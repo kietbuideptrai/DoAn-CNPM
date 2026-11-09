@@ -1,0 +1,61 @@
+{
+  "referenceUrl": "https://baotangchungtichchientranh.vn/vi",
+  "images": [
+    {
+      "slug": "uh-1-huey",
+      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=UH-1+Huey",
+      "sourceUrl": null,
+      "licenseOrPermission": null,
+      "status": "pending"
+    },
+    {
+      "slug": "f-5a",
+      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=F-5A",
+      "sourceUrl": null,
+      "licenseOrPermission": null,
+      "status": "pending"
+    },
+    {
+      "slug": "m48-patton",
+      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=M48+Patton",
+      "sourceUrl": null,
+      "licenseOrPermission": null,
+      "status": "pending"
+    },
+    {
+      "slug": "a-1-skyraider",
+      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=A-1+Skyraider",
+      "sourceUrl": null,
+      "licenseOrPermission": null,
+      "status": "pending"
+    },
+    {
+      "slug": "may-chem",
+      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=May+chem",
+      "sourceUrl": null,
+      "licenseOrPermission": null,
+      "status": "pending"
+    },
+    {
+      "slug": "chuong-cop-con-dao",
+      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=Chuong+cop+Con+Dao",
+      "sourceUrl": null,
+      "licenseOrPermission": null,
+      "status": "pending"
+    },
+    {
+      "slug": "blu-82",
+      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=BLU-82",
+      "sourceUrl": null,
+      "licenseOrPermission": null,
+      "status": "pending"
+    },
+    {
+      "slug": "phao-155mm",
+      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=Phao+155mm",
+      "sourceUrl": null,
+      "licenseOrPermission": null,
+      "status": "pending"
+    }
+  ]
+}

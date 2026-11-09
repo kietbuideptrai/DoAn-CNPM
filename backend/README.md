@@ -17,8 +17,10 @@ For a long-running Express server, use the Supabase session pooler or direct
 connection details appropriate for your network. Ensure the URL requires TLS
 (`sslmode=require`). Never commit `.env`.
 
-Run `src/db/schema.sql` in the Supabase SQL Editor to create the tables, then
-start the API:
+Follow the non-production database confirmation, schema preflight, safe seed,
+and read-only verification steps in
+[`src/db/README.md`](./src/db/README.md) before applying schema or sample data.
+Then start the API:
 
 ```bash
 npm run dev
@@ -27,6 +29,21 @@ npm run dev
 The API listens on `http://localhost:3000` by default. Vite's
 `http://localhost:5173` and `http://127.0.0.1:5173` origins are allowed for
 local development.
+
+## Sample data
+
+`src/db/seed.sql` is draft development data. It inserts missing artifact and
+translation rows only, leaves existing rows unchanged, and creates new
+artifacts as unpublished. Its `placehold.co` URLs are development placeholders,
+not approved images. Content and image review status are tracked in
+[`src/db/CONTENT-REVIEW.md`](./src/db/CONTENT-REVIEW.md) and
+[`src/db/image-sources.json`](./src/db/image-sources.json).
+
+After content review, image-rights confirmation, and explicit non-production
+database verification, use [`src/db/verify-seed.sql`](./src/db/verify-seed.sql)
+and [`src/db/verify-demo-readiness.sql`](./src/db/verify-demo-readiness.sql)
+as read-only checks, then verify the public API. Do not publish draft records
+or describe unreviewed content/placeholders as approved data.
 
 ## Deploy to Render
 
@@ -61,7 +78,23 @@ also allowed.
 
 ## API
 
-- `GET /api/health`
+- `GET /api/health` — returns separate backend and database checks. HTTP 200
+  means both checks passed; HTTP 503 means the API is running but the database
+  is unavailable. The response never includes connection details.
 - `GET /api/languages`
 - `GET /api/artifacts?lang=vi&q=tank`
 - `GET /api/artifacts/:slug?lang=vi`
+
+Artifact list searches `q` case-insensitively and partially against the
+Vietnamese artifact name and English translation title, regardless of the
+requested display language. Only published artifacts are returned.
+
+Before a demo, call the deployed backend's `/api/health` endpoint and confirm
+HTTP 200 with both checks marked `ok`. If it returns HTTP 503, the backend is
+reachable but the database check failed; verify service/database availability
+and configuration without sharing the `DATABASE_URL`. Call the endpoint early
+enough to allow a paused free-tier service to wake up, then check it again
+before the demo.
+
+Run `npm test` from `backend/` to verify backend health, database failure
+handling, seed safety, and search query behavior.

@@ -1,7 +1,35 @@
 export interface HealthStatus {
-  status: "ok";
+  status: "ok" | "unavailable";
+  checks: {
+    backend: "ok";
+    database: "ok" | "unavailable";
+  };
 }
 
-export function getHealthStatus(): HealthStatus {
-  return { status: "ok" };
+export interface HealthCheckResult {
+  status: HealthStatus;
+  httpStatus: 200 | 503;
+}
+
+export async function getHealthStatus(
+  checkDatabase: () => Promise<unknown>,
+): Promise<HealthCheckResult> {
+  try {
+    await checkDatabase();
+    return {
+      status: {
+        status: "ok",
+        checks: { backend: "ok", database: "ok" },
+      },
+      httpStatus: 200,
+    };
+  } catch {
+    return {
+      status: {
+        status: "unavailable",
+        checks: { backend: "ok", database: "unavailable" },
+      },
+      httpStatus: 503,
+    };
+  }
 }

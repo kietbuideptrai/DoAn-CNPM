@@ -13,7 +13,7 @@ export function getTtsLocale(language: Language): string {
   return ttsLocales[language];
 }
 
-export type SpeechStatus = "idle" | "playing" | "paused";
+export type SpeechStatus = "idle" | "starting" | "playing" | "paused";
 export type VoiceStatus =
   | "loading"
   | "available"
@@ -57,20 +57,28 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
   const utteranceQueue = useRef<string[]>([]);
   const currentIndex = useRef(0);
   const requestId = useRef(0);
+  const activeRequest = useRef<number | null>(null);
   const locale = getTtsLocale(language);
 
   const sentences = useMemo(() => splitSentences(text), [text]);
 
-  const stop = useCallback(() => {
+  const cancelCurrentRequest = useCallback((resetState: boolean) => {
     requestId.current += 1;
+    activeRequest.current = null;
     utteranceQueue.current = [];
     currentIndex.current = 0;
-    if ("speechSynthesis" in window) {
+    if (typeof window !== "undefined" && "speechSynthesis" in window) {
       window.speechSynthesis.cancel();
     }
-    setStatus("idle");
-    setError(null);
+    if (resetState) {
+      setStatus("idle");
+      setError(null);
+    }
   }, []);
+
+  const stop = useCallback(() => {
+    cancelCurrentRequest(true);
+  }, [cancelCurrentRequest]);
 
   useEffect(() => {
     if (
@@ -125,42 +133,88 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
   }, [locale]);
 
   useEffect(() => {
-    stop();
-    return stop;
-  }, [text, language, stop]);
+    cancelCurrentRequest(true);
+    return () => cancelCurrentRequest(false);
+  }, [text, language, cancelCurrentRequest]);
 
   const speakNextSentence = useCallback(
     (activeRequestId: number) => {
       if (
         activeRequestId !== requestId.current ||
+        activeRequest.current !== activeRequestId ||
         currentIndex.current >= utteranceQueue.current.length
       ) {
-        if (activeRequestId === requestId.current) {
+        if (
+          activeRequestId === requestId.current &&
+          activeRequest.current === activeRequestId
+        ) {
+          activeRequest.current = null;
           setStatus("idle");
         }
         return;
       }
 
-      const utterance = new SpeechSynthesisUtterance(
-        utteranceQueue.current[currentIndex.current],
-      );
-      utterance.lang = locale;
-      utterance.onend = () => {
-        if (activeRequestId !== requestId.current) {
-          return;
-        }
-        currentIndex.current += 1;
-        window.setTimeout(() => speakNextSentence(activeRequestId), 0);
-      };
-      utterance.onerror = (event) => {
-        if (activeRequestId !== requestId.current || event.error === "canceled") {
-          return;
-        }
-        setStatus("idle");
-        setError("Không thể phát thuyết minh trên thiết bị này.");
-      };
+      try {
+        const utterance = new SpeechSynthesisUtterance(
+          utteranceQueue.current[currentIndex.current],
+        );
+        utterance.lang = locale;
+        utterance.onstart = () => {
+          if (
+            activeRequestId === requestId.current &&
+            activeRequest.current === activeRequestId
+          ) {
+            setStatus("playing");
+          }
+        };
+        utterance.onend = () => {
+          if (
+            activeRequestId !== requestId.current ||
+            activeRequest.current !== activeRequestId
+          ) {
+            return;
+          }
+          currentIndex.current += 1;
+          window.setTimeout(() => speakNextSentence(activeRequestId), 0);
+        };
+        utterance.onerror = (event) => {
+          if (
+            activeRequestId !== requestId.current ||
+            activeRequest.current !== activeRequestId ||
+            event.error === "canceled"
+          ) {
+            return;
+          }
 
-      window.speechSynthesis.speak(utterance);
+          activeRequest.current = null;
+          utteranceQueue.current = [];
+          currentIndex.current = 0;
+          setStatus("idle");
+          if (
+            event.error === "voice-unavailable" ||
+            event.error === "language-unavailable"
+          ) {
+            setVoiceStatus("unavailable");
+            setError("Hiện giờ chưa có voice");
+            return;
+          }
+
+          setError("Không thể phát thuyết minh trên thiết bị này.");
+        };
+
+        window.speechSynthesis.speak(utterance);
+      } catch {
+        if (
+          activeRequestId === requestId.current &&
+          activeRequest.current === activeRequestId
+        ) {
+          activeRequest.current = null;
+          utteranceQueue.current = [];
+          currentIndex.current = 0;
+          setStatus("idle");
+          setError("Không thể phát thuyết minh trên thiết bị này.");
+        }
+      }
     },
     [locale],
   );
@@ -168,10 +222,14 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
   const play = useCallback(() => {
     if (
       !("speechSynthesis" in window) ||
-      !("SpeechSynthesisUtterance" in window) ||
-      voiceStatus === "unavailable"
+      !("SpeechSynthesisUtterance" in window)
     ) {
       setVoiceStatus("unavailable");
+      setError("Hiện giờ chưa có voice");
+      return;
+    }
+
+    if (activeRequest.current !== null) {
       return;
     }
 
@@ -180,15 +238,23 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
       return;
     }
 
+    const currentVoiceStatus = getVoiceStatus(locale);
+    setVoiceStatus(currentVoiceStatus);
+    if (currentVoiceStatus === "unavailable") {
+      setError("Hiện giờ chưa có voice");
+      return;
+    }
+
     window.speechSynthesis.cancel();
     requestId.current += 1;
-    const activeRequestId = requestId.current;
+    const requestForSpeech = requestId.current;
+    activeRequest.current = requestForSpeech;
     utteranceQueue.current = sentences;
     currentIndex.current = 0;
     setError(null);
-    setStatus("playing");
-    speakNextSentence(activeRequestId);
-  }, [sentences, speakNextSentence, voiceStatus]);
+    setStatus("starting");
+    speakNextSentence(requestForSpeech);
+  }, [locale, sentences, speakNextSentence]);
 
   const pause = useCallback(() => {
     if (status === "playing") {

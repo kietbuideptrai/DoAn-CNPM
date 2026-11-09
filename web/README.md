@@ -54,6 +54,14 @@ Khi `VITE_DEMO_MODE=false`, đảm bảo backend đang chạy tại URL cấu h�
 npm test
 ```
 
+Vitest dùng cấu hình local cố định cho API/demo và không cần đọc URL hoặc secret
+từ `.env.local`.
+
+Thuyết minh chỉ bắt đầu sau thao tác bấm của người dùng. Khi đổi ngôn ngữ hoặc
+rời trang hiện vật, giọng đọc và hàng đợi được dừng; nếu thiết bị thiếu voice
+phù hợp, web giữ nguyên văn bản và hiển thị `Hiện giờ chưa có voice`. Nút kiểm
+tra lại voice cho phép thử phát lại sau khi thiết bị tải/cài voice.
+
 ## Build production
 
 ```bash

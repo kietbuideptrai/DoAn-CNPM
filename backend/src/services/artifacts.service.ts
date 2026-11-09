@@ -1,4 +1,5 @@
 import { pool } from "../db/pool";
+import { buildArtifactListQuery } from "./artifact-list-query";
 
 export type Language = "vi" | "en" | "zh" | "ja" | "ko";
 
@@ -35,32 +36,8 @@ export async function getArtifacts(
   language: Language,
   query?: string,
 ): Promise<ArtifactListItem[]> {
-  const searchTerm = query?.trim();
-  const searchCondition = searchTerm
-    ? `AND (
-        POSITION(LOWER($2) IN LOWER(translations.title)) > 0
-        OR POSITION(LOWER($2) IN LOWER(artifacts.name)) > 0
-      )`
-    : "";
-  const parameters: string[] = searchTerm
-    ? [language, searchTerm]
-    : [language];
-
-  const result = await pool.query<ArtifactListItem>(
-    `SELECT
-       artifacts.slug,
-       artifacts.image_url,
-       translations.title,
-       translations.summary
-     FROM artifacts
-     INNER JOIN artifact_translations AS translations
-       ON translations.artifact_id = artifacts.id
-       AND translations.language_code = $1
-     WHERE artifacts.is_published = TRUE
-       ${searchCondition}
-     ORDER BY translations.title ASC`,
-    parameters,
-  );
+  const { text, values } = buildArtifactListQuery(language, query);
+  const result = await pool.query<ArtifactListItem>(text, values);
 
   return result.rows;
 }

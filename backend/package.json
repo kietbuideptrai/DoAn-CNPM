@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
+    "test": "tsx --test src/services/artifact-list-query.test.ts src/services/health.service.test.ts src/db/seed.test.ts",
     "start": "node dist/server.js"
   },
   "dependencies": {

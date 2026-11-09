@@ -5,7 +5,7 @@ import {
   useLocation,
   useParams,
 } from "react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useArtifacts } from "./hooks/useArtifacts";
 import { useArtifact } from "./hooks/useArtifact";
 import { useSpeech } from "./hooks/useSpeech";
@@ -327,8 +327,25 @@ function ArtifactImage({
 function ArtifactDetailPage() {
   const { slug } = useParams();
   const { language } = useLanguage();
-  const { state, isNotFound, retry } = useArtifact(slug, language);
+  const [fallbackChoice, setFallbackChoice] = useState<{
+    slug: string | undefined;
+    language: Language;
+    choice: "accepted" | "dismissed";
+  } | null>(null);
+  const currentFallbackChoice =
+    fallbackChoice?.slug === slug && fallbackChoice?.language === language
+      ? fallbackChoice
+      : null;
+  const showingEnglishFallback = currentFallbackChoice?.choice === "accepted";
+  const { state, isNotFound, retry } = useArtifact(
+    slug,
+    showingEnglishFallback ? "en" : language,
+  );
   const { recordView } = useViewHistory();
+
+  useEffect(() => {
+    setFallbackChoice(null);
+  }, [slug, language]);
 
   useEffect(() => {
     if (state.status === "success") {
@@ -365,7 +382,16 @@ function ArtifactDetailPage() {
           </Link>
         </div>
       ) : state.data.translation ? (
-        <ArtifactDetailContent artifact={state.data} language={language} />
+        <ArtifactDetailContent artifact={state.data} />
+      ) : !showingEnglishFallback &&
+        state.data.available_languages.includes("en") &&
+        currentFallbackChoice?.choice !== "dismissed" ? (
+        <EnglishFallbackDialog
+          onAccept={() => setFallbackChoice({ slug, language, choice: "accepted" })}
+          onCancel={() =>
+            setFallbackChoice({ slug, language, choice: "dismissed" })
+          }
+        />
       ) : (
         <MissingTranslation
           artifact={state.data}
@@ -379,13 +405,9 @@ function ArtifactDetailPage() {
 
 interface ArtifactDetailContentProps {
   artifact: ArtifactDetail;
-  language: Language;
 }
 
-function ArtifactDetailContent({
-  artifact,
-  language,
-}: ArtifactDetailContentProps) {
+function ArtifactDetailContent({ artifact }: ArtifactDetailContentProps) {
   const translation = artifact.translation;
   if (!translation) {
     return null;
@@ -400,7 +422,9 @@ function ArtifactDetailContent({
     <article className="artifact-detail">
       <div className="detail-heading">
         <div>
-          <span className="artifact-language">{getLanguageLabel(language)}</span>
+          <span className="artifact-language">
+            {getLanguageLabel(translation.language_code)}
+          </span>
           <h1>{translation.title}</h1>
           <p className="detail-summary">{translation.summary}</p>
         </div>
@@ -410,11 +434,28 @@ function ArtifactDetailContent({
               className="button button-listen"
               type="button"
               onClick={speech.play}
-              disabled={speech.voiceStatus === "unavailable"}
-              aria-label={`Nghe thuyết minh bằng ${getLanguageLabel(language)}`}
+              aria-label={`Nghe thuyết minh bằng ${getLanguageLabel(translation.language_code)}`}
             >
-              <span aria-hidden="true">▶</span> Nghe thuyết minh
+              <span aria-hidden="true">▶</span>{" "}
+              {speech.voiceStatus === "unavailable"
+                ? "Kiểm tra lại giọng đọc"
+                : speech.error
+                  ? "Thử lại"
+                  : "Nghe thuyết minh"}
             </button>
+          ) : speech.status === "starting" ? (
+            <>
+              <button className="button button-listen" type="button" disabled>
+                Đang khởi tạo giọng đọc...
+              </button>
+              <button
+                className="button button-stop"
+                type="button"
+                onClick={speech.stop}
+              >
+                Dừng
+              </button>
+            </>
           ) : (
             <>
               <button
@@ -440,8 +481,7 @@ function ArtifactDetailContent({
           )}
           {speech.voiceStatus === "unavailable" ? (
             <p className="speech-message" role="status">
-              Chưa có giọng đọc {getLanguageLabel(language)} trên thiết bị. Bạn
-              vẫn có thể đọc đầy đủ nội dung bên dưới.
+              Hiện giờ chưa có voice
             </p>
           ) : speech.voiceStatus === "loading" ? (
             <p className="speech-message" role="status">
@@ -452,7 +492,7 @@ function ArtifactDetailContent({
               Chưa xác định được giọng đọc. Bạn vẫn có thể thử phát thuyết minh.
             </p>
           ) : null}
-          {speech.error && (
+          {speech.error && speech.voiceStatus !== "unavailable" && (
             <p className="speech-message speech-error" role="alert">
               {speech.error}
             </p>
@@ -470,6 +510,64 @@ function ArtifactDetailContent({
         ))}
       </div>
     </article>
+  );
+}
+
+interface EnglishFallbackDialogProps {
+  onAccept: () => void;
+  onCancel: () => void;
+}
+
+function EnglishFallbackDialog({
+  onAccept,
+  onCancel,
+}: EnglishFallbackDialogProps) {
+  const cancelButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    cancelButtonRef.current?.focus();
+  }, []);
+
+  return (
+    <div className="translation-fallback-backdrop">
+      <section
+        aria-describedby="english-fallback-description"
+        aria-labelledby="english-fallback-title"
+        aria-modal="true"
+        className="translation-fallback-dialog"
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            onCancel();
+          }
+        }}
+        role="dialog"
+        tabIndex={-1}
+      >
+        <span className="eyebrow">THUYẾT MINH HIỆN VẬT</span>
+        <h1 id="english-fallback-title">Chưa có bản dịch</h1>
+        <p id="english-fallback-description">
+          Hiện chưa có nội dung bằng ngôn ngữ bạn chọn. Bạn có muốn xem nội dung
+          bằng tiếng Anh không?
+        </p>
+        <div className="translation-fallback-actions">
+          <button
+            className="button button-primary"
+            onClick={onAccept}
+            type="button"
+          >
+            Xem tiếng Anh
+          </button>
+          <button
+            className="button translation-fallback-cancel"
+            onClick={onCancel}
+            ref={cancelButtonRef}
+            type="button"
+          >
+            Hủy
+          </button>
+        </div>
+      </section>
+    </div>
   );
 }
 
@@ -493,10 +591,15 @@ function MissingTranslation({
       />
       <div className="missing-message">
         <span className="eyebrow">BẢN DỊCH CHƯA CÓ</span>
-        <h1>Chưa có thuyết minh bằng {getLanguageLabel(language)}</h1>
+        <h1>
+          {artifact.available_languages.includes("en")
+            ? `Chưa có thuyết minh bằng ${getLanguageLabel(language)}`
+            : "Nội dung chưa khả dụng"}
+        </h1>
         <p>
-          Hiện vật này chưa có nội dung trong ngôn ngữ đã chọn. Bạn có thể xem
-          thuyết minh bằng một trong các ngôn ngữ hiện có:
+          {artifact.available_languages.includes("en")
+            ? "Hiện vật này chưa có nội dung trong ngôn ngữ đã chọn. Bạn có thể xem thuyết minh bằng một trong các ngôn ngữ hiện có:"
+            : `Hiện chưa có nội dung bằng ${getLanguageLabel(language)} hoặc tiếng Anh cho hiện vật này.`}
         </p>
         <div className="available-languages" aria-label="Ngôn ngữ có sẵn">
           {artifact.available_languages.map((availableLanguage) => (
