@@ -15,11 +15,16 @@ import { ArtifactCard } from "@/components/ArtifactCard";
 import { EmptyState } from "@/components/EmptyState";
 import { useLanguage } from "@/context/LanguageContext";
 import type { ArtifactListItem } from "../../../../shared/types";
-import { colors, styles as sharedStyles } from "@/theme";
+import { createSharedStyles, useTheme } from "@/theme";
 import { useArtifacts } from "@/hooks/useArtifacts";
+import { useTranslation } from "@/utils/i18n";
 
 export default function ArtifactsScreen() {
   const { language } = useLanguage();
+  const { t } = useTranslation();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+  const sharedStyles = createSharedStyles(colors);
   const [searchQuery, setSearchQuery] = useState("");
   const { state, retry } = useArtifacts(language, searchQuery);
   const artifacts = state.status === "success" ? state.data : [];
@@ -47,14 +52,14 @@ export default function ArtifactsScreen() {
         keyboardShouldPersistTaps="handled"
         ListHeaderComponent={
           <View>
-            <Text style={sharedStyles.screenTitle}>Hiện vật</Text>
-            <Text style={styles.fieldLabel}>Tìm hiện vật theo tên</Text>
+            <Text style={sharedStyles.screenTitle}>{t("artifacts")}</Text>
+            <Text style={styles.fieldLabel}>{t("searchArtifacts")}</Text>
             <TextInput
-              accessibilityLabel="Tìm hiện vật theo tên"
+              accessibilityLabel={t("searchArtifacts")}
               autoCapitalize="none"
               clearButtonMode="while-editing"
               onChangeText={setSearchQuery}
-              placeholder="Nhập tên hiện vật..."
+              placeholder={t("artifactSearchPlaceholder")}
               placeholderTextColor={colors.muted}
               returnKeyType="search"
               style={styles.searchInput}
@@ -62,7 +67,7 @@ export default function ArtifactsScreen() {
             />
             {state.status === "success" ? (
               <Text style={styles.resultCount} accessibilityLiveRegion="polite">
-                {state.data.length} hiện vật
+                {t("artifactCount", { count: state.data.length })}
               </Text>
             ) : null}
           </View>
@@ -71,33 +76,33 @@ export default function ArtifactsScreen() {
           isLoading ? (
             <View style={styles.feedback}>
               <ActivityIndicator color={colors.primary} size="large" />
-              <Text style={styles.feedbackText}>Đang tải hiện vật...</Text>
+              <Text style={styles.feedbackText}>{t("loadingArtifacts")}</Text>
             </View>
           ) : state.status === "error" ? (
             <View style={styles.errorState}>
               <EmptyState
-                title="Không thể tải hiện vật"
-                message={state.error.message}
+                title={t("cannotLoadArtifacts")}
+                message={t("artifactLoadError")}
               />
               <Pressable
                 accessibilityRole="button"
                 onPress={retry}
                 style={styles.retryButton}
               >
-                <Text style={styles.retryButtonText}>Thử lại</Text>
+                <Text style={styles.retryButtonText}>{t("retry")}</Text>
               </Pressable>
             </View>
           ) : (
             <EmptyState
               title={
                 searchQuery.trim()
-                  ? "Không tìm thấy hiện vật phù hợp"
-                  : "Chưa có hiện vật bằng ngôn ngữ này"
+                  ? t("noMatchingArtifact")
+                  : t("noArtifactInLanguage")
               }
               message={
                 searchQuery.trim()
-                  ? `Không có kết quả cho “${searchQuery.trim()}”. Hãy thử từ khóa khác.`
-                  : "Hiện chưa có hiện vật được xuất bản bằng ngôn ngữ này."
+                  ? t("noSearchResults", { query: searchQuery.trim() })
+                  : t("noPublishedArtifacts")
               }
             />
           )
@@ -107,7 +112,8 @@ export default function ArtifactsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+return StyleSheet.create({
   listContent: {
     flexGrow: 1,
     paddingHorizontal: 20,
@@ -162,3 +168,4 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
+}

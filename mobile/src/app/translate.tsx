@@ -9,15 +9,19 @@ import {
   View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { colors, styles as sharedStyles } from "@/theme";
+import { createSharedStyles, useTheme } from "@/theme";
 import {
-  translationLanguages,
   translatePhrase,
   type TranslationLanguage,
 } from "@/utils/translation";
 import { saveTranslationHistory } from "@/services/translationHistory";
+import { useTranslation } from "@/utils/i18n";
 
 export default function TranslateScreen() {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const styles = createStyles(colors);
+  const sharedStyles = createSharedStyles(colors);
   const [sourceLanguage, setSourceLanguage] =
     useState<TranslationLanguage>("en");
   const [input, setInput] = useState("");
@@ -39,7 +43,7 @@ export default function TranslateScreen() {
     const originalText = input.trim();
     if (!originalText) {
       setResult("");
-      setMessage("Hãy nhập cụm từ bạn muốn dịch.");
+      setMessage(t("enterPhrase"));
       return;
     }
 
@@ -54,7 +58,7 @@ export default function TranslateScreen() {
     const translatedText = translatePhrase(originalText, sourceLanguage);
     if (!translatedText) {
       setMessage(
-        "Cụm từ chưa có trong từ điển mẫu. Hiện chỉ hỗ trợ một số cụm tiếng Anh và tiếng Việt thông dụng.",
+        t("phraseMissing"),
       );
       setIsSaving(false);
       return;
@@ -70,9 +74,9 @@ export default function TranslateScreen() {
         translatedText,
         createdAt: new Date().toISOString(),
       });
-      setMessage("Đã lưu bản dịch vào lịch sử.");
+      setMessage(t("translationSaved"));
     } catch {
-      setMessage("Bản dịch hiển thị nhưng chưa lưu được vào lịch sử.");
+      setMessage(t("translationNotSaved"));
     } finally {
       setIsSaving(false);
     }
@@ -84,21 +88,20 @@ export default function TranslateScreen() {
       keyboardShouldPersistTaps="handled"
     >
       <SafeAreaView edges={["top"]} style={sharedStyles.screen}>
-        <Text style={sharedStyles.screenTitle}>Dịch cụm từ</Text>
+        <Text style={sharedStyles.screenTitle}>{t("translatePhrase")}</Text>
         <Text style={styles.description}>
-          Bản demo dịch một số cụm từ tiếng Anh và tiếng Việt; chưa kết nối dịch
-          máy.
+          {t("translateDescription")}
         </Text>
 
         <View style={styles.languageRow}>
           <View style={styles.languageCard}>
-            <Text style={styles.languageCaption}>Dịch từ</Text>
+            <Text style={styles.languageCaption}>{t("translateFrom")}</Text>
             <Text style={styles.languageName}>
-              {translationLanguages[sourceLanguage]}
+              {t(sourceLanguage === "en" ? "englishLanguage" : "vietnameseLanguage")}
             </Text>
           </View>
           <Pressable
-            accessibilityLabel="Đổi ngôn ngữ dịch"
+            accessibilityLabel={t("swapLanguages")}
             accessibilityRole="button"
             onPress={swapLanguages}
             style={({ pressed }) => [
@@ -109,15 +112,15 @@ export default function TranslateScreen() {
             <Text style={styles.swapLabel}>⇄</Text>
           </Pressable>
           <View style={styles.languageCard}>
-            <Text style={styles.languageCaption}>Dịch sang</Text>
+            <Text style={styles.languageCaption}>{t("translateTo")}</Text>
             <Text style={styles.languageName}>
-              {translationLanguages[targetLanguage]}
+              {t(targetLanguage === "en" ? "englishLanguage" : "vietnameseLanguage")}
             </Text>
           </View>
         </View>
 
         <TextInput
-          accessibilityLabel="Cụm từ cần dịch"
+          accessibilityLabel={t("phraseToTranslate")}
           autoCapitalize="sentences"
           multiline
           maxLength={200}
@@ -128,8 +131,8 @@ export default function TranslateScreen() {
           }}
           placeholder={
             sourceLanguage === "en"
-              ? "Ví dụ: hello"
-              : "Ví dụ: xin chào"
+              ? t("exampleHello")
+              : t("exampleXinChao")
           }
           placeholderTextColor={colors.muted}
           style={styles.input}
@@ -147,13 +150,13 @@ export default function TranslateScreen() {
           ]}
         >
           <Text style={styles.translateButtonLabel}>
-            {isSaving ? "Đang xử lý..." : "Dịch"}
+            {isSaving ? t("processing") : t("translate")}
           </Text>
         </Pressable>
 
         {result ? (
           <View style={styles.resultCard}>
-            <Text style={styles.resultCaption}>Bản dịch</Text>
+            <Text style={styles.resultCaption}>{t("translatedResult")}</Text>
             <Text style={styles.resultText}>{result}</Text>
           </View>
         ) : null}
@@ -170,7 +173,8 @@ export default function TranslateScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+return StyleSheet.create({
   description: {
     marginBottom: 20,
     color: colors.muted,
@@ -275,3 +279,4 @@ const styles = StyleSheet.create({
     opacity: 0.75,
   },
 });
+}

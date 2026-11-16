@@ -1,56 +1,53 @@
 import { Tabs } from "expo-router";
-import { StyleSheet, Text, View } from "react-native";
-import { colors } from "@/theme";
+import { StyleSheet, Text } from "react-native";
+import { useTheme } from "@/theme";
+import { useTranslation } from "@/utils/i18n";
 
 const tabSymbols: Record<string, string> = {
   index: "⌂",
   artifacts: "▤",
-  scan: "QR",
+  scan: "▦",
   favorites: "♡",
   profile: "●",
 };
 
 export default function TabLayout() {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const styles = createStyles(colors);
+
   return (
     <Tabs
-      screenOptions={({ route }) => {
-        const isScannerTab = route.name === "scan";
-
-        return {
-          headerShown: false,
-          tabBarActiveTintColor: colors.primary,
-          tabBarInactiveTintColor: colors.muted,
-          tabBarStyle: styles.tabBar,
-          tabBarLabelStyle: styles.tabLabel,
-          tabBarIcon: ({ color, focused }) =>
-            isScannerTab ? (
-              <View style={styles.scanButton}>
-                <Text style={styles.scanButtonText}>{tabSymbols.scan}</Text>
-              </View>
-            ) : (
-              <Text
-                style={[
-                  styles.tabSymbol,
-                  { color },
-                  focused && styles.tabSymbolFocused,
-                ]}
-              >
-                {tabSymbols[route.name] ?? ""}
-              </Text>
-            ),
-        };
-      }}
+      screenOptions={({ route }) => ({
+        headerShown: false,
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.muted,
+        tabBarStyle: styles.tabBar,
+        tabBarLabelStyle: styles.tabLabel,
+        tabBarIcon: ({ color, focused }) => (
+          <Text
+            style={[
+              styles.tabSymbol,
+              { color },
+              focused && styles.tabSymbolFocused,
+            ]}
+          >
+            {tabSymbols[route.name] ?? ""}
+          </Text>
+        ),
+      })}
     >
-      <Tabs.Screen name="index" options={{ title: "Trang chủ" }} />
-      <Tabs.Screen name="artifacts" options={{ title: "Hiện vật" }} />
-      <Tabs.Screen name="scan" options={{ title: "Quét QR" }} />
-      <Tabs.Screen name="favorites" options={{ title: "Yêu thích" }} />
-      <Tabs.Screen name="profile" options={{ title: "Cá nhân" }} />
+      <Tabs.Screen name="index" options={{ title: t("home") }} />
+      <Tabs.Screen name="artifacts" options={{ title: t("artifacts") }} />
+      <Tabs.Screen name="scan" options={{ title: t("scanQr") }} />
+      <Tabs.Screen name="favorites" options={{ title: t("favorites") }} />
+      <Tabs.Screen name="profile" options={{ title: t("profile") }} />
     </Tabs>
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+return StyleSheet.create({
   tabBar: {
     height: 76,
     paddingTop: 8,
@@ -72,26 +69,5 @@ const styles = StyleSheet.create({
   tabSymbolFocused: {
     fontWeight: "700",
   },
-  scanButton: {
-    width: 58,
-    height: 58,
-    marginTop: -25,
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 4,
-    borderColor: colors.paper,
-    borderRadius: 32,
-    backgroundColor: colors.primary,
-    elevation: 6,
-    shadowColor: "#18392E",
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-  },
-  scanButtonText: {
-    color: colors.paper,
-    fontSize: 17,
-    fontWeight: "800",
-    letterSpacing: 1,
-  },
 });
+}

@@ -2,7 +2,26 @@
 
 Expo app for browsing artifacts, scanning QR codes, listening to multilingual narration, and trying a local English–Vietnamese phrase-translation demo.
 
-The phrase translator uses a small built-in dictionary; it is not a general-purpose translation service. Translation history is stored locally on the device.
+The app interface follows the selected language across the Home, Artifacts, QR
+scanner, Favorites, and Personal tabs, as well as artifact details and the
+translation screens. Vietnamese, English, Chinese, Japanese, and Korean are
+supported; artifact narration is shown in the selected language when available.
+Each app launch first shows a language picker. Select a language and confirm
+with **OK** to save it; the app then displays a localized welcome message
+before opening the main interface. The selection is shared with the language
+setting in the Personal tab.
+
+The phrase translator uses a small built-in dictionary; it is not a
+general-purpose translation service. Translation history is stored locally on
+the device.
+
+The Personal tab provides persistent light and dark themes. Narration uses the
+device's built-in text-to-speech voices for the selected language. Install the
+Japanese (`ja-JP`), Chinese (`zh-CN`), or Korean (`ko-KR`) voice in the device
+accessibility or text-to-speech settings if the app reports that voice as
+unavailable, then use the localized **Check voices again** action. Voice
+availability varies by device and browser; this app does not download or bundle
+voice audio.
 
 ## Requirements
 

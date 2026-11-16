@@ -1,14 +1,18 @@
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { router } from "expo-router";
 import { Screen } from "@/components/Screen";
-import { colors, styles } from "@/theme";
+import { createSharedStyles, useTheme } from "@/theme";
+import { useTranslation } from "@/utils/i18n";
 
 export default function HomeScreen() {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const styles = createSharedStyles(colors);
+  const homeStyles = createHomeStyles(colors);
+
   return (
-    <Screen title="Trang chủ">
-      <Text style={styles.bodyText}>
-        Khám phá hiện vật và nghe những câu chuyện lịch sử.
-      </Text>
+    <Screen title={t("home")}>
+      <Text style={styles.bodyText}>{t("homeIntro")}</Text>
       <View style={homeStyles.actions}>
         <Pressable
           accessibilityRole="button"
@@ -18,9 +22,9 @@ export default function HomeScreen() {
             pressed && homeStyles.pressed,
           ]}
         >
-          <Text style={homeStyles.actionTitle}>Dịch cụm từ</Text>
+          <Text style={homeStyles.actionTitle}>{t("translatePhrase")}</Text>
           <Text style={homeStyles.actionDescription}>
-            Thử các cụm từ tiếng Anh và tiếng Việt thông dụng.
+            {t("translationDemoDescription")}
           </Text>
         </Pressable>
         <Pressable
@@ -31,9 +35,9 @@ export default function HomeScreen() {
             pressed && homeStyles.pressed,
           ]}
         >
-          <Text style={homeStyles.actionTitle}>Lịch sử bản dịch</Text>
+          <Text style={homeStyles.actionTitle}>{t("translationHistory")}</Text>
           <Text style={homeStyles.actionDescription}>
-            Xem các cụm từ đã dịch trên thiết bị này.
+            {t("translationHistoryDescription")}
           </Text>
         </Pressable>
       </View>
@@ -41,7 +45,8 @@ export default function HomeScreen() {
   );
 }
 
-const homeStyles = StyleSheet.create({
+function createHomeStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+return StyleSheet.create({
   actions: {
     gap: 12,
     marginTop: 24,
@@ -68,3 +73,4 @@ const homeStyles = StyleSheet.create({
     opacity: 0.75,
   },
 });
+}

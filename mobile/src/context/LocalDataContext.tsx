@@ -10,29 +10,18 @@ import {
 } from "react";
 import type { ReactNode } from "react";
 
-export type FontSize = "small" | "medium" | "large";
-
 interface LocalDataContextValue {
   isLoading: boolean;
   favoriteSlugs: string[];
   historySlugs: string[];
-  fontSize: FontSize;
-  fontScale: number;
   storageError: string | null;
   toggleFavorite: (slug: string) => void;
   recordViewed: (slug: string) => void;
-  setFontSize: (fontSize: FontSize) => void;
 }
 
 const FAVORITES_KEY = "artifact-guide.favorites";
 const HISTORY_KEY = "artifact-guide.history";
-const FONT_SIZE_KEY = "artifact-guide.font-size";
 const MAX_HISTORY_ITEMS = 20;
-const fontScales: Record<FontSize, number> = {
-  small: 0.9,
-  medium: 1,
-  large: 1.2,
-};
 
 const LocalDataContext = createContext<LocalDataContextValue | null>(null);
 
@@ -43,7 +32,6 @@ interface LocalDataProviderProps {
 export function LocalDataProvider({ children }: LocalDataProviderProps) {
   const [favoriteSlugs, setFavoriteSlugs] = useState<string[]>([]);
   const [historySlugs, setHistorySlugs] = useState<string[]>([]);
-  const [fontSize, setFontSizeState] = useState<FontSize>("medium");
   const [isLoading, setIsLoading] = useState(true);
   const [storageError, setStorageError] = useState<string | null>(null);
   const favoriteSlugsRef = useRef<string[]>([]);
@@ -55,26 +43,19 @@ export function LocalDataProvider({ children }: LocalDataProviderProps) {
 
     async function loadLocalData() {
       try {
-        const values = await AsyncStorage.multiGet([
-          FAVORITES_KEY,
-          HISTORY_KEY,
-          FONT_SIZE_KEY,
-        ]);
+        const values = await AsyncStorage.multiGet([FAVORITES_KEY, HISTORY_KEY]);
         const storedValues = new Map(values);
         const nextFavorites = parseSlugList(storedValues.get(FAVORITES_KEY));
         const nextHistory = parseSlugList(storedValues.get(HISTORY_KEY)).slice(
           0,
           MAX_HISTORY_ITEMS,
         );
-        const savedFontSize = storedValues.get(FONT_SIZE_KEY);
-        const nextFontSize = isFontSize(savedFontSize) ? savedFontSize : "medium";
 
         if (isMounted) {
           favoriteSlugsRef.current = nextFavorites;
           historySlugsRef.current = nextHistory;
           setFavoriteSlugs(nextFavorites);
           setHistorySlugs(nextHistory);
-          setFontSizeState(nextFontSize);
         }
       } catch {
         if (isMounted) {
@@ -130,33 +111,20 @@ export function LocalDataProvider({ children }: LocalDataProviderProps) {
     [persist],
   );
 
-  const setFontSize = useCallback(
-    (nextFontSize: FontSize) => {
-      setFontSizeState(nextFontSize);
-      persist(FONT_SIZE_KEY, nextFontSize);
-    },
-    [persist],
-  );
-
   const value = useMemo(
     () => ({
       isLoading,
       favoriteSlugs,
       historySlugs,
-      fontSize,
-      fontScale: fontScales[fontSize],
       storageError,
       toggleFavorite,
       recordViewed,
-      setFontSize,
     }),
     [
       favoriteSlugs,
-      fontSize,
       historySlugs,
       isLoading,
       recordViewed,
-      setFontSize,
       storageError,
       toggleFavorite,
     ],
@@ -199,8 +167,4 @@ function isArtifactSlug(value: unknown): value is string {
   return (
     typeof value === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(value)
   );
-}
-
-function isFontSize(value: string | null | undefined): value is FontSize {
-  return value === "small" || value === "medium" || value === "large";
 }

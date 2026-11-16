@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { colors } from "@/theme";
+import { useTheme } from "@/theme";
 
 interface EmptyStateProps {
   message: string;
@@ -7,6 +7,9 @@ interface EmptyStateProps {
 }
 
 export function EmptyState({ message, title }: EmptyStateProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   return (
     <View accessibilityLiveRegion="polite" style={styles.container}>
       <Text style={styles.mark} accessibilityElementsHidden>
@@ -18,7 +21,8 @@ export function EmptyState({ message, title }: EmptyStateProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+  return StyleSheet.create({
   container: {
     minHeight: 190,
     alignItems: "center",
@@ -47,4 +51,5 @@ const styles = StyleSheet.create({
     lineHeight: 21,
     textAlign: "center",
   },
-});
+  });
+}

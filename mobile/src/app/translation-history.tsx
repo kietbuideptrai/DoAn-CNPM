@@ -15,10 +15,15 @@ import {
   getTranslationHistory,
   type TranslationHistoryItem,
 } from "@/services/translationHistory";
-import { colors } from "@/theme";
-import { translationLanguages } from "@/utils/translation";
+import { useTheme } from "@/theme";
+import { useLanguage } from "@/context/LanguageContext";
+import { useTranslation } from "@/utils/i18n";
 
 export default function TranslationHistoryScreen() {
+  const { colors } = useTheme();
+  const { language } = useLanguage();
+  const { t } = useTranslation();
+  const styles = createStyles(colors);
   const [history, setHistory] = useState<TranslationHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -30,11 +35,11 @@ export default function TranslationHistoryScreen() {
     try {
       setHistory(await getTranslationHistory());
     } catch {
-      setErrorMessage("Không thể tải lịch sử bản dịch. Hãy thử lại.");
+      setErrorMessage(t("historyLoadError"));
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [t]);
 
   useFocusEffect(
     useCallback(() => {
@@ -43,10 +48,10 @@ export default function TranslationHistoryScreen() {
   );
 
   function confirmClearHistory() {
-    Alert.alert("Xóa lịch sử", "Bạn có chắc muốn xóa toàn bộ lịch sử bản dịch?", [
-      { text: "Hủy", style: "cancel" },
+    Alert.alert(t("clearHistory"), t("clearHistoryConfirm"), [
+      { text: t("cancel"), style: "cancel" },
       {
-        text: "Xóa",
+        text: t("delete"),
         style: "destructive",
         onPress: () => void handleClearHistory(),
       },
@@ -59,12 +64,12 @@ export default function TranslationHistoryScreen() {
       setHistory([]);
       setErrorMessage(null);
     } catch {
-      setErrorMessage("Không thể xóa lịch sử bản dịch. Hãy thử lại.");
+      setErrorMessage(t("historyDeleteError"));
     }
   }
 
   return (
-    <Screen title="Lịch sử bản dịch">
+    <Screen title={t("translationHistory")}>
       {history.length > 0 && !isLoading ? (
         <Pressable
           accessibilityRole="button"
@@ -74,14 +79,14 @@ export default function TranslationHistoryScreen() {
             pressed && styles.pressed,
           ]}
         >
-          <Text style={styles.clearButtonLabel}>Xóa lịch sử</Text>
+          <Text style={styles.clearButtonLabel}>{t("clearHistory")}</Text>
         </Pressable>
       ) : null}
 
       {isLoading ? (
         <View style={styles.feedback}>
           <ActivityIndicator color={colors.primary} size="large" />
-          <Text style={styles.feedbackText}>Đang tải lịch sử...</Text>
+          <Text style={styles.feedbackText}>{t("loadingTranslations")}</Text>
         </View>
       ) : errorMessage ? (
         <View style={styles.feedback}>
@@ -93,33 +98,33 @@ export default function TranslationHistoryScreen() {
             onPress={() => void loadHistory()}
             style={styles.retryButton}
           >
-            <Text style={styles.retryButtonLabel}>Thử lại</Text>
+            <Text style={styles.retryButtonLabel}>{t("retry")}</Text>
           </Pressable>
           <Pressable
             accessibilityRole="button"
             onPress={confirmClearHistory}
             style={styles.clearButton}
           >
-            <Text style={styles.clearButtonLabel}>Xóa dữ liệu lịch sử</Text>
+            <Text style={styles.clearButtonLabel}>{t("clearHistoryData")}</Text>
           </Pressable>
         </View>
       ) : history.length === 0 ? (
         <EmptyState
-          title="Chưa có bản dịch"
-          message="Các cụm từ đã dịch sẽ được lưu tại đây trên thiết bị."
+          title={t("noTranslations")}
+          message={t("noTranslationsDescription")}
         />
       ) : (
         <View style={styles.historyList}>
           {history.map((item) => (
             <View key={item.id} style={styles.historyItem}>
               <Text style={styles.languagePair}>
-                {translationLanguages[item.sourceLanguage]} →{" "}
-                {translationLanguages[item.targetLanguage]}
+                {t(item.sourceLanguage === "en" ? "englishLanguage" : "vietnameseLanguage")} →{" "}
+                {t(item.targetLanguage === "en" ? "englishLanguage" : "vietnameseLanguage")}
               </Text>
               <Text style={styles.originalText}>{item.originalText}</Text>
               <Text style={styles.translatedText}>{item.translatedText}</Text>
               <Text style={styles.dateText}>
-                {new Date(item.createdAt).toLocaleString("vi-VN")}
+                {new Date(item.createdAt).toLocaleString(dateLocales[language])}
               </Text>
             </View>
           ))}
@@ -129,7 +134,16 @@ export default function TranslationHistoryScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+const dateLocales = {
+  vi: "vi-VN",
+  en: "en-US",
+  zh: "zh-CN",
+  ja: "ja-JP",
+  ko: "ko-KR",
+} as const;
+
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+return StyleSheet.create({
   clearButton: {
     minHeight: 44,
     alignItems: "center",
@@ -211,3 +225,4 @@ const styles = StyleSheet.create({
     opacity: 0.75,
   },
 });
+}

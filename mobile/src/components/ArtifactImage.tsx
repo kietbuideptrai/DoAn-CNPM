@@ -1,12 +1,8 @@
 import { useState } from "react";
-import {
-  Image,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import { Image, StyleSheet, Text, View } from "react-native";
 import type { ImageStyle, StyleProp } from "react-native";
-import { colors } from "@/theme";
+import { useTheme } from "@/theme";
+import { useTranslation } from "@/utils/i18n";
 
 interface ArtifactImageProps {
   accessibilityLabel: string;
@@ -20,6 +16,9 @@ export function ArtifactImage({
   style,
 }: ArtifactImageProps) {
   const [hasLoadError, setHasLoadError] = useState(false);
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const styles = createStyles(colors);
 
   if (hasLoadError) {
     return (
@@ -29,7 +28,7 @@ export function ArtifactImage({
         style={[style, styles.placeholder]}
       >
         <Text style={styles.placeholderMark}>◇</Text>
-        <Text style={styles.placeholderText}>Không tải được ảnh hiện vật</Text>
+        <Text style={styles.placeholderText}>{t("imageLoadError")}</Text>
       </View>
     );
   }
@@ -46,20 +45,22 @@ export function ArtifactImage({
   );
 }
 
-const styles = StyleSheet.create({
-  placeholder: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.highlight,
-  },
-  placeholderMark: {
-    marginBottom: 8,
-    color: colors.muted,
-    fontSize: 28,
-  },
-  placeholderText: {
-    color: colors.muted,
-    fontSize: 13,
-    textAlign: "center",
-  },
-});
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+  return StyleSheet.create({
+    placeholder: {
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: colors.highlight,
+    },
+    placeholderMark: {
+      marginBottom: 8,
+      color: colors.muted,
+      fontSize: 28,
+    },
+    placeholderText: {
+      color: colors.muted,
+      fontSize: 13,
+      textAlign: "center",
+    },
+  });
+}
