@@ -13,10 +13,14 @@ import { Screen } from "@/components/Screen";
 import { useLanguage } from "@/context/LanguageContext";
 import { useLocalData } from "@/context/LocalDataContext";
 import { useArtifacts } from "@/hooks/useArtifacts";
-import { colors } from "@/theme";
+import { useTheme } from "@/theme";
+import { useTranslation } from "@/utils/i18n";
 
 export default function FavoritesScreen() {
   const { language } = useLanguage();
+  const { t } = useTranslation();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const { favoriteSlugs } = useLocalData();
   const { state, retry } = useArtifacts(language, "");
   const artifactsBySlug = useMemo(
@@ -31,32 +35,32 @@ export default function FavoritesScreen() {
     .filter((artifact) => artifact !== undefined);
 
   return (
-    <Screen title="Yêu thích">
+    <Screen title={t("favorites")}>
       {favoriteSlugs.length === 0 ? (
         <EmptyState
-          title="Chưa có hiện vật yêu thích"
-          message="Hiện vật bạn yêu thích sẽ xuất hiện tại đây."
+          title={t("favoriteEmptyTitle")}
+          message={t("favoriteEmptyMessage")}
         />
       ) : state.status === "loading" ? (
         <View style={styles.feedback}>
           <ActivityIndicator color={colors.primary} size="large" />
-          <Text style={styles.message}>Đang tải hiện vật yêu thích...</Text>
+          <Text style={styles.message}>{t("loadingFavorites")}</Text>
         </View>
       ) : state.status === "error" ? (
         <View style={styles.feedback}>
-          <EmptyState title="Không thể tải hiện vật" message={state.error.message} />
+          <EmptyState title={t("cannotLoadArtifacts")} message={t("artifactLoadError")} />
           <Pressable
             accessibilityRole="button"
             onPress={retry}
             style={styles.retryButton}
           >
-            <Text style={styles.retryButtonText}>Thử lại</Text>
+            <Text style={styles.retryButtonText}>{t("retry")}</Text>
           </Pressable>
         </View>
       ) : favorites.length === 0 ? (
         <EmptyState
-          title="Chưa có hiện vật trong ngôn ngữ này"
-          message="Các hiện vật yêu thích chưa có bản dịch bằng ngôn ngữ đang chọn."
+          title={t("noFavoriteInLanguage")}
+          message={t("favoritesNoTranslation")}
         />
       ) : (
         favorites.map((artifact) => (
@@ -76,7 +80,8 @@ export default function FavoritesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+return StyleSheet.create({
   feedback: {
     gap: 14,
   },
@@ -98,3 +103,4 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
+}

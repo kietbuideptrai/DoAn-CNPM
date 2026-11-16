@@ -356,7 +356,9 @@ export function getDemoArtifacts(
 
     if (
       normalizedQuery &&
-      !translation.title.toLocaleLowerCase(language).includes(normalizedQuery)
+      !Object.values(artifact.translations).some((item) =>
+        item.title.toLocaleLowerCase(language).includes(normalizedQuery),
+      )
     ) {
       return [];
     }

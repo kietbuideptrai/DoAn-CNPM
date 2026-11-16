@@ -37,7 +37,7 @@ Backlog này phản ánh PRD 1.1 và hiện trạng code đã rà soát ngày 20
 | P2-01 | Kiểm thử responsive mobile-first trên web | Chưa làm | Web | Kiểm tra viewport 320, 375, 390, 768 và 1440 CSS px; không cuộn ngang ngoài ý muốn, cắt/chồng nội dung; ảnh không méo; popup, ngôn ngữ và điều khiển TTS dùng được. Lưu kết quả Pass/Fail và thiết bị/trình duyệt. |
 | P2-02 | Kiểm thử accessibility web | Chưa làm | Web | Hoàn thành luồng chính bằng bàn phím; focus nhìn thấy, popup quản lý/trả focus; zoom 200% không mất chức năng; chữ chính ≥16 CSS px, tương phản văn bản thường ≥4.5:1, nút chính có vùng chạm ≥44×44 CSS px; kiểm tra screen reader, heading, alt text và `lang`. Ghi lại kết quả, sửa lỗi phát hiện. |
 | P2-03 | Kiểm thử luồng mobile trên thiết bị thật | Chưa làm | Mobile | Trên Android/iOS mục tiêu, kiểm tra quyền camera (cho phép/từ chối), QR đúng/sai, slug không tồn tại, mất mạng/thử lại, đổi ngôn ngữ khi TTS đang chạy, rời màn hình khi đang đọc, thiếu voice và VoiceOver/TalkBack. Ghi thiết bị/OS và kết quả. |
-| P2-04 | Đồng bộ tài liệu checklist mobile với phạm vi MVP | Chưa làm | Mobile + QA | `docs/MOBILE-TEST-CHECKLIST.md` không coi lịch sử là tiêu chí bắt buộc; có các case tìm tiếng Việt/Anh độc lập ngôn ngữ, TTS dừng đúng lúc và accessibility; có cột trạng thái/kết quả cho từng case. |
+| P2-04 | Đồng bộ tài liệu checklist mobile với phạm vi MVP | Hoàn thành | Mobile + QA | Checklist không coi lịch sử là tiêu chí MVP bắt buộc; bao gồm tìm kiếm xuyên ngôn ngữ, TTS, accessibility, theme và kiểm tra toàn bộ giao diện cùng luồng chọn ngôn ngữ lúc khởi động. Kiểm thử thiết bị thật vẫn cần được ghi nhận riêng. |
 | P2-05 | Đo mục tiêu tải nội dung trong điều kiện xác định | Chưa làm | Cả nhóm | Chọn và ghi thiết bị, trình duyệt, mạng di động; đo từ lúc mở URL hiện vật đến khi nội dung chính hiển thị. Báo kết quả so với mục tiêu ≤3 giây, không tuyên bố đạt nếu chưa đo. |
 
 ## P3 — Đóng gói demo và bàn giao
@@ -53,7 +53,7 @@ Backlog này phản ánh PRD 1.1 và hiện trạng code đã rà soát ngày 20
 - Không triển khai hoặc mở rộng CMS, đăng nhập quản trị, CRUD qua giao diện, upload ảnh qua CMS.
 - Không mở rộng lịch sử xem hoặc điều chỉnh tốc độ TTS.
 - Không xóa các phần CMS/lịch sử đã có nếu chưa đánh giá phụ thuộc và chưa có yêu cầu riêng.
-- Yêu thích và chỉnh cỡ chữ mobile là Should; chỉ làm sau P0/P1 và các kiểm thử nghiệm thu bắt buộc.
+- Yêu thích mobile là Should; cỡ chữ riêng đã được bỏ khỏi giao diện theo yêu cầu, vẫn hỗ trợ phóng to của hệ điều hành/trình duyệt.
 
 ## Thứ tự đề xuất
 

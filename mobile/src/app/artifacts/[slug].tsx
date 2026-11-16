@@ -15,14 +15,19 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useLocalData } from "@/context/LocalDataContext";
 import { useArtifact } from "@/hooks/useArtifact";
 import { useSpeech } from "@/hooks/useSpeech";
-import { colors, styles as sharedStyles } from "@/theme";
+import { createSharedStyles, useTheme } from "@/theme";
 import { getLanguageLabel, languages } from "@/utils/languages";
+import { useTranslation } from "@/utils/i18n";
 
 export default function ArtifactDetailScreen() {
   const { slug: requestedSlug } = useLocalSearchParams<{ slug: string }>();
   const slug = Array.isArray(requestedSlug) ? requestedSlug[0] : requestedSlug;
   const { language, setLanguage, storageError } = useLanguage();
-  const { favoriteSlugs, fontScale, recordViewed, toggleFavorite } = useLocalData();
+  const { t } = useTranslation();
+  const { favoriteSlugs, recordViewed, toggleFavorite } = useLocalData();
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+  const sharedStyles = createSharedStyles(colors);
   const { state, isNotFound, retry } = useArtifact(slug, language);
   const artifact = state.status === "success" ? state.data : null;
   const translation = artifact?.translation;
@@ -44,7 +49,7 @@ export default function ArtifactDetailScreen() {
     return (
       <View style={[sharedStyles.screen, styles.feedback]}>
         <ActivityIndicator color={colors.primary} size="large" />
-        <Text style={styles.feedbackText}>Đang tải thuyết minh...</Text>
+        <Text style={styles.feedbackText}>{t("loadingNarration")}</Text>
       </View>
     );
   }
@@ -53,11 +58,11 @@ export default function ArtifactDetailScreen() {
     return (
       <View style={[sharedStyles.screen, styles.errorState]}>
         <EmptyState
-          title={isNotFound ? "Không tìm thấy hiện vật" : "Không thể tải hiện vật"}
+          title={isNotFound ? t("artifactNotFound") : t("cannotLoadArtifacts")}
           message={
             isNotFound
-              ? `Không có hiện vật với mã "${slug ?? ""}".`
-              : state.error.message
+              ? t("artifactNotFoundMessage", { slug: slug ?? "" })
+              : t("artifactLoadError")
           }
         />
         {!isNotFound ? (
@@ -66,7 +71,7 @@ export default function ArtifactDetailScreen() {
             onPress={retry}
             style={styles.retryButton}
           >
-            <Text style={styles.retryButtonText}>Thử lại</Text>
+            <Text style={styles.retryButtonText}>{t("retry")}</Text>
           </Pressable>
         ) : null}
       </View>
@@ -81,18 +86,19 @@ export default function ArtifactDetailScreen() {
     return (
       <ScrollView contentContainerStyle={styles.content}>
         <ArtifactImage
-          accessibilityLabel={`Ảnh hiện vật ${artifact.slug}`}
+          accessibilityLabel={t("artifactImage", { name: artifact.slug })}
           source={artifact.image_url}
           style={styles.image}
         />
         <EmptyState
-          title={`Chưa có thuyết minh bằng ${getLanguageLabel(language)}`}
-          message={`Ngôn ngữ này chưa có bản dịch. Nội dung hiện có: ${artifact.available_languages
-            .map(getLanguageLabel)
-            .join(", ")}.`}
+          title={t("noNarrationLanguage", { language: getLanguageLabel(language) })}
+          message={t("noTranslationMessage", {
+            languages: artifact.available_languages.map(getLanguageLabel).join(", "),
+          })}
         />
         <LanguageSelector
           language={language}
+          availableLanguages={artifact.available_languages}
           onChange={setLanguage}
           storageError={storageError}
         />
@@ -109,12 +115,13 @@ export default function ArtifactDetailScreen() {
   return (
     <ScrollView contentContainerStyle={styles.content}>
       <ArtifactImage
-        accessibilityLabel={`Ảnh hiện vật ${translation.title}`}
+        accessibilityLabel={t("artifactImage", { name: translation.title })}
         source={artifact.image_url}
         style={styles.image}
       />
       <LanguageSelector
         language={language}
+        availableLanguages={artifact.available_languages}
         onChange={setLanguage}
         storageError={storageError}
       />
@@ -123,31 +130,31 @@ export default function ArtifactDetailScreen() {
         onPress={() => slug && toggleFavorite(slug)}
       />
       <Text style={styles.languageTag}>{getLanguageLabel(language)}</Text>
-      <Text
-        style={[
-          styles.title,
-          { fontSize: 30 * fontScale, lineHeight: 38 * fontScale },
-        ]}
-      >
+      <Text style={styles.title}>
         {translation.title}
       </Text>
-      <Text
-        style={[
-          styles.summary,
-          { fontSize: 16 * fontScale, lineHeight: 25 * fontScale },
-        ]}
-      >
+      <Text style={styles.summary}>
         {translation.summary}
       </Text>
       <View style={styles.speechControls}>
         {speech.voiceAvailability === "unavailable" ? (
-          <Text style={styles.speechMessage} accessibilityRole="alert">
-            Thiết bị không có giọng đọc {getLanguageLabel(language)}. Bạn vẫn có
-            thể đọc nội dung bên dưới.
-          </Text>
+          <View>
+            <Text style={styles.speechMessage} accessibilityRole="alert">
+              {t("voiceUnavailable", { language: getLanguageLabel(language) })}
+            </Text>
+            <Pressable
+              accessibilityRole="button"
+              onPress={speech.checkVoices}
+              style={styles.retryVoiceButton}
+            >
+              <Text style={styles.retryVoiceButtonText}>{t("checkVoice")}</Text>
+            </Pressable>
+          </View>
         ) : speech.status === "idle" ? (
           <Pressable
-            accessibilityLabel={`Nghe thuyết minh bằng ${getLanguageLabel(language)}`}
+            accessibilityLabel={t("listenNarration", {
+              language: getLanguageLabel(language),
+            })}
             accessibilityRole="button"
             disabled={speech.voiceAvailability === "checking"}
             onPress={speech.play}
@@ -158,8 +165,8 @@ export default function ArtifactDetailScreen() {
           >
             <Text style={styles.speechButtonText}>
               {speech.voiceAvailability === "checking"
-                ? "Đang kiểm tra giọng đọc..."
-                : "▶  Nghe thuyết minh"}
+                ? t("checkingVoice")
+                : t("listen")}
             </Text>
           </Pressable>
         ) : (
@@ -170,7 +177,7 @@ export default function ArtifactDetailScreen() {
                 onPress={speech.resume}
                 style={styles.speechButton}
               >
-                <Text style={styles.speechButtonText}>▶  Tiếp tục</Text>
+                <Text style={styles.speechButtonText}>{t("resume")}</Text>
               </Pressable>
             ) : (
               <Pressable
@@ -178,7 +185,7 @@ export default function ArtifactDetailScreen() {
                 onPress={speech.pause}
                 style={styles.speechButton}
               >
-                <Text style={styles.speechButtonText}>Ⅱ  Tạm dừng</Text>
+                <Text style={styles.speechButtonText}>{t("pause")}</Text>
               </Pressable>
             )}
             <Pressable
@@ -186,7 +193,7 @@ export default function ArtifactDetailScreen() {
               onPress={speech.stop}
               style={styles.stopButton}
             >
-              <Text style={styles.stopButtonText}>Dừng</Text>
+              <Text style={styles.stopButtonText}>{t("stop")}</Text>
             </Pressable>
           </View>
         )}
@@ -200,10 +207,7 @@ export default function ArtifactDetailScreen() {
         {paragraphs.map((paragraph, index) => (
           <Text
             key={`${index}-${paragraph}`}
-            style={[
-              styles.paragraph,
-              { fontSize: 17 * fontScale, lineHeight: 29 * fontScale },
-            ]}
+            style={styles.paragraph}
           >
             {paragraph}
           </Text>
@@ -219,10 +223,14 @@ interface FavoriteButtonProps {
 }
 
 function FavoriteButton({ isFavorite, onPress }: FavoriteButtonProps) {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const styles = createStyles(colors);
+
   return (
     <Pressable
       accessibilityLabel={
-        isFavorite ? "Bỏ khỏi danh sách yêu thích" : "Thêm vào danh sách yêu thích"
+        isFavorite ? t("removeFavorite") : t("addFavorite")
       }
       accessibilityRole="button"
       accessibilityState={{ selected: isFavorite }}
@@ -239,7 +247,7 @@ function FavoriteButton({ isFavorite, onPress }: FavoriteButtonProps) {
           isFavorite && styles.favoriteButtonTextSelected,
         ]}
       >
-        {isFavorite ? "♥  Đã yêu thích" : "♡  Thêm yêu thích"}
+        {isFavorite ? t("favorited") : t("addFavoriteShort")}
       </Text>
     </Pressable>
   );
@@ -247,30 +255,42 @@ function FavoriteButton({ isFavorite, onPress }: FavoriteButtonProps) {
 
 interface LanguageSelectorProps {
   language: Language;
+  availableLanguages: Language[];
   onChange: (language: Language) => Promise<void>;
   storageError: string | null;
 }
 
 function LanguageSelector({
   language,
+  availableLanguages,
   onChange,
   storageError,
 }: LanguageSelectorProps) {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const styles = createStyles(colors);
+
   return (
     <View style={styles.languageSelector}>
-      <Text style={styles.languageSelectorLabel}>Ngôn ngữ thuyết minh</Text>
+      <Text style={styles.languageSelectorLabel}>{t("narrationLanguage")}</Text>
       <View style={styles.languageOptions}>
         {languages.map((item) => {
           const isSelected = item.code === language;
+          const isAvailable = availableLanguages.includes(item.code);
           return (
             <Pressable
               accessibilityRole="radio"
-              accessibilityState={{ checked: isSelected }}
+              accessibilityState={{
+                checked: isSelected,
+                disabled: !isAvailable,
+              }}
               key={item.code}
+              disabled={!isAvailable}
               onPress={() => void onChange(item.code)}
               style={[
                 styles.languageOption,
                 isSelected && styles.selectedLanguageOption,
+                !isAvailable && styles.unavailableLanguageOption,
               ]}
             >
               <Text
@@ -279,7 +299,7 @@ function LanguageSelector({
                   isSelected && styles.selectedLanguageOptionText,
                 ]}
               >
-                {item.label}
+                {isAvailable ? item.label : `${item.label} · ${t("unavailable")}`}
               </Text>
             </Pressable>
           );
@@ -287,7 +307,7 @@ function LanguageSelector({
       </View>
       {storageError ? (
         <Text style={styles.storageError} accessibilityRole="alert">
-          {storageError}
+          {t("storageError")}
         </Text>
       ) : null}
     </View>
@@ -303,10 +323,23 @@ function splitIntoParagraphs(content: string): string[] {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+  return StyleSheet.create({
   content: {
     padding: 20,
     paddingBottom: 40,
+  },
+  retryVoiceButton: {
+    minHeight: 44,
+    alignSelf: "flex-start",
+    justifyContent: "center",
+    marginTop: 6,
+    paddingHorizontal: 10,
+  },
+  retryVoiceButtonText: {
+    color: colors.primary,
+    fontSize: 14,
+    fontWeight: "700",
   },
   image: {
     width: "100%",
@@ -391,6 +424,9 @@ const styles = StyleSheet.create({
   selectedLanguageOption: {
     borderColor: colors.primary,
     backgroundColor: colors.highlight,
+  },
+  unavailableLanguageOption: {
+    opacity: 0.5,
   },
   languageOptionText: {
     color: colors.ink,
@@ -487,4 +523,5 @@ const styles = StyleSheet.create({
     fontSize: 17,
     lineHeight: 29,
   },
-});
+  });
+}

@@ -11,10 +11,15 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { CameraView, useCameraPermissions } from "expo-camera";
 import { router, useFocusEffect } from "expo-router";
 import { EmptyState } from "@/components/EmptyState";
-import { colors, styles as sharedStyles } from "@/theme";
+import { createSharedStyles, useTheme } from "@/theme";
 import { parseArtifactSlug } from "@/utils/qr";
+import { useTranslation } from "@/utils/i18n";
 
 export default function ScanScreen() {
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const styles = createStyles(colors);
+  const sharedStyles = createSharedStyles(colors);
   const [permission, requestPermission] = useCameraPermissions();
   const [isScreenFocused, setIsScreenFocused] = useState(false);
   const [isRequestingPermission, setIsRequestingPermission] = useState(false);
@@ -40,9 +45,7 @@ export default function ScanScreen() {
     try {
       await requestPermission();
     } catch {
-      setPermissionError(
-        "Không thể yêu cầu quyền camera. Hãy thử lại hoặc kiểm tra cài đặt thiết bị.",
-      );
+      setPermissionError(t("cameraPermissionRequestError"));
     } finally {
       setIsRequestingPermission(false);
     }
@@ -54,9 +57,7 @@ export default function ScanScreen() {
     try {
       await Linking.openSettings();
     } catch {
-      setPermissionError(
-        "Không thể mở cài đặt thiết bị. Hãy bật quyền camera trong phần cài đặt ứng dụng.",
-      );
+      setPermissionError(t("openSettingsError"));
     }
   }
 
@@ -70,9 +71,7 @@ export default function ScanScreen() {
     const slug = parseArtifactSlug(data);
 
     if (!slug) {
-      setScanError(
-        "Mã QR không hợp lệ. Hãy quét mã QR có đường dẫn đến /artifacts/:slug.",
-      );
+      setScanError(t("invalidQr"));
       return;
     }
 
@@ -93,7 +92,7 @@ export default function ScanScreen() {
       <SafeAreaView edges={["top"]} style={sharedStyles.screen}>
         <View style={styles.permissionState}>
           <ActivityIndicator color={colors.primary} size="large" />
-          <Text style={styles.permissionText}>Đang kiểm tra quyền camera…</Text>
+          <Text style={styles.permissionText}>{t("cameraChecking")}</Text>
         </View>
       </SafeAreaView>
     );
@@ -104,13 +103,13 @@ export default function ScanScreen() {
 
     return (
       <SafeAreaView edges={["top"]} style={sharedStyles.screen}>
-        <Text style={sharedStyles.screenTitle}>Quét QR</Text>
+        <Text style={sharedStyles.screenTitle}>{t("scanQr")}</Text>
         <EmptyState
-          title="Cần quyền truy cập camera"
+          title={t("cameraPermissionTitle")}
           message={
             canAskAgain
-              ? "Cho phép camera để quét mã QR trên hiện vật."
-              : "Quyền camera đã bị từ chối. Hãy bật quyền trong cài đặt thiết bị để quét mã QR."
+              ? t("cameraPermissionAsk")
+              : t("cameraPermissionDenied")
           }
         />
         {permissionError ? (
@@ -132,7 +131,7 @@ export default function ScanScreen() {
             <ActivityIndicator color={colors.paper} />
           ) : (
             <Text style={styles.primaryButtonText}>
-              {canAskAgain ? "Cho phép camera" : "Mở cài đặt"}
+              {canAskAgain ? t("cameraPermission") : t("openSettings")}
             </Text>
           )}
         </Pressable>
@@ -142,9 +141,9 @@ export default function ScanScreen() {
 
   return (
     <SafeAreaView edges={["top"]} style={sharedStyles.screen}>
-      <Text style={sharedStyles.screenTitle}>Quét QR</Text>
+      <Text style={sharedStyles.screenTitle}>{t("scanQr")}</Text>
       <Text style={styles.instruction}>
-        Hướng camera vào mã QR của hiện vật.
+        {t("scanInstruction")}
       </Text>
       <View style={styles.cameraFrame}>
         <CameraView
@@ -174,17 +173,18 @@ export default function ScanScreen() {
               pressed && styles.buttonPressed,
             ]}
           >
-            <Text style={styles.secondaryButtonText}>Quét lại</Text>
+            <Text style={styles.secondaryButtonText}>{t("scanAgain")}</Text>
           </Pressable>
         </View>
       ) : (
-        <Text style={styles.cameraHint}>Mã QR hợp lệ sẽ mở trang hiện vật.</Text>
+        <Text style={styles.cameraHint}>{t("validQrHint")}</Text>
       )}
     </SafeAreaView>
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+return StyleSheet.create({
   permissionState: {
     flex: 1,
     alignItems: "center",
@@ -318,3 +318,4 @@ const styles = StyleSheet.create({
     opacity: 0.6,
   },
 });
+}

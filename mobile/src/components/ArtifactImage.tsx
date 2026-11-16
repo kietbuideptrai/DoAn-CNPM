@@ -10,7 +10,8 @@ import type {
   ImageStyle,
   StyleProp,
 } from "react-native";
-import { colors } from "@/theme";
+import { useTheme } from "@/theme";
+import { useTranslation } from "@/utils/i18n";
 
 const localArtifactImages: Record<string, ImageSourcePropType> = {
   "/images/artifacts/uh-1-huey.png": require("../../assets/artifacts/uh-1-huey.png"),
@@ -35,6 +36,9 @@ export function ArtifactImage({
   style,
 }: ArtifactImageProps) {
   const [hasLoadError, setHasLoadError] = useState(false);
+  const { colors } = useTheme();
+  const { t } = useTranslation();
+  const styles = createStyles(colors);
 
   if (hasLoadError) {
     return (
@@ -44,7 +48,7 @@ export function ArtifactImage({
         style={[style, styles.placeholder]}
       >
         <Text style={styles.placeholderMark}>◇</Text>
-        <Text style={styles.placeholderText}>Không tải được ảnh hiện vật</Text>
+        <Text style={styles.placeholderText}>{t("imageLoadError")}</Text>
       </View>
     );
   }
@@ -61,7 +65,8 @@ export function ArtifactImage({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+  return StyleSheet.create({
   placeholder: {
     alignItems: "center",
     justifyContent: "center",
@@ -77,4 +82,5 @@ const styles = StyleSheet.create({
     fontSize: 13,
     textAlign: "center",
   },
-});
+  });
+}

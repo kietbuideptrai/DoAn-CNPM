@@ -11,19 +11,20 @@ import { EmptyState } from "@/components/EmptyState";
 import { Screen } from "@/components/Screen";
 import { useLanguage } from "@/context/LanguageContext";
 import { useLocalData } from "@/context/LocalDataContext";
-import type { FontSize } from "@/context/LocalDataContext";
 import { useArtifacts } from "@/hooks/useArtifacts";
 import { languages } from "@/utils/languages";
-import { colors } from "@/theme";
+import { useTheme } from "@/theme";
+import { useTranslation } from "@/utils/i18n";
 
 export default function ProfileScreen() {
   const { language, setLanguage, storageError } = useLanguage();
   const {
-    fontSize,
     historySlugs,
-    setFontSize,
     storageError: localStorageError,
   } = useLocalData();
+  const { colors, mode, setMode, storageError: themeStorageError } = useTheme();
+  const { t } = useTranslation();
+  const styles = createStyles(colors);
   const { state, retry } = useArtifacts(language, "");
   const artifactsBySlug = useMemo(
     () =>
@@ -37,10 +38,10 @@ export default function ProfileScreen() {
     .filter((artifact) => artifact !== undefined);
 
   return (
-    <Screen title="Cá nhân">
-      <Text style={styles.sectionTitle}>Ngôn ngữ</Text>
+    <Screen title={t("profile")}>
+      <Text style={styles.sectionTitle}>{t("language")}</Text>
       <Text style={styles.description}>
-        Chọn ngôn ngữ dùng cho nội dung hiện vật.
+        {t("artifactLanguageDescription")}
       </Text>
       <View style={styles.languageList}>
         {languages.map((item) => {
@@ -73,36 +74,41 @@ export default function ProfileScreen() {
       </View>
       {storageError ? (
         <Text style={styles.storageError} accessibilityRole="alert">
-          {storageError}
+          {t("storageError")}
         </Text>
       ) : null}
 
-      <Text style={styles.sectionTitle}>Cỡ chữ</Text>
+      {themeStorageError ? (
+        <Text style={styles.storageError} accessibilityRole="alert">
+          {t("storageError")}
+        </Text>
+      ) : null}
+
+      <Text style={styles.sectionTitle}>{t("theme")}</Text>
       <Text style={styles.description}>
-        Điều chỉnh cỡ chữ trong nội dung thuyết minh.
+        {t("themeDescription")}
       </Text>
-      <View style={styles.fontSizeOptions}>
+      <View style={styles.themeOptions}>
         {([
-          ["small", "Nhỏ"],
-          ["medium", "Vừa"],
-          ["large", "Lớn"],
+          ["light", t("light")],
+          ["dark", t("dark")],
         ] as const).map(([value, label]) => {
-          const isSelected = fontSize === value;
+          const isSelected = mode === value;
           return (
             <Pressable
               accessibilityRole="radio"
               accessibilityState={{ checked: isSelected }}
               key={value}
-              onPress={() => setFontSize(value as FontSize)}
+              onPress={() => void setMode(value)}
               style={({ pressed }) => [
-                styles.fontSizeOption,
-                isSelected && styles.selectedFontSizeOption,
+                styles.themeOption,
+                isSelected && styles.selectedThemeOption,
                 pressed && styles.languageOptionPressed,
               ]}
             >
               <Text
                 style={[
-                  styles.fontSizeLabel,
+                  styles.themeLabel,
                   isSelected && styles.selectedLanguageLabel,
                 ]}
               >
@@ -113,7 +119,7 @@ export default function ProfileScreen() {
         })}
       </View>
 
-      <Text style={styles.sectionTitle}>Công cụ học tập</Text>
+      <Text style={styles.sectionTitle}>{t("learningTools")}</Text>
       <View style={styles.learningActions}>
         <Pressable
           accessibilityRole="button"
@@ -123,9 +129,9 @@ export default function ProfileScreen() {
             pressed && styles.languageOptionPressed,
           ]}
         >
-          <Text style={styles.learningActionTitle}>Dịch cụm từ</Text>
+          <Text style={styles.learningActionTitle}>{t("translatePhrase")}</Text>
           <Text style={styles.learningActionDescription}>
-            Bản demo Anh–Việt với các cụm từ thông dụng.
+          {t("translationDemoShort")}
           </Text>
         </Pressable>
         <Pressable
@@ -136,14 +142,14 @@ export default function ProfileScreen() {
             pressed && styles.languageOptionPressed,
           ]}
         >
-          <Text style={styles.learningActionTitle}>Lịch sử bản dịch</Text>
+          <Text style={styles.learningActionTitle}>{t("translationHistory")}</Text>
           <Text style={styles.learningActionDescription}>
-            Xem hoặc xóa các bản dịch đã lưu.
+          {t("savedTranslationsDescription")}
           </Text>
         </Pressable>
       </View>
 
-      <Text style={styles.sectionTitle}>Lịch sử đã xem</Text>
+      <Text style={styles.sectionTitle}>{t("viewedHistory")}</Text>
       {localStorageError ? (
         <Text style={styles.storageError} accessibilityRole="alert">
           {localStorageError}
@@ -151,37 +157,37 @@ export default function ProfileScreen() {
       ) : null}
       {historySlugs.length === 0 ? (
         <EmptyState
-          title="Chưa có hiện vật đã xem"
-          message="Các hiện vật bạn đã mở sẽ xuất hiện tại đây."
+          title={t("noViewedArtifacts")}
+          message={t("viewedArtifactsDescription")}
         />
       ) : state.status === "loading" ? (
         <View style={styles.historyFeedback}>
           <ActivityIndicator color={colors.primary} />
-          <Text style={styles.description}>Đang tải lịch sử...</Text>
+          <Text style={styles.description}>{t("loadingHistory")}</Text>
         </View>
       ) : state.status === "error" ? (
         <View style={styles.historyFeedback}>
           <Text style={styles.storageError} accessibilityRole="alert">
-            {state.error.message}
+            {t("artifactLoadError")}
           </Text>
           <Pressable
             accessibilityRole="button"
             onPress={retry}
             style={styles.retryButton}
           >
-            <Text style={styles.retryButtonLabel}>Thử lại</Text>
+            <Text style={styles.retryButtonLabel}>{t("retry")}</Text>
           </Pressable>
         </View>
       ) : history.length === 0 ? (
         <EmptyState
-          title="Không có lịch sử bằng ngôn ngữ này"
-          message="Các hiện vật trong lịch sử chưa có bản dịch bằng ngôn ngữ đang chọn."
+          title={t("noHistoryInLanguage")}
+          message={t("historyNoTranslation")}
         />
       ) : (
         <View style={styles.historyList}>
           {history.map((artifact) => (
             <Pressable
-              accessibilityHint="Mở lại thuyết minh hiện vật"
+              accessibilityHint={t("openNarrationHint")}
               accessibilityRole="button"
               key={artifact.slug}
               onPress={() =>
@@ -207,7 +213,8 @@ export default function ProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+return StyleSheet.create({
   sectionTitle: {
     marginBottom: 6,
     color: colors.ink,
@@ -260,14 +267,14 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
   },
-  fontSizeOptions: {
+  themeOptions: {
     flexDirection: "row",
     gap: 8,
     marginBottom: 28,
   },
-  fontSizeOption: {
+  themeOption: {
     minHeight: 44,
-    minWidth: 82,
+    minWidth: 110,
     alignItems: "center",
     justifyContent: "center",
     paddingHorizontal: 12,
@@ -276,11 +283,11 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: colors.paper,
   },
-  selectedFontSizeOption: {
+  selectedThemeOption: {
     borderColor: colors.primary,
     backgroundColor: colors.highlight,
   },
-  fontSizeLabel: {
+  themeLabel: {
     color: colors.ink,
     fontSize: 14,
   },
@@ -347,3 +354,4 @@ const styles = StyleSheet.create({
     fontWeight: "700",
   },
 });
+}
