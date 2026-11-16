@@ -1,15 +1,15 @@
--- Read-only preflight report for the eight sample artifacts.
+-- Read-only preflight report for the eight Ho Chi Minh Museum sample artifacts.
 -- Run only against an explicitly confirmed non-production database.
 WITH expected(slug) AS (
   VALUES
-    ('uh-1-huey'),
-    ('f-5a'),
-    ('m48-patton'),
-    ('a-1-skyraider'),
-    ('may-chem'),
-    ('chuong-cop-con-dao'),
-    ('blu-82'),
-    ('phao-155mm')
+    ('dong-hai-dong-1946'),
+    ('me-con-ngay-gap-mat'),
+    ('tap-tho-trong-tuyen'),
+    ('bao-linh-kach-menh-so-2'),
+    ('bo-do-an-chu-tich-ho-chi-minh'),
+    ('tui-dung-com-nuoc-ho-chi-minh'),
+    ('doi-guoc-go-ho-chi-minh'),
+    ('tranh-co-dong-cach-mang-thang-tam')
 ),
 required_languages(language_code) AS (
   VALUES ('vi'), ('en'), ('zh'), ('ja'), ('ko')

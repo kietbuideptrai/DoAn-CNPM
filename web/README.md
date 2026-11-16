@@ -30,12 +30,14 @@ cp .env.example .env.local
 HTTPS thực tế của backend và domain Vercel tương ứng.
 
 Khi `VITE_DEMO_MODE=true`, web dùng bộ dữ liệu 8 hiện vật trong
-`shared/demoArtifacts.ts`, có nội dung nháp tiếng Việt, Anh, Trung, Nhật và Hàn;
-ảnh được lưu trong `web/public/images/artifacts/`. Không cần backend hoặc
-database để chạy luồng tham quan. Chế độ này chỉ thay API đọc công khai; đăng
-nhập và các thao tác quản trị vẫn cần các endpoint backend tương ứng. Nội dung
-thuyết minh đa ngôn ngữ là bản nháp, cần được bảo tàng/chuyên gia lịch sử kiểm
-chứng trước khi sử dụng chính thức. Đặt thành `false` khi tích hợp backend thật.
+`shared/demoArtifacts.ts`, tham khảo chuyên mục [Hiện vật kể chuyện của Bảo tàng
+Hồ Chí Minh](https://baotanghochiminh.vn/hien-vat-ke-chuyen.htm). Nội dung
+tiếng Việt và các bản dịch tiếng Anh, Trung, Nhật, Hàn đều là bản nháp cần được
+chuyên gia/bảo tàng kiểm chứng. Ảnh dùng hình giữ chỗ cho tới khi có xác nhận
+quyền sử dụng ảnh hiện vật. Không cần backend hoặc database để chạy luồng tham
+quan. Chế độ này chỉ thay API đọc công khai; đăng nhập và các thao tác quản trị
+vẫn cần các endpoint backend tương ứng. Đặt thành `false` khi tích hợp backend
+thật.
 
 ## Chạy local
 

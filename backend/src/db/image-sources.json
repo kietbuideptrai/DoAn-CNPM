@@ -1,61 +1,70 @@
 {
-  "referenceUrl": "https://baotangchungtichchientranh.vn/vi",
+  "referenceUrl": "https://baotanghochiminh.vn/hien-vat-ke-chuyen.htm",
+  "imagePolicy": "Official article images are not reused until usage rights are confirmed; development uses neutral placeholders.",
   "images": [
     {
-      "slug": "uh-1-huey",
-      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=UH-1+Huey",
-      "sourceUrl": null,
+      "slug": "dong-hai-dong-1946",
+      "articleUrl": "https://baotanghochiminh.vn/hien-vat-ke-chuyen-dong-tien-nuoc-viet-nam-dan-chu-cong-hoa-in-hinh-chan-dung-chu-tich-ho-chi-minh.htm",
+      "imageUrl": "https://placehold.co/800x600?text=Image+pending+rights",
+      "sourceImageUrl": null,
       "licenseOrPermission": null,
-      "status": "pending"
+      "status": "placeholder-rights-unconfirmed"
     },
     {
-      "slug": "f-5a",
-      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=F-5A",
-      "sourceUrl": null,
+      "slug": "me-con-ngay-gap-mat",
+      "articleUrl": "https://baotanghochiminh.vn/hien-vat-ke-chuyen-buc-anh-me-con-ngay-gap-mat.htm",
+      "imageUrl": "https://placehold.co/800x600?text=Image+pending+rights",
+      "sourceImageUrl": null,
       "licenseOrPermission": null,
-      "status": "pending"
+      "status": "placeholder-rights-unconfirmed"
     },
     {
-      "slug": "m48-patton",
-      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=M48+Patton",
-      "sourceUrl": null,
+      "slug": "tap-tho-trong-tuyen",
+      "articleUrl": "https://baotanghochiminh.vn/hien-vat-ke-chuyen-tang-pham-tap-tho-trong-tuyen-kinh-tang-bac-ho.htm",
+      "imageUrl": "https://placehold.co/800x600?text=Image+pending+rights",
+      "sourceImageUrl": null,
       "licenseOrPermission": null,
-      "status": "pending"
+      "status": "placeholder-rights-unconfirmed"
     },
     {
-      "slug": "a-1-skyraider",
-      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=A-1+Skyraider",
-      "sourceUrl": null,
+      "slug": "bao-linh-kach-menh-so-2",
+      "articleUrl": "https://baotanghochiminh.vn/hien-vat-ke-chuyen-bao-linh-kach-menh-so-2-thang-02-1927.htm",
+      "imageUrl": "https://placehold.co/800x600?text=Image+pending+rights",
+      "sourceImageUrl": null,
       "licenseOrPermission": null,
-      "status": "pending"
+      "status": "placeholder-rights-unconfirmed"
     },
     {
-      "slug": "may-chem",
-      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=May+chem",
-      "sourceUrl": null,
+      "slug": "bo-do-an-chu-tich-ho-chi-minh",
+      "articleUrl": "https://baotanghochiminh.vn/hien-vat-ke-chuyen-bo-do-an-cua-chu-tich-ho-chi-minh.htm",
+      "imageUrl": "https://placehold.co/800x600?text=Image+pending+rights",
+      "sourceImageUrl": null,
       "licenseOrPermission": null,
-      "status": "pending"
+      "status": "placeholder-rights-unconfirmed"
     },
     {
-      "slug": "chuong-cop-con-dao",
-      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=Chuong+cop+Con+Dao",
-      "sourceUrl": null,
+      "slug": "tui-dung-com-nuoc-ho-chi-minh",
+      "articleUrl": "https://baotanghochiminh.vn/hien-vat-ke-chuyen-tui-dung-com-va-nuoc-uong-cua-chu-tich-ho-chi-minh.htm",
+      "imageUrl": "https://placehold.co/800x600?text=Image+pending+rights",
+      "sourceImageUrl": null,
       "licenseOrPermission": null,
-      "status": "pending"
+      "status": "placeholder-rights-unconfirmed"
     },
     {
-      "slug": "blu-82",
-      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=BLU-82",
-      "sourceUrl": null,
+      "slug": "doi-guoc-go-ho-chi-minh",
+      "articleUrl": "https://baotanghochiminh.vn/hien-vat-ke-chuyen-doi-guoc-go-moc-cua-chu-tich-ho-chi-minh.htm",
+      "imageUrl": "https://placehold.co/800x600?text=Image+pending+rights",
+      "sourceImageUrl": null,
       "licenseOrPermission": null,
-      "status": "pending"
+      "status": "placeholder-rights-unconfirmed"
     },
     {
-      "slug": "phao-155mm",
-      "developmentPlaceholderUrl": "https://placehold.co/800x600?text=Phao+155mm",
-      "sourceUrl": null,
+      "slug": "tranh-co-dong-cach-mang-thang-tam",
+      "articleUrl": "https://baotanghochiminh.vn/hien-vat-ke-chuyen-tranh-co-dong-tinh-than-cach-mang-thang-tam-va-quoc-khanh-2-9.htm",
+      "imageUrl": "https://placehold.co/800x600?text=Image+pending+rights",
+      "sourceImageUrl": null,
       "licenseOrPermission": null,
-      "status": "pending"
+      "status": "placeholder-rights-unconfirmed"
     }
   ]
 }

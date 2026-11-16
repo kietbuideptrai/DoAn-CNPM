@@ -2,15 +2,30 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, it } from "node:test";
+import { parse } from "csv-parse/sync";
 
 const seed = readFileSync(join(process.cwd(), "src/db/seed.sql"), "utf8");
+const csv = new TextDecoder("utf-8", { fatal: true }).decode(
+  readFileSync(join(process.cwd(), "data/noi-dung-bao-tang.csv")),
+);
+const csvRows = parse(csv, {
+  columns: true,
+  skip_empty_lines: true,
+}) as Array<{
+  slug: string;
+  language_code: string;
+  title: string;
+  summary: string;
+  content: string;
+}>;
 const imageSources = JSON.parse(
   readFileSync(join(process.cwd(), "src/db/image-sources.json"), "utf8"),
 ) as {
   images: Array<{
     slug: string;
-    developmentPlaceholderUrl: string;
-    sourceUrl: string | null;
+    articleUrl: string;
+    imageUrl: string;
+    sourceImageUrl: string | null;
     licenseOrPermission: string | null;
     status: string;
   }>;
@@ -22,36 +37,27 @@ describe("development seed safety", () => {
   it("adds artifacts as unpublished and does not update existing rows", () => {
     const artifactRows = [
       ...seed.matchAll(
-        /VALUES \('([^']+)', '[^']+', '[^']+', '[^']+', (TRUE|FALSE)\)\s+ON CONFLICT \(slug\) (DO NOTHING|DO UPDATE)/g,
+        /\('([^']+)', '[^']+', '([^']+)', '[^']+', (TRUE|FALSE)\)/g,
       ),
     ];
 
     assert.equal(artifactRows.length, 8);
-    assert.ok(artifactRows.every(([, , published, conflict]) =>
-      published === "FALSE" && conflict === "DO NOTHING",
+    assert.ok(artifactRows.every(([, , imageUrl, published]) =>
+      imageUrl.startsWith("https://placehold.co/") && published === "FALSE",
     ));
     assert.doesNotMatch(seed, /ON CONFLICT \(slug\) DO UPDATE/);
     assert.doesNotMatch(seed, /ON CONFLICT \(artifact_id, language_code\) DO UPDATE/);
+    assert.match(seed, /ON CONFLICT \(slug\) DO NOTHING/);
   });
 
   it("seeds all five draft languages for each artifact without overwriting translations", () => {
-    const translationStatements = seed.split(
-      /(?=INSERT INTO artifact_translations)/,
-    );
-    const entries = translationStatements
-      .map((statement) => {
-        const language = statement.match(/SELECT id, '(vi|en|zh|ja|ko)'/)?.[1];
-        const slug = statement.match(/FROM artifacts WHERE slug = '([^']+)'/)?.[1];
-        return language && slug ? { language, slug, statement } : undefined;
-      })
-      .filter(
-        (entry): entry is { language: string; slug: string; statement: string } =>
-          entry !== undefined,
-      );
+    const entries = [...seed.matchAll(/^\s*\('([a-z0-9-]+)', '(vi|en|zh|ja|ko)',/gm)]
+      .map(([, slug, language]) => ({ slug, language }));
     const slugs = [...new Set(entries.map(({ slug }) => slug))];
 
     assert.equal(slugs.length, 8);
     assert.equal(entries.length, 8 * supportedLanguages.length);
+    assert.equal(csvRows.length, 8 * supportedLanguages.length);
     for (const slug of slugs) {
       assert.deepEqual(
         entries
@@ -60,36 +66,41 @@ describe("development seed safety", () => {
           .sort(),
         [...supportedLanguages].sort(),
       );
+      const csvLanguages = csvRows
+        .filter((entry) => entry.slug === slug)
+        .map((entry) => entry.language_code)
+        .sort();
+      assert.deepEqual(csvLanguages, [...supportedLanguages].sort());
     }
-    assert.ok(
-      entries.every(({ statement }) =>
-        /ON CONFLICT \(artifact_id, language_code\) DO NOTHING/.test(statement),
-      ),
-    );
+    assert.ok(csvRows.every((row) => row.title && row.summary && row.content));
+    assert.match(seed, /ON CONFLICT \(artifact_id, language_code\) DO NOTHING/);
   });
 
-  it("tracks source and permission status for every development image placeholder", () => {
+  it("tracks source articles and placeholder images pending rights confirmation", () => {
     assert.equal(imageSources.images.length, 8);
     assert.ok(
       imageSources.images.every(
         (image) =>
-          image.developmentPlaceholderUrl.startsWith("https://placehold.co/") &&
-          image.sourceUrl === null &&
+          image.articleUrl.startsWith("https://baotanghochiminh.vn/") &&
+          image.imageUrl.startsWith("https://placehold.co/") &&
+          image.sourceImageUrl === null &&
           image.licenseOrPermission === null &&
-          image.status === "pending",
+          image.status === "placeholder-rights-unconfirmed" &&
+          seed.includes(image.imageUrl),
       ),
     );
+    assert.doesNotMatch(seed, /War Remnants Museum|Chứng tích Chiến tranh/);
     assert.deepEqual(
       imageSources.images.map(({ slug }) => slug).sort(),
       [
-        "uh-1-huey",
-        "f-5a",
-        "m48-patton",
-        "a-1-skyraider",
-        "may-chem",
-        "chuong-cop-con-dao",
-        "blu-82",
-        "phao-155mm",
+        "dong-hai-dong-1946",
+        "me-con-ngay-gap-mat",
+        "tap-tho-trong-tuyen",
+        "bao-linh-kach-menh-so-2",
+        "bo-do-an-chu-tich-ho-chi-minh",
+        "tui-dung-com-nuoc-ho-chi-minh",
+        "doi-guoc-go-ho-chi-minh",
+        "tranh-co-dong-cach-mang-thang-tam",
       ].sort(),
     );
   });

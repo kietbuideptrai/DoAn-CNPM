@@ -17,15 +17,15 @@ describe("local web demo data", () => {
     expect(isDemoMode()).toBe(true);
     const artifacts = await getArtifacts("ja");
     expect(artifacts).toHaveLength(8);
-    expect(artifacts[0].title).toBe("UH-1「ヒューイ」ヘリコプター");
+    expect(artifacts[0].title).toBe("1946年発行の2ドン硬貨");
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("filters demo artifacts by the localized title", async () => {
     vi.stubEnv("VITE_DEMO_MODE", "true");
 
-    await expect(getArtifacts("en", "fighter")).resolves.toMatchObject([
-      { slug: "f-5a-fighter", title: "F-5A fighter aircraft" },
+    await expect(getArtifacts("en", "coin")).resolves.toMatchObject([
+      { slug: "dong-hai-dong-1946", title: "The 1946 Two-Dong Coin" },
     ]);
   });
 
@@ -39,7 +39,10 @@ describe("local web demo data", () => {
       expect(artifacts).toHaveLength(8);
       expect(artifacts.every((artifact) => artifact.title.length > 0)).toBe(true);
       expect(
-        artifacts.every((artifact) => artifact.image_url.startsWith("/images/artifacts/")),
+        artifacts.every(
+          (artifact) =>
+            artifact.image_url === "/images/artifacts/museum-placeholder.svg",
+        ),
       ).toBe(true);
     },
   );
@@ -47,9 +50,9 @@ describe("local web demo data", () => {
   it("returns localized detail data and rejects unknown slugs with 404", async () => {
     vi.stubEnv("VITE_DEMO_MODE", "true");
 
-    await expect(getArtifact("m48-patton", "ko")).resolves.toMatchObject({
-      slug: "m48-patton",
-      translation: { language_code: "ko", title: "M48 패튼 전차" },
+    await expect(getArtifact("tap-tho-trong-tuyen", "ko")).resolves.toMatchObject({
+      slug: "tap-tho-trong-tuyen",
+      translation: { language_code: "ko", title: "쫑뚜옌 시집" },
     });
     await expect(getArtifact("unknown", "vi")).rejects.toMatchObject({
       status: 404,
