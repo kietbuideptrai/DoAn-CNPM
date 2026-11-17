@@ -481,7 +481,7 @@ function ArtifactDetailContent({ artifact }: ArtifactDetailContentProps) {
           )}
           {speech.voiceStatus === "unavailable" ? (
             <p className="speech-message" role="status">
-              Hiện giờ chưa có voice
+              {speech.error ?? "Hiện giờ chưa có voice"}
             </p>
           ) : speech.voiceStatus === "loading" ? (
             <p className="speech-message" role="status">

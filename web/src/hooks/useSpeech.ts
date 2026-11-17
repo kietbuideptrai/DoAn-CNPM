@@ -42,12 +42,43 @@ export function getVoiceStatus(
     return "loading";
   }
 
-  const normalizedTtsLang = ttsLang.toLowerCase();
-  return voices.some((voice) =>
-    voice.lang.toLowerCase().startsWith(normalizedTtsLang),
-  )
+  return voices.some((voice) => matchesVoiceLanguage(voice.lang, ttsLang))
     ? "available"
     : "unavailable";
+}
+
+function matchesVoiceLanguage(voiceLanguage: string, requestedLanguage: string) {
+  const normalizedVoice = voiceLanguage.toLowerCase();
+  const normalizedRequested = requestedLanguage.toLowerCase();
+  const baseLanguage = normalizedRequested.split("-")[0];
+  return (
+    normalizedVoice === normalizedRequested ||
+    normalizedVoice.startsWith(`${normalizedRequested}-`) ||
+    normalizedVoice === baseLanguage ||
+    normalizedVoice.startsWith(`${baseLanguage}-`)
+  );
+}
+
+function getSpeechErrorMessage(error: string): string {
+  switch (error) {
+    case "not-allowed":
+    case "service-not-allowed":
+      return "Trình duyệt hoặc hệ điều hành đang chặn giọng đọc. Hãy cho phép âm thanh, rồi bấm phát lại.";
+    case "language-unavailable":
+    case "voice-unavailable":
+      return "Thiết bị chưa có giọng đọc cho ngôn ngữ này. Hãy cài voice trong cài đặt hệ điều hành.";
+    case "network":
+      return "Không thể tải dịch vụ giọng đọc. Hãy kiểm tra kết nối mạng rồi thử lại.";
+    case "audio-busy":
+    case "audio-hardware":
+      return "Thiết bị âm thanh đang bận hoặc không khả dụng. Hãy kiểm tra âm lượng và thử lại.";
+    case "synthesis-unavailable":
+      return "Dịch vụ đọc văn bản hiện không khả dụng trên thiết bị này.";
+    case "synthesis-failed":
+      return "Trình đọc giọng nói gặp lỗi. Hãy thử lại hoặc chọn voice khác trong cài đặt thiết bị.";
+    default:
+      return "Không thể phát thuyết minh trên thiết bị này.";
+  }
 }
 
 export function useSpeech(text: string, language: Language): UseSpeechResult {
@@ -159,6 +190,13 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
           utteranceQueue.current[currentIndex.current],
         );
         utterance.lang = locale;
+        const voices = window.speechSynthesis.getVoices();
+        const voice =
+          voices.find((candidate) => candidate.lang.toLowerCase() === locale.toLowerCase()) ??
+          voices.find((candidate) => matchesVoiceLanguage(candidate.lang, locale));
+        if (voice) {
+          utterance.voice = voice;
+        }
         utterance.onstart = () => {
           if (
             activeRequestId === requestId.current &&
@@ -190,16 +228,10 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
           utteranceQueue.current = [];
           currentIndex.current = 0;
           setStatus("idle");
-          if (
-            event.error === "voice-unavailable" ||
-            event.error === "language-unavailable"
-          ) {
+          if (event.error === "voice-unavailable" || event.error === "language-unavailable") {
             setVoiceStatus("unavailable");
-            setError("Hiện giờ chưa có voice");
-            return;
           }
-
-          setError("Không thể phát thuyết minh trên thiết bị này.");
+          setError(getSpeechErrorMessage(event.error));
         };
 
         window.speechSynthesis.speak(utterance);
@@ -241,7 +273,7 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
     const currentVoiceStatus = getVoiceStatus(locale);
     setVoiceStatus(currentVoiceStatus);
     if (currentVoiceStatus === "unavailable") {
-      setError("Hiện giờ chưa có voice");
+      setError(getSpeechErrorMessage("language-unavailable"));
       return;
     }
 

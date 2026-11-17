@@ -316,7 +316,11 @@ describe("artifact detail page", () => {
       ),
     );
 
-    expect(await screen.findByText("Hiện giờ chưa có voice")).toBeTruthy();
+    expect(
+      await screen.findByText(
+        "Thiết bị chưa có giọng đọc cho ngôn ngữ này. Hãy cài voice trong cài đặt hệ điều hành.",
+      ),
+    ).toBeTruthy();
     expect(screen.getByText("This tank served during the war.")).toBeTruthy();
   });
 });

@@ -27,16 +27,11 @@ function AppNavigator() {
   const [startupState, setStartupState] = useState<
     "selecting" | "saving" | "welcome" | "ready"
   >("selecting");
-  const [selectedLanguage, setSelectedLanguage] = useState<Language>("vi");
-  const welcomeAnimation = useRef(new Animated.Value(0)).current;
+  const [selectedLanguage, setSelectedLanguage] = useState<Language | null>(null);
+  const languageChoice = selectedLanguage ?? language;
+  const [welcomeAnimation] = useState(() => new Animated.Value(0));
   const isChoosingLanguage = useRef(false);
   const startupStyles = createStartupStyles(colors);
-
-  useEffect(() => {
-    if (!isLoading) {
-      setSelectedLanguage(language);
-    }
-  }, [isLoading, language]);
 
   useEffect(() => {
     if (startupState !== "welcome") {
@@ -47,7 +42,7 @@ function AppNavigator() {
     Animated.timing(welcomeAnimation, {
       toValue: 1,
       duration: 650,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start();
 
     const timeout = setTimeout(() => setStartupState("ready"), 2200);
@@ -62,7 +57,7 @@ function AppNavigator() {
     isChoosingLanguage.current = true;
     setStartupState("saving");
     try {
-      await setLanguage(selectedLanguage);
+      await setLanguage(languageChoice);
       setStartupState("welcome");
     } finally {
       isChoosingLanguage.current = false;
@@ -96,7 +91,7 @@ function AppNavigator() {
           <Text style={startupStyles.title}>{t("startupPrompt")}</Text>
           <View style={startupStyles.languageList}>
             {languages.map((item) => {
-              const isSelected = selectedLanguage === item.code;
+              const isSelected = languageChoice === item.code;
               return (
                   <Pressable
                     accessibilityRole="radio"

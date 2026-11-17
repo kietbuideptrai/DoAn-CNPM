@@ -16,7 +16,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useLocalData } from "@/context/LocalDataContext";
 import { useArtifact } from "@/hooks/useArtifact";
 import { useSpeech } from "@/hooks/useSpeech";
-import { colors, styles as sharedStyles } from "@/theme";
+import { createSharedStyles, useTheme } from "@/theme";
 import { getLanguageLabel, languages } from "@/utils/languages";
 
 type FallbackChoice = "accepted" | "dismissed";
@@ -25,7 +25,10 @@ export default function ArtifactDetailScreen() {
   const { slug: requestedSlug } = useLocalSearchParams<{ slug: string }>();
   const slug = Array.isArray(requestedSlug) ? requestedSlug[0] : requestedSlug;
   const { language, setLanguage, storageError } = useLanguage();
-  const { favoriteSlugs, fontScale, recordViewed, toggleFavorite } = useLocalData();
+  const { colors } = useTheme();
+  const sharedStyles = createSharedStyles(colors);
+  const styles = createStyles(colors);
+  const { favoriteSlugs, recordViewed, toggleFavorite } = useLocalData();
   const fallbackKey = `${slug ?? ""}\u0000${language}`;
   const [fallbackChoice, setFallbackChoice] = useState<{
     key: string;
@@ -178,19 +181,11 @@ export default function ArtifactDetailScreen() {
         {getLanguageLabel(translation.language_code)}
       </Text>
       <Text
-        style={[
-          styles.title,
-          { fontSize: 30 * fontScale, lineHeight: 38 * fontScale },
-        ]}
+        style={styles.title}
       >
         {translation.title}
       </Text>
-      <Text
-        style={[
-          styles.summary,
-          { fontSize: 16 * fontScale, lineHeight: 25 * fontScale },
-        ]}
-      >
+      <Text style={styles.summary}>
         {translation.summary}
       </Text>
       <View style={styles.speechControls}>
@@ -271,10 +266,7 @@ export default function ArtifactDetailScreen() {
         {paragraphs.map((paragraph, index) => (
           <Text
             key={`${index}-${paragraph}`}
-            style={[
-              styles.paragraph,
-              { fontSize: 17 * fontScale, lineHeight: 29 * fontScale },
-            ]}
+            style={styles.paragraph}
           >
             {paragraph}
           </Text>
@@ -290,6 +282,9 @@ interface FavoriteButtonProps {
 }
 
 function FavoriteButton({ isFavorite, onPress }: FavoriteButtonProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   return (
     <Pressable
       accessibilityLabel={
@@ -325,6 +320,9 @@ function EnglishFallbackDialog({
   onAccept,
   onCancel,
 }: EnglishFallbackDialogProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   return (
     <Modal
       animationType="fade"
@@ -377,6 +375,9 @@ function LanguageSelector({
   onChange,
   storageError,
 }: LanguageSelectorProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
+
   return (
     <View style={styles.languageSelector}>
       <Text style={styles.languageSelectorLabel}>Ngôn ngữ thuyết minh</Text>
@@ -424,278 +425,280 @@ function splitIntoParagraphs(content: string): string[] {
   );
 }
 
-const styles = StyleSheet.create({
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-  image: {
-    width: "100%",
-    height: 230,
-    marginBottom: 22,
-    borderRadius: 14,
-  },
-  feedback: {
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 12,
-  },
-  feedbackText: {
-    color: colors.muted,
-    fontSize: 15,
-  },
-  errorState: {
-    justifyContent: "center",
-    gap: 14,
-  },
-  retryButton: {
-    minHeight: 48,
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 10,
-    backgroundColor: colors.primary,
-  },
-  retryButtonText: {
-    color: colors.paper,
-    fontSize: 15,
-    fontWeight: "700",
-  },
-  languageSelector: {
-    marginBottom: 18,
-  },
-  favoriteButton: {
-    minHeight: 44,
-    alignSelf: "flex-start",
-    justifyContent: "center",
-    marginBottom: 20,
-    paddingHorizontal: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    backgroundColor: colors.paper,
-  },
-  favoriteButtonSelected: {
-    borderColor: colors.primary,
-    backgroundColor: colors.highlight,
-  },
-  favoriteButtonPressed: {
-    opacity: 0.75,
-  },
-  favoriteButtonText: {
-    color: colors.ink,
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  favoriteButtonTextSelected: {
-    color: colors.primary,
-  },
-  languageSelectorLabel: {
-    marginBottom: 9,
-    color: colors.ink,
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  languageOptions: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 8,
-  },
-  languageOption: {
-    minHeight: 40,
-    justifyContent: "center",
-    paddingHorizontal: 13,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 20,
-    backgroundColor: colors.paper,
-  },
-  selectedLanguageOption: {
-    borderColor: colors.primary,
-    backgroundColor: colors.highlight,
-  },
-  languageOptionText: {
-    color: colors.ink,
-    fontSize: 14,
-  },
-  selectedLanguageOptionText: {
-    color: colors.primary,
-    fontWeight: "700",
-  },
-  storageError: {
-    marginTop: 10,
-    color: colors.error,
-    fontSize: 13,
-    lineHeight: 19,
-  },
-  fallbackNotice: {
-    marginBottom: 14,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    backgroundColor: colors.highlight,
-    color: colors.ink,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  languageTag: {
-    marginBottom: 8,
-    color: colors.primary,
-    fontSize: 12,
-    fontWeight: "700",
-    letterSpacing: 0.8,
-    textTransform: "uppercase",
-  },
-  title: {
-    marginBottom: 10,
-    color: colors.ink,
-    fontSize: 30,
-    fontWeight: "700",
-    lineHeight: 38,
-  },
-  summary: {
-    marginBottom: 18,
-    color: colors.muted,
-    fontSize: 16,
-    lineHeight: 25,
-  },
-  speechControls: {
-    marginBottom: 22,
-  },
-  speechButton: {
-    minHeight: 48,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 18,
-    borderRadius: 10,
-    backgroundColor: colors.primary,
-  },
-  speechButtonText: {
-    color: colors.paper,
-    fontSize: 15,
-    fontWeight: "700",
-  },
-  speechButtonRow: {
-    flexDirection: "row",
-    gap: 10,
-  },
-  stopButton: {
-    minHeight: 48,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    backgroundColor: colors.paper,
-  },
-  stopButtonText: {
-    color: colors.ink,
-    fontSize: 15,
-    fontWeight: "700",
-  },
-  disabledButton: {
-    opacity: 0.6,
-  },
-  speechMessage: {
-    color: colors.muted,
-    fontSize: 14,
-    lineHeight: 21,
-  },
-  speechUnavailable: {
-    gap: 8,
-  },
-  recheckButton: {
-    minHeight: 44,
-    alignSelf: "flex-start",
-    justifyContent: "center",
-    marginTop: 4,
-    paddingHorizontal: 14,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    borderRadius: 10,
-    backgroundColor: colors.paper,
-  },
-  recheckButtonText: {
-    color: colors.primary,
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  speechError: {
-    marginTop: 10,
-    color: colors.error,
-    fontSize: 14,
-    lineHeight: 20,
-  },
-  dialogBackdrop: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 20,
-    backgroundColor: "rgba(18, 32, 25, 0.58)",
-  },
-  dialogCard: {
-    width: "100%",
-    maxWidth: 520,
-    padding: 26,
-    borderRadius: 16,
-    backgroundColor: colors.paper,
-  },
-  dialogTitle: {
-    marginBottom: 10,
-    color: colors.ink,
-    fontSize: 24,
-    fontWeight: "700",
-    lineHeight: 30,
-  },
-  dialogMessage: {
-    color: colors.muted,
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  dialogActions: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    gap: 10,
-    marginTop: 24,
-  },
-  dialogPrimaryButton: {
-    minHeight: 48,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 18,
-    borderRadius: 10,
-    backgroundColor: colors.primary,
-  },
-  dialogPrimaryButtonText: {
-    color: colors.paper,
-    fontSize: 15,
-    fontWeight: "700",
-  },
-  dialogSecondaryButton: {
-    minHeight: 48,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingHorizontal: 18,
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 10,
-    backgroundColor: colors.paper,
-  },
-  dialogSecondaryButtonText: {
-    color: colors.ink,
-    fontSize: 15,
-    fontWeight: "700",
-  },
-  article: {
-    paddingTop: 18,
-    borderTopWidth: 1,
-    borderTopColor: colors.border,
-  },
-  paragraph: {
-    marginBottom: 18,
-    color: colors.ink,
-    fontSize: 17,
-    lineHeight: 29,
-  },
-});
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+  return StyleSheet.create({
+    content: {
+      padding: 20,
+      paddingBottom: 40,
+    },
+    image: {
+      width: "100%",
+      height: 230,
+      marginBottom: 22,
+      borderRadius: 14,
+    },
+    feedback: {
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 12,
+    },
+    feedbackText: {
+      color: colors.muted,
+      fontSize: 15,
+    },
+    errorState: {
+      justifyContent: "center",
+      gap: 14,
+    },
+    retryButton: {
+      minHeight: 48,
+      alignItems: "center",
+      justifyContent: "center",
+      borderRadius: 10,
+      backgroundColor: colors.primary,
+    },
+    retryButtonText: {
+      color: colors.paper,
+      fontSize: 15,
+      fontWeight: "700",
+    },
+    languageSelector: {
+      marginBottom: 18,
+    },
+    favoriteButton: {
+      minHeight: 44,
+      alignSelf: "flex-start",
+      justifyContent: "center",
+      marginBottom: 20,
+      paddingHorizontal: 14,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 10,
+      backgroundColor: colors.paper,
+    },
+    favoriteButtonSelected: {
+      borderColor: colors.primary,
+      backgroundColor: colors.highlight,
+    },
+    favoriteButtonPressed: {
+      opacity: 0.75,
+    },
+    favoriteButtonText: {
+      color: colors.ink,
+      fontSize: 14,
+      fontWeight: "700",
+    },
+    favoriteButtonTextSelected: {
+      color: colors.primary,
+    },
+    languageSelectorLabel: {
+      marginBottom: 9,
+      color: colors.ink,
+      fontSize: 14,
+      fontWeight: "700",
+    },
+    languageOptions: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 8,
+    },
+    languageOption: {
+      minHeight: 40,
+      justifyContent: "center",
+      paddingHorizontal: 13,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 20,
+      backgroundColor: colors.paper,
+    },
+    selectedLanguageOption: {
+      borderColor: colors.primary,
+      backgroundColor: colors.highlight,
+    },
+    languageOptionText: {
+      color: colors.ink,
+      fontSize: 14,
+    },
+    selectedLanguageOptionText: {
+      color: colors.primary,
+      fontWeight: "700",
+    },
+    storageError: {
+      marginTop: 10,
+      color: colors.error,
+      fontSize: 13,
+      lineHeight: 19,
+    },
+    fallbackNotice: {
+      marginBottom: 14,
+      padding: 12,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 10,
+      backgroundColor: colors.highlight,
+      color: colors.ink,
+      fontSize: 14,
+      lineHeight: 20,
+    },
+    languageTag: {
+      marginBottom: 8,
+      color: colors.primary,
+      fontSize: 12,
+      fontWeight: "700",
+      letterSpacing: 0.8,
+      textTransform: "uppercase",
+    },
+    title: {
+      marginBottom: 10,
+      color: colors.ink,
+      fontSize: 30,
+      fontWeight: "700",
+      lineHeight: 38,
+    },
+    summary: {
+      marginBottom: 18,
+      color: colors.muted,
+      fontSize: 16,
+      lineHeight: 25,
+    },
+    speechControls: {
+      marginBottom: 22,
+    },
+    speechButton: {
+      minHeight: 48,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 18,
+      borderRadius: 10,
+      backgroundColor: colors.primary,
+    },
+    speechButtonText: {
+      color: colors.paper,
+      fontSize: 15,
+      fontWeight: "700",
+    },
+    speechButtonRow: {
+      flexDirection: "row",
+      gap: 10,
+    },
+    stopButton: {
+      minHeight: 48,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 18,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 10,
+      backgroundColor: colors.paper,
+    },
+    stopButtonText: {
+      color: colors.ink,
+      fontSize: 15,
+      fontWeight: "700",
+    },
+    disabledButton: {
+      opacity: 0.6,
+    },
+    speechMessage: {
+      color: colors.muted,
+      fontSize: 14,
+      lineHeight: 21,
+    },
+    speechUnavailable: {
+      gap: 8,
+    },
+    recheckButton: {
+      minHeight: 44,
+      alignSelf: "flex-start",
+      justifyContent: "center",
+      marginTop: 4,
+      paddingHorizontal: 14,
+      borderWidth: 1,
+      borderColor: colors.primary,
+      borderRadius: 10,
+      backgroundColor: colors.paper,
+    },
+    recheckButtonText: {
+      color: colors.primary,
+      fontSize: 14,
+      fontWeight: "700",
+    },
+    speechError: {
+      marginTop: 10,
+      color: colors.error,
+      fontSize: 14,
+      lineHeight: 20,
+    },
+    dialogBackdrop: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      padding: 20,
+      backgroundColor: "rgba(18, 32, 25, 0.58)",
+    },
+    dialogCard: {
+      width: "100%",
+      maxWidth: 520,
+      padding: 26,
+      borderRadius: 16,
+      backgroundColor: colors.paper,
+    },
+    dialogTitle: {
+      marginBottom: 10,
+      color: colors.ink,
+      fontSize: 24,
+      fontWeight: "700",
+      lineHeight: 30,
+    },
+    dialogMessage: {
+      color: colors.muted,
+      fontSize: 16,
+      lineHeight: 24,
+    },
+    dialogActions: {
+      flexDirection: "row",
+      flexWrap: "wrap",
+      gap: 10,
+      marginTop: 24,
+    },
+    dialogPrimaryButton: {
+      minHeight: 48,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 18,
+      borderRadius: 10,
+      backgroundColor: colors.primary,
+    },
+    dialogPrimaryButtonText: {
+      color: colors.paper,
+      fontSize: 15,
+      fontWeight: "700",
+    },
+    dialogSecondaryButton: {
+      minHeight: 48,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingHorizontal: 18,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 10,
+      backgroundColor: colors.paper,
+    },
+    dialogSecondaryButtonText: {
+      color: colors.ink,
+      fontSize: 15,
+      fontWeight: "700",
+    },
+    article: {
+      paddingTop: 18,
+      borderTopWidth: 1,
+      borderTopColor: colors.border,
+    },
+    paragraph: {
+      marginBottom: 18,
+      color: colors.ink,
+      fontSize: 17,
+      lineHeight: 29,
+    },
+  });
+}

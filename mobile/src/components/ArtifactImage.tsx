@@ -6,7 +6,7 @@ import {
   View,
 } from "react-native";
 import type { ImageStyle, StyleProp } from "react-native";
-import { colors } from "@/theme";
+import { useTheme } from "@/theme";
 
 interface ArtifactImageProps {
   accessibilityLabel: string;
@@ -19,6 +19,8 @@ export function ArtifactImage({
   source,
   style,
 }: ArtifactImageProps) {
+  const { colors } = useTheme();
+  const styles = createStyles(colors);
   const [hasLoadError, setHasLoadError] = useState(false);
   const isRightsPlaceholder =
     source === "/images/artifacts/museum-placeholder.svg";
@@ -52,20 +54,22 @@ export function ArtifactImage({
   );
 }
 
-const styles = StyleSheet.create({
-  placeholder: {
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: colors.highlight,
-  },
-  placeholderMark: {
-    marginBottom: 8,
-    color: colors.muted,
-    fontSize: 28,
-  },
-  placeholderText: {
-    color: colors.muted,
-    fontSize: 13,
-    textAlign: "center",
-  },
-});
+function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
+  return StyleSheet.create({
+    placeholder: {
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: colors.highlight,
+    },
+    placeholderMark: {
+      marginBottom: 8,
+      color: colors.muted,
+      fontSize: 28,
+    },
+    placeholderText: {
+      color: colors.muted,
+      fontSize: 13,
+      textAlign: "center",
+    },
+  });
+}

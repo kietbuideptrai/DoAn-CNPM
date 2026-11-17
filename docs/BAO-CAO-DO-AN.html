@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Báo cáo đồ án — Thuyết minh hiện vật đa ngôn ngữ</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm; }
+    :root { --ink: #17221d; --green: #1f5c45; --mint: #e9f3ed; --gold: #b77a1c; --line: #ccd8d0; --muted: #53645b; }
+    * { box-sizing: border-box; }
+    body { color: var(--ink); font: 11pt/1.55 Arial, "Noto Sans", sans-serif; margin: 0; }
+    h1, h2, h3 { color: var(--green); line-height: 1.25; }
+    h1 { font-size: 25pt; margin: 0 0 18px; }
+    h2 { font-size: 17pt; border-bottom: 2px solid var(--green); margin: 28px 0 12px; padding-bottom: 5px; }
+    h3 { font-size: 13pt; margin: 18px 0 6px; }
+    p { margin: 7px 0; }
+    ul, ol { margin: 7px 0; padding-left: 23px; }
+    li { margin: 3px 0; }
+    .cover { align-items: center; border: 2px solid var(--green); display: flex; flex-direction: column; justify-content: center; min-height: 250mm; padding: 30mm 20mm; text-align: center; }
+    .cover .eyebrow { color: var(--gold); font-weight: bold; letter-spacing: 1.5px; margin-bottom: 18px; text-transform: uppercase; }
+    .cover h1 { font-size: 29pt; max-width: 570px; }
+    .cover .subtitle { color: var(--muted); font-size: 14pt; max-width: 470px; }
+    .cover .meta { border-top: 1px solid var(--line); margin-top: 42px; padding-top: 18px; text-align: left; width: 100%; }
+    .cover .meta p { margin: 5px 0; }
+    .page-break { break-before: page; page-break-before: always; }
+    .note { background: var(--mint); border-left: 4px solid var(--green); margin: 13px 0; padding: 10px 13px; }
+    table { border-collapse: collapse; margin: 10px 0 16px; width: 100%; }
+    th, td { border: 1px solid var(--line); padding: 7px 8px; text-align: left; vertical-align: top; }
+    th { background: var(--mint); color: var(--green); }
+    code, pre { font-family: "DejaVu Sans Mono", monospace; }
+    pre { background: #f3f7f4; border: 1px solid var(--line); font-size: 9.4pt; line-height: 1.45; overflow: hidden; padding: 12px; }
+    .toc a { color: inherit; text-decoration: none; }
+    .toc li { border-bottom: 1px dotted var(--line); padding: 4px 0; }
+    .badge { background: var(--mint); border-radius: 10px; color: var(--green); display: inline-block; font-size: 9pt; font-weight: bold; margin: 2px; padding: 2px 8px; }
+    .small { color: var(--muted); font-size: 9.5pt; }
+    .status-ok { color: #18603c; font-weight: bold; }
+    .status-partial { color: #9a6513; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <section class="cover">
+    <p class="eyebrow">BÁO CÁO ĐỒ ÁN MÔN CÔNG NGHỆ PHẦN MỀM</p>
+    <h1>Hệ thống thuyết minh hiện vật đa ngôn ngữ qua mã QR</h1>
+    <p class="subtitle">Website và ứng dụng di động hỗ trợ khách tham quan tìm hiểu hiện vật bằng nội dung đa ngôn ngữ và giọng đọc tổng hợp.</p>
+    <div class="meta">
+      <p><strong>Sinh viên / nhóm:</strong> …</p>
+      <p><strong>Lớp:</strong> …</p>
+      <p><strong>Giảng viên hướng dẫn:</strong> …</p>
+      <p><strong>Ngày báo cáo:</strong> 17/11/2026</p>
+    </div>
+  </section>
+
+  <section class="page-break">
+    <h2>Mục lục</h2>
+    <ol class="toc">
+      <li><a href="#overview">Tổng quan đề tài</a></li>
+      <li><a href="#requirements">Yêu cầu và phạm vi MVP</a></li>
+      <li><a href="#architecture">Kiến trúc và công nghệ</a></li>
+      <li><a href="#data">Thiết kế dữ liệu và API</a></li>
+      <li><a href="#implementation">Các luồng đã triển khai</a></li>
+      <li><a href="#testing">Kiểm thử và đánh giá</a></li>
+      <li><a href="#limits">Giới hạn và hướng phát triển</a></li>
+      <li><a href="#conclusion">Kết luận</a></li>
+    </ol>
+
+    <h2 id="overview">1. Tổng quan đề tài</h2>
+    <h3>1.1. Bài toán</h3>
+    <p>Khách tham quan bảo tàng có thể không có hướng dẫn viên riêng, gặp rào cản ngôn ngữ hoặc cần nghe thay vì đọc nội dung. Đề tài xây dựng một hệ thống để khách quét mã QR tại hiện vật, mở đúng trang giới thiệu, chọn ngôn ngữ và nghe thuyết minh khi cần.</p>
+
+    <h3>1.2. Mục tiêu</h3>
+    <ul>
+      <li>Truy cập nhanh nội dung hiện vật bằng QR hoặc đường dẫn trực tiếp.</li>
+      <li>Hỗ trợ năm ngôn ngữ: Việt, Anh, Trung, Nhật và Hàn.</li>
+      <li>Hiển thị nội dung dễ đọc và hỗ trợ Text-to-Speech (TTS).</li>
+      <li>Cung cấp trải nghiệm trên website và ứng dụng điện thoại.</li>
+      <li>Cho phép web và mobile dùng cùng nguồn dữ liệu qua REST API.</li>
+    </ul>
+
+    <h3>1.3. Người dùng và luồng cốt lõi</h3>
+    <p>Người dùng chính là <strong>khách tham quan</strong>. Luồng nghiệp vụ chính là:</p>
+    <pre>Quét QR / mở URL → mở hiện vật theo slug → chọn ngôn ngữ → đọc nội dung → tùy chọn nghe TTS</pre>
+    <p>QR in tại hiện vật chứa URL web dạng <code>/artifacts/&lt;slug&gt;</code>. Trong ứng dụng mobile, người dùng có thể mở tab Quét QR; ứng dụng chỉ chấp nhận URL HTTP(S) có cấu trúc hợp lệ rồi điều hướng đến màn chi tiết.</p>
+  </section>
+
+  <section class="page-break" id="requirements">
+    <h2>2. Yêu cầu và phạm vi MVP</h2>
+    <table>
+      <thead><tr><th>Khu vực</th><th>Chức năng chính đã đặt ra</th></tr></thead>
+      <tbody>
+        <tr><td>Website</td><td>Trang chủ, danh sách hiện vật, tìm kiếm, chi tiết theo slug/QR, chọn ngôn ngữ, TTS, trạng thái tải/lỗi/404, fallback tiếng Anh có xác nhận.</td></tr>
+        <tr><td>Mobile</td><td>Danh sách, tìm kiếm, quét QR, xem chi tiết, TTS, lưu ngôn ngữ, yêu thích và điều chỉnh cỡ chữ.</td></tr>
+        <tr><td>Backend</td><td>API đọc ngôn ngữ, danh sách và chi tiết hiện vật; health check tách trạng thái backend và database.</td></tr>
+        <tr><td>Khả năng tiếp cận</td><td>Thao tác bàn phím trên web, focus rõ, dialog có ngữ nghĩa, nội dung chữ vẫn có khi TTS không dùng được.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Quy tắc nghiệp vụ quan trọng</h3>
+    <ul>
+      <li>Tìm kiếm theo tên tiếng Việt gốc hoặc tiêu đề tiếng Anh, không phân biệt hoa/thường và không phụ thuộc ngôn ngữ đang hiển thị.</li>
+      <li>Nếu thiếu bản dịch đã chọn nhưng có tiếng Anh, hệ thống hỏi khách trước khi hiển thị tiếng Anh; không tự đổi lựa chọn ngôn ngữ của khách.</li>
+      <li>TTS chỉ phát sau khi người dùng bấm; dừng khi đổi ngôn ngữ hoặc rời trang; không tạo nhiều luồng đọc cùng lúc.</li>
+      <li>Nếu thiếu giọng đọc phù hợp, hệ thống giữ nguyên nội dung chữ và hiển thị “Hiện giờ chưa có voice”.</li>
+    </ul>
+
+    <div class="note"><strong>Ngoài phạm vi MVP:</strong> CMS hoàn chỉnh, CRUD nội dung qua giao diện, upload ảnh, deep link mở thẳng ứng dụng từ QR bên ngoài, lịch sử phiên bản và chỉnh tốc độ đọc. Một số code liên quan có thể còn trong repository nhưng không phải tiêu chí nghiệm thu MVP.</div>
+  </section>
+
+  <section class="page-break" id="architecture">
+    <h2>3. Kiến trúc và công nghệ</h2>
+    <pre>┌────────────────────┐          ┌───────────────────────┐          ┌─────────────────────┐
+│ Web React + Vite   │ ───────▶ │ Express REST API       │ ───────▶ │ PostgreSQL/Supabase │
+│ /artifacts/:slug   │   JSON   │ /api/artifacts         │   SQL    │ artifacts           │
+└────────────────────┘          │ /api/languages         │          │ translations        │
+                                │ /api/health            │          └─────────────────────┘
+┌────────────────────┐          └───────────────────────┘
+│ Mobile React Native │ ────────────────▲
+│ Expo + Camera + TTS │                 │
+└────────────────────┘                 │</pre>
+
+    <table>
+      <thead><tr><th>Thành phần</th><th>Công nghệ</th><th>Lý do chọn</th></tr></thead>
+      <tbody>
+        <tr><td>Web</td><td>React, Vite, TypeScript</td><td>Giao diện theo component, xây dựng nhanh, hỗ trợ route hiện vật trực tiếp.</td></tr>
+        <tr><td>Mobile</td><td>React Native, Expo, TypeScript</td><td>Dùng cùng hệ sinh thái React; Expo cung cấp camera và speech phù hợp phạm vi app.</td></tr>
+        <tr><td>Backend</td><td>Node.js, Express, TypeScript</td><td>REST API gọn, phục vụ cả web và mobile.</td></tr>
+        <tr><td>Database</td><td>PostgreSQL/Supabase</td><td>Dữ liệu hiện vật và bản dịch có quan hệ rõ ràng; hỗ trợ ràng buộc và truy vấn.</td></tr>
+        <tr><td>Giọng nói</td><td>Web Speech API; expo-speech</td><td>Tận dụng voice có sẵn trên trình duyệt/thiết bị, không cần server sinh audio.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Chia sẻ dữ liệu</h3>
+    <p>Web, mobile và backend dùng các kiểu dữ liệu chung trong <code>shared/types.ts</code>. Điều này giảm nguy cơ các client hiểu khác nhau về cấu trúc response, mã ngôn ngữ hoặc trạng thái bản dịch.</p>
+  </section>
+
+  <section class="page-break" id="data">
+    <h2>4. Thiết kế dữ liệu và API</h2>
+    <h3>4.1. Mô hình dữ liệu</h3>
+    <table>
+      <thead><tr><th>Bảng</th><th>Vai trò</th><th>Ràng buộc chính</th></tr></thead>
+      <tbody>
+        <tr><td><code>artifacts</code></td><td>Lưu thông tin chung: id, slug, tên gốc, ảnh, danh mục, trạng thái xuất bản.</td><td><code>id</code> là UUID; <code>slug</code> duy nhất; chỉ dữ liệu <code>is_published=true</code> được API public trả về.</td></tr>
+        <tr><td><code>artifact_translations</code></td><td>Lưu title, summary và content theo từng ngôn ngữ.</td><td>Khóa ngoại tới hiện vật; mã ngôn ngữ giới hạn vi/en/zh/ja/ko; duy nhất theo cặp <code>(artifact_id, language_code)</code>.</td></tr>
+        <tr><td><code>admin_users</code></td><td>Dành cho hướng quản trị sau này.</td><td>Có trong schema, chưa phải chức năng MVP hoàn chỉnh.</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.2. API đọc công khai</h3>
+    <table>
+      <thead><tr><th>Endpoint</th><th>Mục đích</th><th>Phản hồi đáng chú ý</th></tr></thead>
+      <tbody>
+        <tr><td><code>GET /api/languages</code></td><td>Lấy danh sách ngôn ngữ.</td><td>Mã và nhãn năm ngôn ngữ.</td></tr>
+        <tr><td><code>GET /api/artifacts?lang=vi&amp;q=...</code></td><td>Lấy danh sách/tìm kiếm.</td><td>Chỉ hiện vật xuất bản; tìm tên Việt hoặc title tiếng Anh.</td></tr>
+        <tr><td><code>GET /api/artifacts/:slug?lang=vi</code></td><td>Lấy chi tiết hiện vật.</td><td><code>translation</code> có thể null và <code>available_languages</code> giúp client xử lý fallback.</td></tr>
+        <tr><td><code>GET /api/health</code></td><td>Kiểm tra vận hành.</td><td>200 khi backend/database đều ổn; 503 nếu database unavailable; không lộ chuỗi kết nối.</td></tr>
+      </tbody>
+    </table>
+
+    <p>Truy vấn dùng parameterized query: dữ liệu tìm kiếm được truyền qua placeholder SQL, không nối trực tiếp vào chuỗi truy vấn. Backend cũng kiểm tra mã ngôn ngữ trước khi gọi service.</p>
+  </section>
+
+  <section class="page-break" id="implementation">
+    <h2>5. Các luồng đã triển khai</h2>
+    <h3>5.1. Hiển thị và fallback ngôn ngữ</h3>
+    <ol>
+      <li>Client tải nội dung bằng <code>slug</code> và ngôn ngữ người dùng chọn.</li>
+      <li>Nếu có bản dịch, hiển thị title, summary và content theo ngôn ngữ thực tế.</li>
+      <li>Nếu không có bản dịch nhưng có tiếng Anh, hiển thị dialog “Chưa có bản dịch”.</li>
+      <li>Nếu khách xác nhận, client tải tiếng Anh và ghi rõ đang hiển thị tiếng Anh, nhưng không đổi lựa chọn gốc.</li>
+      <li>Nếu không có cả tiếng Anh, client thông báo nội dung chưa khả dụng.</li>
+    </ol>
+
+    <h3>5.2. Thuyết minh bằng giọng nói</h3>
+    <p>Web dùng <code>speechSynthesis</code>; mobile dùng <code>expo-speech</code>. Nội dung dài được chia thành câu để giảm rủi ro engine ngắt giữa chừng. Mobile dò voice sẵn có, chọn identifier phù hợp với locale của nội dung và gửi identifier đó khi gọi TTS.</p>
+    <p>Các locale được ánh xạ như sau: <span class="badge">vi → vi-VN</span><span class="badge">en → en-US</span><span class="badge">zh → zh-CN</span><span class="badge">ja → ja-JP</span><span class="badge">ko → ko-KR</span></p>
+    <p>Trên Android, API pause native không có sẵn trong expo-speech; ứng dụng dừng lượt đọc hiện tại và tiếp tục từ câu đang xử lý khi người dùng bấm tiếp tục.</p>
+
+    <h3>5.3. Trải nghiệm lỗi và tiếp cận</h3>
+    <ul>
+      <li>Có trạng thái loading, lỗi mạng và nút thử lại.</li>
+      <li>Slug sai hiển thị trạng thái không tìm thấy thay vì màn hình trống.</li>
+      <li>Web hỗ trợ focus nhìn thấy rõ, bàn phím, heading/landmark, alt text và dialog có quản lý focus.</li>
+      <li>Mobile hướng dẫn cấp quyền camera, xử lý QR sai định dạng và QR có slug không tồn tại.</li>
+    </ul>
+  </section>
+
+  <section class="page-break" id="testing">
+    <h2>6. Kiểm thử và đánh giá</h2>
+    <p>Kết quả dưới đây lấy từ báo cáo QA local ngày 17/11/2026. Dữ liệu API dùng trong E2E là tám hiện vật hư cấu <code>demo-*</code>, không phải dữ liệu nghiệm thu bảo tàng.</p>
+    <table>
+      <thead><tr><th>Hạng mục</th><th>Kết quả</th><th>Đánh giá</th></tr></thead>
+      <tbody>
+        <tr><td>Web unit/component</td><td>52/52 test đạt; build production thành công.</td><td class="status-ok">Đạt</td></tr>
+        <tr><td>Backend</td><td>14/14 test đạt; build thành công.</td><td class="status-ok">Đạt</td></tr>
+        <tr><td>Responsive web</td><td>20/20 case đạt tại 320, 375, 390, 768, 1440 px.</td><td class="status-ok">Đạt</td></tr>
+        <tr><td>Accessibility web</td><td>Axe 0 vi phạm trên 10 tổ hợp; bàn phím, dialog, zoom mô phỏng và tap target chính đạt.</td><td class="status-partial">Một phần: chưa có screen reader thật</td></tr>
+        <tr><td>Web E2E</td><td>16/16 case đạt: URL QR, đổi ngôn ngữ, TTS mock, fallback, 404, retry và tìm kiếm.</td><td class="status-ok">Đạt trong môi trường E2E</td></tr>
+        <tr><td>Hiệu năng mô phỏng</td><td>p95 468 ms đến khi nội dung hiển thị, 4G mô phỏng + CPU 4×, web/API local.</td><td class="status-partial">Chưa đại diện production</td></tr>
+        <tr><td>Mobile</td><td>Typecheck và lint đạt.</td><td class="status-partial">Chưa kiểm thử thiết bị thật</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Lỗi đã phát hiện và sửa</h3>
+    <ul>
+      <li>Ở viewport 320 px, cụm điều khiển header bị tràn khi cỡ chữ lớn. Đã điều chỉnh khoảng cách, cho phép wrap và vẫn giữ nhãn cho screen reader; chạy lại 20/20 case đạt.</li>
+      <li><code>aria-label</code> đặt trên <code>div</code> không có role gây cảnh báo accessibility. Đã thêm <code>role="group"</code>; quét lại không còn cảnh báo đó.</li>
+      <li>TTS mobile được cập nhật để chọn identifier của voice có thật trên thiết bị và báo nhất quán khi không có voice.</li>
+    </ul>
+  </section>
+
+  <section class="page-break" id="limits">
+    <h2>7. Giới hạn và hướng phát triển</h2>
+    <h3>Giới hạn hiện tại</h3>
+    <ul>
+      <li>Nội dung và bản dịch bảo tàng là bản nháp; chưa được chuyên gia/bảo tàng duyệt.</li>
+      <li>Ảnh demo là placeholder; quyền dùng ảnh hiện vật thật chưa được xác nhận.</li>
+      <li>Mobile chưa được kiểm thử camera, quyền, native TTS và VoiceOver/TalkBack trên thiết bị thật.</li>
+      <li>Accessibility web chưa được kiểm tra bằng screen reader thật; web QA chủ yếu chạy trên Chromium headless.</li>
+      <li>Hiệu năng đo trong môi trường mô phỏng local, chưa tính mạng WAN, cold start dịch vụ hay ảnh thật.</li>
+      <li>Dữ liệu nghiệm thu thật trên Supabase chưa được seed/xác minh trong lần rà soát này.</li>
+    </ul>
+
+    <h3>Hướng phát triển ưu tiên</h3>
+    <ol>
+      <li>Rà soát nội dung, bản dịch và quyền ảnh với đơn vị chuyên môn.</li>
+      <li>Kiểm thử mobile trên Android/iOS thật, gồm camera, QR, TTS và accessibility.</li>
+      <li>Triển khai web/API HTTPS ổn định; kiểm tra health trước demo; đo lại hiệu năng trên mạng và thiết bị thật.</li>
+      <li>Khi dữ liệu ổn định, cân nhắc CMS có xác thực, phân quyền, audit log và quy trình duyệt nội dung.</li>
+      <li>Nếu dữ liệu lớn, đo truy vấn thực tế rồi bổ sung index/full-text search phù hợp.</li>
+    </ol>
+  </section>
+
+  <section class="page-break" id="conclusion">
+    <h2>8. Kết luận</h2>
+    <p>Đồ án đã hiện thực hóa luồng cốt lõi <strong>QR → hiện vật → ngôn ngữ → đọc/nghe</strong> trên website, đồng thời có ứng dụng mobile và backend dùng chung mô hình dữ liệu. Hệ thống xử lý các tình huống thiết yếu như thiếu bản dịch, thiếu voice, lỗi mạng và hiện vật không tồn tại.</p>
+    <p>Kết quả kiểm thử xác nhận tốt các luồng web trong môi trường local. Các bước tiếp theo cần tập trung vào xác minh dữ liệu bảo tàng, kiểm thử mobile trên thiết bị thật và đo vận hành trong môi trường triển khai trước khi xem là bản sẵn sàng công bố.</p>
+
+    <h3>Tài liệu tham khảo trong repository</h3>
+    <ul>
+      <li><code>docs/PRD.md</code> — yêu cầu sản phẩm và phạm vi MVP.</li>
+      <li><code>docs/TASKS.md</code> — backlog, trạng thái và tiêu chí hoàn thành.</li>
+      <li><code>docs/qa/</code> — kết quả responsive, accessibility, performance và E2E.</li>
+      <li><code>docs/MOBILE-TEST-CHECKLIST.md</code> — checklist thiết bị thật.</li>
+      <li><code>backend/src/db/CONTENT-REVIEW.md</code> — trạng thái nội dung và nguồn tham khảo.</li>
+    </ul>
+    <p class="small">Nguồn HTML này được tạo để xuất PDF. Trước khi nộp, thay các trường có dấu “…” ở trang bìa bằng thông tin nhóm thực tế.</p>
+  </section>
+</body>
+</html>

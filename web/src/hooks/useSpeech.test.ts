@@ -113,6 +113,15 @@ describe("getVoiceStatus", () => {
     expect(getVoiceStatus("en-US")).toBe("available");
   });
 
+  it("accepts another regional voice for the requested language", () => {
+    getVoices.mockReturnValue([{ lang: "en-GB" } as SpeechSynthesisVoice]);
+    vi.stubGlobal("window", {
+      speechSynthesis: { getVoices },
+    });
+
+    expect(getVoiceStatus("en-US")).toBe("available");
+  });
+
   it("returns loading while the browser has not loaded any voices", () => {
     getVoices.mockReturnValue([]);
     vi.stubGlobal("window", {
@@ -203,7 +212,9 @@ describe("useSpeech", () => {
     act(() => hook.result.current.play());
 
     expect(hook.result.current.voiceStatus).toBe("unavailable");
-    expect(hook.result.current.error).toBe("Hiện giờ chưa có voice");
+    expect(hook.result.current.error).toBe(
+      "Thiết bị chưa có giọng đọc cho ngôn ngữ này. Hãy cài voice trong cài đặt hệ điều hành.",
+    );
     expect(speechEnvironment.speechSynthesis.speak).not.toHaveBeenCalled();
 
     voices = [{ lang: "en-US" } as SpeechSynthesisVoice];
@@ -231,9 +242,26 @@ describe("useSpeech", () => {
 
     expect(hook.result.current.status).toBe("idle");
     expect(hook.result.current.voiceStatus).toBe("unavailable");
-    expect(hook.result.current.error).toBe("Hiện giờ chưa có voice");
+    expect(hook.result.current.error).toBe(
+      "Thiết bị chưa có giọng đọc cho ngôn ngữ này. Hãy cài voice trong cài đặt hệ điều hành.",
+    );
     act(() => utterances[0].onstart?.());
     expect(hook.result.current.status).toBe("idle");
+    hook.unmount();
+  });
+
+  it("explains when the browser blocks speech playback", () => {
+    const { utterances } = stubSpeechSynthesis([
+      { lang: "en-US" } as SpeechSynthesisVoice,
+    ]);
+    const hook = renderHook(() => useSpeech("Hello.", "en"));
+
+    act(() => hook.result.current.play());
+    act(() => utterances[0].onerror?.({ error: "not-allowed" }));
+
+    expect(hook.result.current.error).toBe(
+      "Trình duyệt hoặc hệ điều hành đang chặn giọng đọc. Hãy cho phép âm thanh, rồi bấm phát lại.",
+    );
     hook.unmount();
   });
 });
