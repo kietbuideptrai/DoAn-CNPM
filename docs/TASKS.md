@@ -1,6 +1,6 @@
 # Backlog MVP — Thuyết minh đa ngôn ngữ
 
-Backlog này phản ánh PRD 1.1 và hiện trạng code đã rà soát ngày 2026-11-02, cập nhật kiểm tra ngày 2026-11-16. Ưu tiên luồng QR → nội dung hiện vật → đổi ngôn ngữ → nghe thuyết minh. CMS, lịch sử xem và tốc độ TTS không phải mục tiêu MVP; code liên quan đang có được giữ nguyên, không mở rộng hoặc xóa trong các task này.
+Backlog này phản ánh PRD 1.1 và hiện trạng code đã rà soát ngày 2026-11-02, cập nhật kiểm tra ngày 2026-11-16 và kết quả kiểm thử ngày 2026-11-17 (xem `docs/qa/README.md`). Ưu tiên luồng QR → nội dung hiện vật → đổi ngôn ngữ → nghe thuyết minh. CMS, lịch sử xem và tốc độ TTS không phải mục tiêu MVP; code liên quan đang có được giữ nguyên, không mở rộng hoặc xóa trong các task này.
 
 ## Hiện trạng đã kiểm tra (2026-11-16)
 
@@ -36,17 +36,17 @@ Backlog này phản ánh PRD 1.1 và hiện trạng code đã rà soát ngày 20
 
 | ID | Task | Trạng thái | Phụ trách đề xuất | Tiêu chí hoàn thành |
 | --- | --- | --- | --- | --- |
-| P2-01 | Kiểm thử responsive mobile-first trên web | Chưa làm | Web | Kiểm tra viewport 320, 375, 390, 768 và 1440 CSS px; không cuộn ngang ngoài ý muốn, cắt/chồng nội dung; ảnh không méo; popup, ngôn ngữ và điều khiển TTS dùng được. Lưu kết quả Pass/Fail và thiết bị/trình duyệt. |
-| P2-02 | Kiểm thử accessibility web | Chưa làm | Web | Hoàn thành luồng chính bằng bàn phím; focus nhìn thấy, popup quản lý/trả focus; zoom 200% không mất chức năng; chữ chính ≥16 CSS px, tương phản văn bản thường ≥4.5:1, nút chính có vùng chạm ≥44×44 CSS px; kiểm tra screen reader, heading, alt text và `lang`. Ghi lại kết quả, sửa lỗi phát hiện. |
-| P2-03 | Kiểm thử luồng mobile trên thiết bị thật | Chưa làm | Mobile | Trên Android/iOS mục tiêu, kiểm tra quyền camera (cho phép/từ chối), QR đúng/sai, slug không tồn tại, mất mạng/thử lại, đổi ngôn ngữ khi TTS đang chạy, rời màn hình khi đang đọc, thiếu voice và VoiceOver/TalkBack. Ghi thiết bị/OS và kết quả. |
+| P2-01 | Kiểm thử responsive mobile-first trên web | Hoàn thành — 20/20 case Pass (320/375/390/768/1440), Chromium 157 headless; đã sửa lỗi header bị cắt ở 320 px; xem `docs/qa/P2-01-responsive.md` | Web | Kiểm tra viewport 320, 375, 390, 768 và 1440 CSS px; không cuộn ngang ngoài ý muốn, cắt/chồng nội dung; ảnh không méo; popup, ngôn ngữ và điều khiển TTS dùng được. Lưu kết quả Pass/Fail và thiết bị/trình duyệt. |
+| P2-02 | Kiểm thử accessibility web | Một phần — axe 0 vi phạm trên 10 tổ hợp trang/viewport; bàn phím, dialog, zoom 200% và tap target chính đạt; chưa có screen reader thật; đã sửa `aria-label` trên `div` không role; xem `docs/qa/P2-02-accessibility.md` | Web | Hoàn thành luồng chính bằng bàn phím; focus nhìn thấy, popup quản lý/trả focus; zoom 200% không mất chức năng; chữ chính ≥16 CSS px, tương phản văn bản thường ≥4.5:1, nút chính có vùng chạm ≥44×44 CSS px; kiểm tra screen reader, heading, alt text và `lang`. Ghi lại kết quả, sửa lỗi phát hiện. |
+| P2-03 | Kiểm thử luồng mobile trên thiết bị thật | Chặn — môi trường không có thiết bị/emulator Android/iOS, không có `adb`/`xcrun`; typecheck và lint mobile đạt nhưng không thay thế kiểm thử thiết bị; xem `docs/qa/P2-03-mobile-device.md` | Mobile | Trên Android/iOS mục tiêu, kiểm tra quyền camera (cho phép/từ chối), QR đúng/sai, slug không tồn tại, mất mạng/thử lại, đổi ngôn ngữ khi TTS đang chạy, rời màn hình khi đang đọc, thiếu voice và VoiceOver/TalkBack. Ghi thiết bị/OS và kết quả. |
 | P2-04 | Đồng bộ tài liệu checklist mobile với phạm vi MVP | Hoàn thành ngày 2026-11-16 | Mobile + QA | `docs/MOBILE-TEST-CHECKLIST.md` tách rõ case bắt buộc, case Should và mục ngoài MVP; có tìm tiếng Việt/Anh độc lập ngôn ngữ, fallback có xác nhận, TTS dừng đúng lúc, thiếu voice và accessibility; có cột trạng thái cùng phần ghi thiết bị/OS. |
-| P2-05 | Đo mục tiêu tải nội dung trong điều kiện xác định | Chưa làm | Cả nhóm | Chọn và ghi thiết bị, trình duyệt, mạng di động; đo từ lúc mở URL hiện vật đến khi nội dung chính hiển thị. Báo kết quả so với mục tiêu ≤3 giây, không tuyên bố đạt nếu chưa đo. |
+| P2-05 | Đo mục tiêu tải nội dung trong điều kiện xác định | Một phần — p95 468 ms khi mô phỏng 4G (9/1,5 Mbps, RTT 40 ms) + CPU 4×, mục tiêu ≤3 000 ms; chưa đo trên thiết bị/mạng di động thật nên chưa tuyên bố đạt NFR; xem `docs/qa/P2-05-performance.md` | Cả nhóm | Chọn và ghi thiết bị, trình duyệt, mạng di động; đo từ lúc mở URL hiện vật đến khi nội dung chính hiển thị. Báo kết quả so với mục tiêu ≤3 giây, không tuyên bố đạt nếu chưa đo. |
 
 ## P3 — Đóng gói demo và bàn giao
 
 | ID | Task | Trạng thái | Phụ trách đề xuất | Tiêu chí hoàn thành |
 | --- | --- | --- | --- | --- |
-| P3-01 | Chạy kiểm thử nghiệm thu xuyên suốt | Chưa làm | Cả nhóm | Kiểm tra QR → trang hiện vật → đổi ngôn ngữ → TTS trên web và app, cùng các nhánh lỗi trong AC của PRD. Ghi bug, kết quả và bằng chứng; không dùng chế độ demo để tuyên bố database đã kết nối. |
+| P3-01 | Chạy kiểm thử nghiệm thu xuyên suốt | Một phần — web E2E 16/16 Pass (QR URL, đổi ngôn ngữ, TTS, fallback, 404, mất mạng/retry, tìm kiếm); mobile chưa kiểm thử do P2-03 chặn; dữ liệu `demo-*` chưa phải dữ liệu nghiệm thu bảo tàng; xem `docs/qa/P3-01-e2e.md` | Cả nhóm | Kiểm tra QR → trang hiện vật → đổi ngôn ngữ → TTS trên web và app, cùng các nhánh lỗi trong AC của PRD. Ghi bug, kết quả và bằng chứng; không dùng chế độ demo để tuyên bố database đã kết nối. |
 | P3-02 | Chuẩn bị bản demo triển khai và QR | Chưa làm | Web + Backend + Mobile | Cấu hình URL HTTPS, CORS và môi trường không chứa secret trong repo; mở trực tiếp/tải lại URL QR thành công; app trên điện thoại truy cập được backend. Có cách dự phòng local khi dịch vụ demo không sẵn sàng. |
 | P3-03 | Hoàn thiện hướng dẫn chạy và bàn giao | Hoàn thành ngày 2026-11-16 | Cả nhóm | `README.md` ở thư mục gốc hướng dẫn web demo/API thật, backend + Supabase, mobile Expo Go, biến môi trường, kiểm thử/build và các lưu ý dữ liệu; liên kết tới README từng phần và checklist mobile. Đã thêm `backend/.env.example` chỉ chứa placeholder, không có secret. Đã chạy lại `web npm test` (52/52) và `npm run build`, `backend npm test` (14/14) và `npm run build`, `mobile npm run typecheck` và `npm run lint` — tất cả đạt. |
 

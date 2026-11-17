@@ -1,0 +1,541 @@
+{
+  "axe": [
+    {
+      "label": "390-home",
+      "page": "http://127.0.0.1:5173/?lang=vi",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "390-list",
+      "page": "http://127.0.0.1:5173/artifacts?lang=vi",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "390-detail",
+      "page": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=vi",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "390-missing",
+      "page": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=ja",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "390-popup",
+      "page": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=ja",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "1440-home",
+      "page": "http://127.0.0.1:5173/?lang=vi",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "1440-list",
+      "page": "http://127.0.0.1:5173/artifacts?lang=vi",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "label": "1440-detail",
+      "page": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=vi",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "1440-missing",
+      "page": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=ja",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "label": "1440-popup",
+      "page": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=ja",
+      "violations": [],
+      "incomplete": []
+    }
+  ],
+  "keyboard": {
+    "stops": [
+      {
+        "tag": "A",
+        "text": "DDi sản kể chuyện",
+        "outline": "solid 3px rgb(0, 95, 204)",
+        "boxShadow": "none",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "text": "Trang chủ",
+        "outline": "solid 3px rgb(0, 95, 204)",
+        "boxShadow": "none",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "text": "Hiện vật",
+        "outline": "solid 3px rgb(0, 95, 204)",
+        "boxShadow": "none",
+        "visible": true
+      },
+      {
+        "tag": "SELECT",
+        "text": "Tiếng ViệtEnglish中文日本語한국어",
+        "outline": "solid 3px rgb(0, 95, 204)",
+        "boxShadow": "none",
+        "visible": true
+      },
+      {
+        "tag": "SELECT",
+        "text": "Bình thườngLớnRất lớn",
+        "outline": "solid 3px rgb(0, 95, 204)",
+        "boxShadow": "none",
+        "visible": true
+      },
+      {
+        "tag": "INPUT",
+        "text": "artifact-search",
+        "outline": "solid 3px rgb(0, 95, 204)",
+        "boxShadow": "none",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "text": "Tiếng ViệtBình gốm men lam (minh họa)Bình gốm dáng cao, tran",
+        "outline": "none 3px rgb(32, 49, 44)",
+        "boxShadow": "rgb(0, 95, 204) 0px 0px 0px 3px inset, rgb(255, 255, 255) 0px 0px 0px 6px inset",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "text": "Tiếng ViệtĐèn dầu (minh họa)Đèn dầu bằng kim loại có bầu chứ",
+        "outline": "none 3px rgb(32, 49, 44)",
+        "boxShadow": "rgb(0, 95, 204) 0px 0px 0px 3px inset, rgb(255, 255, 255) 0px 0px 0px 6px inset",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "text": "Tiếng ViệtGuốc mộc (minh họa)Đôi guốc làm từ gỗ, quai đơn gi",
+        "outline": "none 3px rgb(32, 49, 44)",
+        "boxShadow": "rgb(0, 95, 204) 0px 0px 0px 3px inset, rgb(255, 255, 255) 0px 0px 0px 6px inset",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "text": "Tiếng ViệtHộp gỗ chạm khắc (minh họa)Hộp gỗ hình chữ nhật, n",
+        "outline": "none 3px rgb(32, 49, 44)",
+        "boxShadow": "rgb(0, 95, 204) 0px 0px 0px 3px inset, rgb(255, 255, 255) 0px 0px 0px 6px inset",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "text": "Tiếng ViệtQuạt giấy (minh họa)Quạt giấy gấp gọn, nan tre và ",
+        "outline": "none 3px rgb(32, 49, 44)",
+        "boxShadow": "rgb(0, 95, 204) 0px 0px 0px 3px inset, rgb(255, 255, 255) 0px 0px 0px 6px inset",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "text": "Tiếng ViệtSách chữ Hán (minh họa)Cuốn sách bìa giấy, chữ viế",
+        "outline": "none 3px rgb(32, 49, 44)",
+        "boxShadow": "rgb(0, 95, 204) 0px 0px 0px 3px inset, rgb(255, 255, 255) 0px 0px 0px 6px inset",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "text": "Tiếng ViệtTranh lụa (minh họa)Tranh lụa mô tả phong cảnh làn",
+        "outline": "none 3px rgb(32, 49, 44)",
+        "boxShadow": "rgb(0, 95, 204) 0px 0px 0px 3px inset, rgb(255, 255, 255) 0px 0px 0px 6px inset",
+        "visible": true
+      },
+      {
+        "tag": "A",
+        "text": "Tiếng ViệtTrống đồng (minh họa)Trống đồng có mặt trời ở giữa",
+        "outline": "none 3px rgb(32, 49, 44)",
+        "boxShadow": "rgb(0, 95, 204) 0px 0px 0px 3px inset, rgb(255, 255, 255) 0px 0px 0px 6px inset",
+        "visible": true
+      }
+    ],
+    "keyboardLanguage": {
+      "urlLanguage": "en",
+      "selectLanguage": "en"
+    }
+  },
+  "dialog": {
+    "390": {
+      "dialog": {
+        "role": "dialog",
+        "ariaModal": "true",
+        "labelledby": "english-fallback-title",
+        "describedby": "english-fallback-description",
+        "activeText": "Hủy",
+        "activeInside": true
+      },
+      "afterTab": "Xem tiếng Anh",
+      "afterSecondTab": "Hủy",
+      "afterShiftTab": "Xem tiếng Anh",
+      "afterEscape": {
+        "dialogGone": true,
+        "activeTag": "BODY",
+        "activeInsideDialog": false,
+        "missingShown": true
+      }
+    },
+    "1440": {
+      "dialog": {
+        "role": "dialog",
+        "ariaModal": "true",
+        "labelledby": "english-fallback-title",
+        "describedby": "english-fallback-description",
+        "activeText": "Hủy",
+        "activeInside": true
+      },
+      "afterTab": "Xem tiếng Anh",
+      "afterSecondTab": "Hủy",
+      "afterShiftTab": "Xem tiếng Anh",
+      "afterEscape": {
+        "dialogGone": true,
+        "activeTag": "BODY",
+        "activeInsideDialog": false,
+        "missingShown": true
+      }
+    }
+  },
+  "zoom": {
+    "visualViewportScale": 2,
+    "scrollWidth": 320,
+    "clientWidth": 320,
+    "languageVisible": true,
+    "ttsVisible": true,
+    "contentVisible": true,
+    "message": "Đang kiểm tra giọng đọc...",
+    "focusedTag": "BODY"
+  },
+  "typography": {
+    "390-detail": {
+      "body": {
+        "text": "DDi sản kể chuyệnTrang chủHiện vậtNgôn n",
+        "fontSize": 16,
+        "lineHeight": "normal",
+        "color": "rgb(32, 49, 44)"
+      },
+      "heroCopy": null,
+      "detailTitle": {
+        "text": "Trống đồng (minh họa)",
+        "fontSize": 36,
+        "lineHeight": "39.6px",
+        "color": "rgb(32, 49, 44)"
+      },
+      "detailSummary": {
+        "text": "Trống đồng có mặt trời ở giữa và các vòn",
+        "fontSize": 17,
+        "lineHeight": "28.05px",
+        "color": "rgb(97, 113, 106)"
+      },
+      "detailContent": {
+        "text": "Hiện vật minh họa cho bản demo.",
+        "fontSize": 17,
+        "lineHeight": "32.3px",
+        "color": "rgb(52, 69, 62)"
+      },
+      "detailImageAlt": "Ảnh hiện vật Trống đồng (minh họa)"
+    },
+    "1440-detail": {
+      "body": {
+        "text": "DDi sản kể chuyệnTrang chủHiện vậtNgôn n",
+        "fontSize": 16,
+        "lineHeight": "normal",
+        "color": "rgb(32, 49, 44)"
+      },
+      "heroCopy": null,
+      "detailTitle": {
+        "text": "Trống đồng (minh họa)",
+        "fontSize": 56,
+        "lineHeight": "61.6px",
+        "color": "rgb(32, 49, 44)"
+      },
+      "detailSummary": {
+        "text": "Trống đồng có mặt trời ở giữa và các vòn",
+        "fontSize": 17,
+        "lineHeight": "28.05px",
+        "color": "rgb(97, 113, 106)"
+      },
+      "detailContent": {
+        "text": "Hiện vật minh họa cho bản demo.",
+        "fontSize": 18,
+        "lineHeight": "34.2px",
+        "color": "rgb(52, 69, 62)"
+      },
+      "detailImageAlt": "Ảnh hiện vật Trống đồng (minh họa)"
+    }
+  },
+  "tapTargets": {
+    "390-detail": [
+      {
+        "tag": "SELECT",
+        "text": "Tiếng ViệtEnglish中文日本語한국어",
+        "width": 126,
+        "height": 38,
+        "primary": false
+      },
+      {
+        "tag": "SELECT",
+        "text": "Bình thườngLớnRất lớn",
+        "width": 139,
+        "height": 38,
+        "primary": false
+      },
+      {
+        "tag": "BUTTON",
+        "text": "▶ Nghe thuyết minh",
+        "width": 189,
+        "height": 44,
+        "primary": true
+      }
+    ],
+    "1440-detail": [
+      {
+        "tag": "SELECT",
+        "text": "Tiếng ViệtEnglish中文日本語한국어",
+        "width": 126,
+        "height": 38,
+        "primary": false
+      },
+      {
+        "tag": "SELECT",
+        "text": "Bình thườngLớnRất lớn",
+        "width": 139,
+        "height": 38,
+        "primary": false
+      },
+      {
+        "tag": "BUTTON",
+        "text": "▶ Nghe thuyết minh",
+        "width": 189,
+        "height": 48,
+        "primary": true
+      }
+    ]
+  },
+  "semantics": {
+    "390-home": {
+      "htmlLang": "vi",
+      "title": "Di sản kể chuyện",
+      "h1": [
+        "Mỗi hiện vật đều có một câu chuyện."
+      ],
+      "headings": [
+        {
+          "level": "H1",
+          "text": "Mỗi hiện vật đều có một câu chuyện."
+        },
+        {
+          "level": "H2",
+          "text": "Đã xem gần đây"
+        }
+      ],
+      "imagesWithoutAlt": [],
+      "imagesEmptyAlt": [],
+      "landmarks": {
+        "header": 1,
+        "nav": 1,
+        "main": 1,
+        "footer": 1
+      },
+      "contentLang": null
+    },
+    "390-list": {
+      "htmlLang": "vi",
+      "title": "Di sản kể chuyện",
+      "h1": [
+        "Hiện vật"
+      ],
+      "headings": [
+        {
+          "level": "H1",
+          "text": "Hiện vật"
+        },
+        {
+          "level": "H2",
+          "text": "Bình gốm men lam (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Đèn dầu (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Guốc mộc (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Hộp gỗ chạm khắc (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Quạt giấy (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Sách chữ Hán (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Tranh lụa (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Trống đồng (minh họa)"
+        }
+      ],
+      "imagesWithoutAlt": [],
+      "imagesEmptyAlt": [],
+      "landmarks": {
+        "header": 1,
+        "nav": 1,
+        "main": 1,
+        "footer": 1
+      },
+      "contentLang": null
+    },
+    "390-detail": {
+      "htmlLang": "vi",
+      "title": "Di sản kể chuyện",
+      "h1": [
+        "Trống đồng (minh họa)"
+      ],
+      "headings": [
+        {
+          "level": "H1",
+          "text": "Trống đồng (minh họa)"
+        }
+      ],
+      "imagesWithoutAlt": [],
+      "imagesEmptyAlt": [],
+      "landmarks": {
+        "header": 1,
+        "nav": 1,
+        "main": 1,
+        "footer": 1
+      },
+      "contentLang": "vi"
+    },
+    "1440-home": {
+      "htmlLang": "vi",
+      "title": "Di sản kể chuyện",
+      "h1": [
+        "Mỗi hiện vật đều có một câu chuyện."
+      ],
+      "headings": [
+        {
+          "level": "H1",
+          "text": "Mỗi hiện vật đều có một câu chuyện."
+        },
+        {
+          "level": "H2",
+          "text": "Đã xem gần đây"
+        }
+      ],
+      "imagesWithoutAlt": [],
+      "imagesEmptyAlt": [],
+      "landmarks": {
+        "header": 1,
+        "nav": 1,
+        "main": 1,
+        "footer": 1
+      },
+      "contentLang": null
+    },
+    "1440-list": {
+      "htmlLang": "vi",
+      "title": "Di sản kể chuyện",
+      "h1": [
+        "Hiện vật"
+      ],
+      "headings": [
+        {
+          "level": "H1",
+          "text": "Hiện vật"
+        },
+        {
+          "level": "H2",
+          "text": "Bình gốm men lam (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Đèn dầu (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Guốc mộc (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Hộp gỗ chạm khắc (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Quạt giấy (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Sách chữ Hán (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Tranh lụa (minh họa)"
+        },
+        {
+          "level": "H2",
+          "text": "Trống đồng (minh họa)"
+        }
+      ],
+      "imagesWithoutAlt": [],
+      "imagesEmptyAlt": [],
+      "landmarks": {
+        "header": 1,
+        "nav": 1,
+        "main": 1,
+        "footer": 1
+      },
+      "contentLang": null
+    },
+    "1440-detail": {
+      "htmlLang": "vi",
+      "title": "Di sản kể chuyện",
+      "h1": [
+        "Trống đồng (minh họa)"
+      ],
+      "headings": [
+        {
+          "level": "H1",
+          "text": "Trống đồng (minh họa)"
+        }
+      ],
+      "imagesWithoutAlt": [],
+      "imagesEmptyAlt": [],
+      "landmarks": {
+        "header": 1,
+        "nav": 1,
+        "main": 1,
+        "footer": 1
+      },
+      "contentLang": "vi"
+    }
+  },
+  "errors": []
+}

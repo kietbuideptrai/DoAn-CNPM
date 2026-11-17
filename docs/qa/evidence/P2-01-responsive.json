@@ -1,0 +1,2155 @@
+{
+  "results": [
+    {
+      "viewport": {
+        "label": "320",
+        "width": 320,
+        "height": 800
+      },
+      "page": "home",
+      "layout": {
+        "viewport": {
+          "width": 320,
+          "height": 800
+        },
+        "scrollWidth": 320,
+        "bodyScrollWidth": 320,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 67,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 51,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".button",
+          "tag": "a",
+          "text": "Khám phá hiện vật →",
+          "width": 196,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "label": "320",
+        "width": 320,
+        "height": 800
+      },
+      "page": "list",
+      "layout": {
+        "viewport": {
+          "width": 320,
+          "height": 800
+        },
+        "scrollWidth": 320,
+        "bodyScrollWidth": 320,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+01",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 111,
+            "renderedHeight": 238,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+04",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 111,
+            "renderedHeight": 238,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+08",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 111,
+            "renderedHeight": 238,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+06",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 111,
+            "renderedHeight": 263,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+05",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 111,
+            "renderedHeight": 238,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+03",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 111,
+            "renderedHeight": 238,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+07",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 111,
+            "renderedHeight": 238,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+02",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 111,
+            "renderedHeight": 261,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          }
+        ],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 63,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 54,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtBình gốm men lam (minh họa)Bình gốm dáng cao, tran",
+          "width": 278,
+          "height": 238,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtĐèn dầu (minh họa)Đèn dầu bằng kim loại có bầu chứ",
+          "width": 278,
+          "height": 238,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtGuốc mộc (minh họa)Đôi guốc làm từ gỗ, quai đơn gi",
+          "width": 278,
+          "height": 238,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtHộp gỗ chạm khắc (minh họa)Hộp gỗ hình chữ nhật, n",
+          "width": 278,
+          "height": 263,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtQuạt giấy (minh họa)Quạt giấy gấp gọn, nan tre và ",
+          "width": 278,
+          "height": 238,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtSách chữ Hán (minh họa)Cuốn sách bìa giấy, chữ viế",
+          "width": 278,
+          "height": 238,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtTranh lụa (minh họa)Tranh lụa mô tả phong cảnh làn",
+          "width": 278,
+          "height": 238,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtTrống đồng (minh họa)Trống đồng có mặt trời ở giữa",
+          "width": 278,
+          "height": 261,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "label": "320",
+        "width": 320,
+        "height": 800
+      },
+      "page": "detail",
+      "layout": {
+        "viewport": {
+          "width": 320,
+          "height": 800
+        },
+        "scrollWidth": 320,
+        "bodyScrollWidth": 320,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+02",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 280,
+            "renderedHeight": 158,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          }
+        ],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 63,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 54,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".button",
+          "tag": "button",
+          "text": "▶ Nghe thuyết minh",
+          "width": 189,
+          "height": 44,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true,
+      "languageChange": {
+        "url": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=en",
+        "language": "en",
+        "htmlLang": "vi",
+        "contentLang": "en"
+      },
+      "languageChangePass": true
+    },
+    {
+      "viewport": {
+        "label": "320",
+        "width": 320,
+        "height": 800
+      },
+      "page": "popup",
+      "layout": {
+        "viewport": {
+          "width": 320,
+          "height": 800
+        },
+        "scrollWidth": 320,
+        "bodyScrollWidth": 320,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": ".translation-fallback-dialog .button",
+          "tag": "button",
+          "text": "Xem tiếng Anh",
+          "width": 140,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".translation-fallback-dialog .button",
+          "tag": "button",
+          "text": "Hủy",
+          "width": 66,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "focus": {
+        "activeText": "Hủy",
+        "insideDialog": true
+      },
+      "pass": true,
+      "cancel": {
+        "dialogGone": true,
+        "missingShown": true,
+        "urlLanguage": "ja",
+        "selectLanguage": "ja"
+      },
+      "cancelPass": true
+    },
+    {
+      "viewport": {
+        "label": "375",
+        "width": 375,
+        "height": 812
+      },
+      "page": "home",
+      "layout": {
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "scrollWidth": 375,
+        "bodyScrollWidth": 375,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 67,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 51,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".button",
+          "tag": "a",
+          "text": "Khám phá hiện vật →",
+          "width": 196,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "label": "375",
+        "width": 375,
+        "height": 812
+      },
+      "page": "list",
+      "layout": {
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "scrollWidth": 375,
+        "bodyScrollWidth": 375,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+01",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 133,
+            "renderedHeight": 222,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+04",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 133,
+            "renderedHeight": 199,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+08",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 133,
+            "renderedHeight": 222,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+06",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 133,
+            "renderedHeight": 199,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+05",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 133,
+            "renderedHeight": 199,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+03",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 133,
+            "renderedHeight": 222,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+07",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 133,
+            "renderedHeight": 222,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+02",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 133,
+            "renderedHeight": 222,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          }
+        ],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 63,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 54,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtBình gốm men lam (minh họa)Bình gốm dáng cao, tran",
+          "width": 333,
+          "height": 222,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtĐèn dầu (minh họa)Đèn dầu bằng kim loại có bầu chứ",
+          "width": 333,
+          "height": 199,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtGuốc mộc (minh họa)Đôi guốc làm từ gỗ, quai đơn gi",
+          "width": 333,
+          "height": 222,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtHộp gỗ chạm khắc (minh họa)Hộp gỗ hình chữ nhật, n",
+          "width": 333,
+          "height": 199,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtQuạt giấy (minh họa)Quạt giấy gấp gọn, nan tre và ",
+          "width": 333,
+          "height": 199,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtSách chữ Hán (minh họa)Cuốn sách bìa giấy, chữ viế",
+          "width": 333,
+          "height": 222,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtTranh lụa (minh họa)Tranh lụa mô tả phong cảnh làn",
+          "width": 333,
+          "height": 222,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtTrống đồng (minh họa)Trống đồng có mặt trời ở giữa",
+          "width": 333,
+          "height": 222,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "label": "375",
+        "width": 375,
+        "height": 812
+      },
+      "page": "detail",
+      "layout": {
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "scrollWidth": 375,
+        "bodyScrollWidth": 375,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+02",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 335,
+            "renderedHeight": 188,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          }
+        ],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 63,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 54,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".button",
+          "tag": "button",
+          "text": "▶ Nghe thuyết minh",
+          "width": 189,
+          "height": 44,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true,
+      "languageChange": {
+        "url": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=en",
+        "language": "en",
+        "htmlLang": "vi",
+        "contentLang": "en"
+      },
+      "languageChangePass": true
+    },
+    {
+      "viewport": {
+        "label": "375",
+        "width": 375,
+        "height": 812
+      },
+      "page": "popup",
+      "layout": {
+        "viewport": {
+          "width": 375,
+          "height": 812
+        },
+        "scrollWidth": 375,
+        "bodyScrollWidth": 375,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": ".translation-fallback-dialog .button",
+          "tag": "button",
+          "text": "Xem tiếng Anh",
+          "width": 140,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".translation-fallback-dialog .button",
+          "tag": "button",
+          "text": "Hủy",
+          "width": 66,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "focus": {
+        "activeText": "Hủy",
+        "insideDialog": true
+      },
+      "pass": true,
+      "cancel": {
+        "dialogGone": true,
+        "missingShown": true,
+        "urlLanguage": "ja",
+        "selectLanguage": "ja"
+      },
+      "cancelPass": true
+    },
+    {
+      "viewport": {
+        "label": "390",
+        "width": 390,
+        "height": 844
+      },
+      "page": "home",
+      "layout": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "scrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 67,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 51,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".button",
+          "tag": "a",
+          "text": "Khám phá hiện vật →",
+          "width": 196,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "label": "390",
+        "width": 390,
+        "height": 844
+      },
+      "page": "list",
+      "layout": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "scrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+01",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 139,
+            "renderedHeight": 222,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+04",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 139,
+            "renderedHeight": 174,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+08",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 139,
+            "renderedHeight": 199,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+06",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 139,
+            "renderedHeight": 199,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+05",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 139,
+            "renderedHeight": 199,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+03",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 139,
+            "renderedHeight": 199,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+07",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 139,
+            "renderedHeight": 199,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+02",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 139,
+            "renderedHeight": 222,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          }
+        ],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 63,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 54,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtBình gốm men lam (minh họa)Bình gốm dáng cao, tran",
+          "width": 348,
+          "height": 222,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtĐèn dầu (minh họa)Đèn dầu bằng kim loại có bầu chứ",
+          "width": 348,
+          "height": 174,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtGuốc mộc (minh họa)Đôi guốc làm từ gỗ, quai đơn gi",
+          "width": 348,
+          "height": 199,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtHộp gỗ chạm khắc (minh họa)Hộp gỗ hình chữ nhật, n",
+          "width": 348,
+          "height": 199,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtQuạt giấy (minh họa)Quạt giấy gấp gọn, nan tre và ",
+          "width": 348,
+          "height": 199,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtSách chữ Hán (minh họa)Cuốn sách bìa giấy, chữ viế",
+          "width": 348,
+          "height": 199,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtTranh lụa (minh họa)Tranh lụa mô tả phong cảnh làn",
+          "width": 348,
+          "height": 199,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtTrống đồng (minh họa)Trống đồng có mặt trời ở giữa",
+          "width": 348,
+          "height": 222,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "label": "390",
+        "width": 390,
+        "height": 844
+      },
+      "page": "detail",
+      "layout": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "scrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+02",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 350,
+            "renderedHeight": 197,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          }
+        ],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 63,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 54,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".button",
+          "tag": "button",
+          "text": "▶ Nghe thuyết minh",
+          "width": 189,
+          "height": 44,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true,
+      "languageChange": {
+        "url": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=en",
+        "language": "en",
+        "htmlLang": "vi",
+        "contentLang": "en"
+      },
+      "languageChangePass": true
+    },
+    {
+      "viewport": {
+        "label": "390",
+        "width": 390,
+        "height": 844
+      },
+      "page": "popup",
+      "layout": {
+        "viewport": {
+          "width": 390,
+          "height": 844
+        },
+        "scrollWidth": 390,
+        "bodyScrollWidth": 390,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": ".translation-fallback-dialog .button",
+          "tag": "button",
+          "text": "Xem tiếng Anh",
+          "width": 140,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".translation-fallback-dialog .button",
+          "tag": "button",
+          "text": "Hủy",
+          "width": 66,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "focus": {
+        "activeText": "Hủy",
+        "insideDialog": true
+      },
+      "pass": true,
+      "cancel": {
+        "dialogGone": true,
+        "missingShown": true,
+        "urlLanguage": "ja",
+        "selectLanguage": "ja"
+      },
+      "cancelPass": true
+    },
+    {
+      "viewport": {
+        "label": "768",
+        "width": 768,
+        "height": 1024
+      },
+      "page": "home",
+      "layout": {
+        "viewport": {
+          "width": 768,
+          "height": 1024
+        },
+        "scrollWidth": 768,
+        "bodyScrollWidth": 768,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 38,
+          "height": 88,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 29,
+          "height": 88,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".button",
+          "tag": "a",
+          "text": "Khám phá hiện vật →",
+          "width": 196,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "label": "768",
+        "width": 768,
+        "height": 1024
+      },
+      "page": "list",
+      "layout": {
+        "viewport": {
+          "width": 768,
+          "height": 1024
+        },
+        "scrollWidth": 768,
+        "bodyScrollWidth": 768,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+01",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 347,
+            "renderedHeight": 217,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+04",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 347,
+            "renderedHeight": 217,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+08",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 347,
+            "renderedHeight": 217,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+06",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 347,
+            "renderedHeight": 217,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+05",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 347,
+            "renderedHeight": 217,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+03",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 347,
+            "renderedHeight": 217,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+07",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 347,
+            "renderedHeight": 217,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+02",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 347,
+            "renderedHeight": 217,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          }
+        ],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 36,
+          "height": 88,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 30,
+          "height": 88,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtBình gốm men lam (minh họa)Bình gốm dáng cao, tran",
+          "width": 347,
+          "height": 403,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtĐèn dầu (minh họa)Đèn dầu bằng kim loại có bầu chứ",
+          "width": 347,
+          "height": 403,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtGuốc mộc (minh họa)Đôi guốc làm từ gỗ, quai đơn gi",
+          "width": 347,
+          "height": 403,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtHộp gỗ chạm khắc (minh họa)Hộp gỗ hình chữ nhật, n",
+          "width": 347,
+          "height": 403,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtQuạt giấy (minh họa)Quạt giấy gấp gọn, nan tre và ",
+          "width": 347,
+          "height": 403,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtSách chữ Hán (minh họa)Cuốn sách bìa giấy, chữ viế",
+          "width": 347,
+          "height": 403,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtTranh lụa (minh họa)Tranh lụa mô tả phong cảnh làn",
+          "width": 347,
+          "height": 403,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtTrống đồng (minh họa)Trống đồng có mặt trời ở giữa",
+          "width": 347,
+          "height": 403,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "label": "768",
+        "width": 768,
+        "height": 1024
+      },
+      "page": "detail",
+      "layout": {
+        "viewport": {
+          "width": 768,
+          "height": 1024
+        },
+        "scrollWidth": 768,
+        "bodyScrollWidth": 768,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+02",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 720,
+            "renderedHeight": 405,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          }
+        ],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 36,
+          "height": 88,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 30,
+          "height": 88,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".button",
+          "tag": "button",
+          "text": "▶ Nghe thuyết minh",
+          "width": 189,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true,
+      "languageChange": {
+        "url": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=en",
+        "language": "en",
+        "htmlLang": "vi",
+        "contentLang": "en"
+      },
+      "languageChangePass": true
+    },
+    {
+      "viewport": {
+        "label": "768",
+        "width": 768,
+        "height": 1024
+      },
+      "page": "popup",
+      "layout": {
+        "viewport": {
+          "width": 768,
+          "height": 1024
+        },
+        "scrollWidth": 768,
+        "bodyScrollWidth": 768,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": ".translation-fallback-dialog .button",
+          "tag": "button",
+          "text": "Xem tiếng Anh",
+          "width": 140,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".translation-fallback-dialog .button",
+          "tag": "button",
+          "text": "Hủy",
+          "width": 66,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "focus": {
+        "activeText": "Hủy",
+        "insideDialog": true
+      },
+      "pass": true,
+      "cancel": {
+        "dialogGone": true,
+        "missingShown": true,
+        "urlLanguage": "ja",
+        "selectLanguage": "ja"
+      },
+      "cancelPass": true
+    },
+    {
+      "viewport": {
+        "label": "1440",
+        "width": 1440,
+        "height": 900
+      },
+      "page": "home",
+      "layout": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "scrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 67,
+          "height": 72,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 51,
+          "height": 72,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".button",
+          "tag": "a",
+          "text": "Khám phá hiện vật →",
+          "width": 196,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "label": "1440",
+        "width": 1440,
+        "height": 900
+      },
+      "page": "list",
+      "layout": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "scrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+01",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 343,
+            "renderedHeight": 215,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+04",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 343,
+            "renderedHeight": 215,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+08",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 343,
+            "renderedHeight": 215,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+06",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 343,
+            "renderedHeight": 215,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+05",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 343,
+            "renderedHeight": 215,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+03",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 343,
+            "renderedHeight": 215,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+07",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 343,
+            "renderedHeight": 215,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          },
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+02",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 343,
+            "renderedHeight": 215,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          }
+        ],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 63,
+          "height": 72,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 54,
+          "height": 72,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtBình gốm men lam (minh họa)Bình gốm dáng cao, tran",
+          "width": 343,
+          "height": 401,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtĐèn dầu (minh họa)Đèn dầu bằng kim loại có bầu chứ",
+          "width": 343,
+          "height": 401,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtGuốc mộc (minh họa)Đôi guốc làm từ gỗ, quai đơn gi",
+          "width": 343,
+          "height": 401,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtHộp gỗ chạm khắc (minh họa)Hộp gỗ hình chữ nhật, n",
+          "width": 343,
+          "height": 401,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtQuạt giấy (minh họa)Quạt giấy gấp gọn, nan tre và ",
+          "width": 343,
+          "height": 401,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtSách chữ Hán (minh họa)Cuốn sách bìa giấy, chữ viế",
+          "width": 343,
+          "height": 401,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtTranh lụa (minh họa)Tranh lụa mô tả phong cảnh làn",
+          "width": 343,
+          "height": 401,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".artifact-card-link",
+          "tag": "a",
+          "text": "Tiếng ViệtTrống đồng (minh họa)Trống đồng có mặt trời ở giữa",
+          "width": 343,
+          "height": 401,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true
+    },
+    {
+      "viewport": {
+        "label": "1440",
+        "width": 1440,
+        "height": 900
+      },
+      "page": "detail",
+      "layout": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "scrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [
+          {
+            "src": "https://placehold.co/800x600?text=Demo+Artifact+02",
+            "complete": true,
+            "naturalWidth": 800,
+            "naturalHeight": 600,
+            "renderedWidth": 860,
+            "renderedHeight": 484,
+            "objectFit": "cover",
+            "distortionRatio": 0
+          }
+        ],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": "#language-select",
+          "tag": "select",
+          "text": "Tiếng ViệtEnglish中文日本語한국어",
+          "width": 126,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": "#font-size-select",
+          "tag": "select",
+          "text": "Bình thườngLớnRất lớn",
+          "width": 139,
+          "height": 38,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Trang chủ",
+          "width": 63,
+          "height": 72,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".primary-nav a",
+          "tag": "a",
+          "text": "Hiện vật",
+          "width": 54,
+          "height": 72,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".button",
+          "tag": "button",
+          "text": "▶ Nghe thuyết minh",
+          "width": 189,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "pass": true,
+      "languageChange": {
+        "url": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=en",
+        "language": "en",
+        "htmlLang": "vi",
+        "contentLang": "en"
+      },
+      "languageChangePass": true
+    },
+    {
+      "viewport": {
+        "label": "1440",
+        "width": 1440,
+        "height": 900
+      },
+      "page": "popup",
+      "layout": {
+        "viewport": {
+          "width": 1440,
+          "height": 900
+        },
+        "scrollWidth": 1440,
+        "bodyScrollWidth": 1440,
+        "horizontalOverflow": false,
+        "offenders": [],
+        "offenderCount": 0,
+        "headerOverlaps": [],
+        "images": [],
+        "brokenImages": [],
+        "distortedImages": []
+      },
+      "controls": [
+        {
+          "selector": ".translation-fallback-dialog .button",
+          "tag": "button",
+          "text": "Xem tiếng Anh",
+          "width": 140,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        },
+        {
+          "selector": ".translation-fallback-dialog .button",
+          "tag": "button",
+          "text": "Hủy",
+          "width": 66,
+          "height": 48,
+          "inViewportWidth": true,
+          "hitInside": true
+        }
+      ],
+      "focus": {
+        "activeText": "Hủy",
+        "insideDialog": true
+      },
+      "pass": true,
+      "cancel": {
+        "dialogGone": true,
+        "missingShown": true,
+        "urlLanguage": "ja",
+        "selectLanguage": "ja"
+      },
+      "cancelPass": true
+    }
+  ],
+  "errors": []
+}

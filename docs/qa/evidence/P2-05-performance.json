@@ -1,0 +1,129 @@
+{
+  "environment": {
+    "url": "http://127.0.0.1:5173/artifacts/demo-trong-dong?lang=vi",
+    "browser": "Chromium 157.0.8103.78 headless",
+    "viewport": "390x844 CSS px, DPR 3, mobile/touch emulation",
+    "network": "CDP cellular4g: 9 Mbps down / 1.5 Mbps up / 40 ms RTT",
+    "cpu": "4x throttling",
+    "note": "Emulated mobile network/CPU on local preview and local API; not a real device or carrier network."
+  },
+  "runs": [
+    {
+      "run": 1,
+      "throttled": true,
+      "elapsedMs": 468,
+      "domContentLoaded": 208.5,
+      "loadEventEnd": 209,
+      "lcp": 304,
+      "resourceCount": 4,
+      "transferBytes": 89638,
+      "title": "Trống đồng (minh họa)",
+      "contentLength": 185
+    },
+    {
+      "run": 2,
+      "throttled": true,
+      "elapsedMs": 466,
+      "domContentLoaded": 216.39999999850988,
+      "loadEventEnd": 217.19999999925494,
+      "lcp": 448,
+      "resourceCount": 3,
+      "transferBytes": 89338,
+      "title": "Trống đồng (minh họa)",
+      "contentLength": 185
+    },
+    {
+      "run": 3,
+      "throttled": true,
+      "elapsedMs": 468,
+      "domContentLoaded": 221,
+      "loadEventEnd": 221.80000000074506,
+      "lcp": 304,
+      "resourceCount": 3,
+      "transferBytes": 89338,
+      "title": "Trống đồng (minh họa)",
+      "contentLength": 185
+    },
+    {
+      "run": 4,
+      "throttled": true,
+      "elapsedMs": 417,
+      "domContentLoaded": 215.40000000223517,
+      "loadEventEnd": 215.80000000074506,
+      "lcp": 304,
+      "resourceCount": 3,
+      "transferBytes": 89338,
+      "title": "Trống đồng (minh họa)",
+      "contentLength": 185
+    },
+    {
+      "run": 5,
+      "throttled": true,
+      "elapsedMs": 458,
+      "domContentLoaded": 213.19999999925494,
+      "loadEventEnd": 213.80000000074506,
+      "lcp": 428,
+      "resourceCount": 3,
+      "transferBytes": 89338,
+      "title": "Trống đồng (minh họa)",
+      "contentLength": 185
+    },
+    {
+      "run": 6,
+      "throttled": true,
+      "elapsedMs": 462,
+      "domContentLoaded": 210.59999999776483,
+      "loadEventEnd": 211.69999999925494,
+      "lcp": 440,
+      "resourceCount": 3,
+      "transferBytes": 89338,
+      "title": "Trống đồng (minh họa)",
+      "contentLength": 185
+    },
+    {
+      "run": 7,
+      "throttled": true,
+      "elapsedMs": 415,
+      "domContentLoaded": 213,
+      "loadEventEnd": 213.80000000074506,
+      "lcp": 292,
+      "resourceCount": 3,
+      "transferBytes": 89338,
+      "title": "Trống đồng (minh họa)",
+      "contentLength": 185
+    },
+    {
+      "run": "baseline-1",
+      "throttled": false,
+      "elapsedMs": 187,
+      "domContentLoaded": 25,
+      "loadEventEnd": 25.399999998509884,
+      "lcp": 168,
+      "resourceCount": 3,
+      "transferBytes": 89338,
+      "title": "Trống đồng (minh họa)",
+      "contentLength": 185
+    },
+    {
+      "run": "baseline-2",
+      "throttled": false,
+      "elapsedMs": 191,
+      "domContentLoaded": 28.800000000745058,
+      "loadEventEnd": 28.899999998509884,
+      "lcp": 180,
+      "resourceCount": 3,
+      "transferBytes": 89338,
+      "title": "Trống đồng (minh họa)",
+      "contentLength": 185
+    }
+  ],
+  "summary": {
+    "count": 7,
+    "minMs": 415,
+    "medianMs": 462,
+    "p95Ms": 468,
+    "maxMs": 468,
+    "targetMs": 3000,
+    "meetsTarget": true
+  }
+}

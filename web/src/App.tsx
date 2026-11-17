@@ -632,7 +632,11 @@ function MissingTranslation({
             ? "Hiện vật này chưa có nội dung trong ngôn ngữ đã chọn. Bạn có thể xem thuyết minh bằng một trong các ngôn ngữ hiện có:"
             : `Hiện chưa có nội dung bằng ${getLanguageLabel(language)} hoặc tiếng Anh cho hiện vật này.`}
         </p>
-        <div className="available-languages" aria-label="Ngôn ngữ có sẵn">
+        <div
+          className="available-languages"
+          role="group"
+          aria-label="Ngôn ngữ có sẵn"
+        >
           {artifact.available_languages.map((availableLanguage) => (
             <Link
               className="language-chip"
