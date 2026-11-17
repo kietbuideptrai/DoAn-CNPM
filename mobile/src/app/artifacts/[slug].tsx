@@ -1,7 +1,8 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
+  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -15,24 +16,34 @@ import { useLanguage } from "@/context/LanguageContext";
 import { useLocalData } from "@/context/LocalDataContext";
 import { useArtifact } from "@/hooks/useArtifact";
 import { useSpeech } from "@/hooks/useSpeech";
-import { createSharedStyles, useTheme } from "@/theme";
+import { colors, styles as sharedStyles } from "@/theme";
 import { getLanguageLabel, languages } from "@/utils/languages";
-import { useTranslation } from "@/utils/i18n";
+
+type FallbackChoice = "accepted" | "dismissed";
 
 export default function ArtifactDetailScreen() {
   const { slug: requestedSlug } = useLocalSearchParams<{ slug: string }>();
   const slug = Array.isArray(requestedSlug) ? requestedSlug[0] : requestedSlug;
   const { language, setLanguage, storageError } = useLanguage();
-  const { t } = useTranslation();
-  const { favoriteSlugs, recordViewed, toggleFavorite } = useLocalData();
-  const { colors } = useTheme();
-  const styles = createStyles(colors);
-  const sharedStyles = createSharedStyles(colors);
-  const { state, isNotFound, retry } = useArtifact(slug, language);
+  const { favoriteSlugs, fontScale, recordViewed, toggleFavorite } = useLocalData();
+  const fallbackKey = `${slug ?? ""}\u0000${language}`;
+  const [fallbackChoice, setFallbackChoice] = useState<{
+    key: string;
+    choice: FallbackChoice;
+  } | null>(null);
+  const currentFallbackChoice =
+    fallbackChoice?.key === fallbackKey ? fallbackChoice : null;
+  const showingEnglishFallback =
+    currentFallbackChoice?.choice === "accepted";
+  const contentLanguage = showingEnglishFallback ? "en" : language;
+  const { state, isNotFound, retry } = useArtifact(slug, contentLanguage);
   const artifact = state.status === "success" ? state.data : null;
   const translation = artifact?.translation;
   const isFavorite = slug ? favoriteSlugs.includes(slug) : false;
-  const speech = useSpeech(translation?.content ?? "", language);
+  const speech = useSpeech(
+    translation?.content ?? "",
+    translation?.language_code ?? contentLanguage,
+  );
   const stopSpeech = speech.stop;
 
   useFocusEffect(
@@ -49,7 +60,7 @@ export default function ArtifactDetailScreen() {
     return (
       <View style={[sharedStyles.screen, styles.feedback]}>
         <ActivityIndicator color={colors.primary} size="large" />
-        <Text style={styles.feedbackText}>{t("loadingNarration")}</Text>
+        <Text style={styles.feedbackText}>Đang tải thuyết minh...</Text>
       </View>
     );
   }
@@ -58,11 +69,11 @@ export default function ArtifactDetailScreen() {
     return (
       <View style={[sharedStyles.screen, styles.errorState]}>
         <EmptyState
-          title={isNotFound ? t("artifactNotFound") : t("cannotLoadArtifacts")}
+          title={isNotFound ? "Không tìm thấy hiện vật" : "Không thể tải hiện vật"}
           message={
             isNotFound
-              ? t("artifactNotFoundMessage", { slug: slug ?? "" })
-              : t("artifactLoadError")
+              ? `Không có hiện vật với mã "${slug ?? ""}".`
+              : state.error.message
           }
         />
         {!isNotFound ? (
@@ -71,7 +82,7 @@ export default function ArtifactDetailScreen() {
             onPress={retry}
             style={styles.retryButton}
           >
-            <Text style={styles.retryButtonText}>{t("retry")}</Text>
+            <Text style={styles.retryButtonText}>Thử lại</Text>
           </Pressable>
         ) : null}
       </View>
@@ -83,30 +94,59 @@ export default function ArtifactDetailScreen() {
   }
 
   if (!translation) {
+    const hasEnglish = artifact.available_languages.includes("en");
+    const canOfferEnglish =
+      !showingEnglishFallback &&
+      hasEnglish &&
+      currentFallbackChoice?.choice !== "dismissed";
+
     return (
-      <ScrollView contentContainerStyle={styles.content}>
-        <ArtifactImage
-          accessibilityLabel={t("artifactImage", { name: artifact.slug })}
-          source={artifact.image_url}
-          style={styles.image}
-        />
-        <EmptyState
-          title={t("noNarrationLanguage", { language: getLanguageLabel(language) })}
-          message={t("noTranslationMessage", {
-            languages: artifact.available_languages.map(getLanguageLabel).join(", "),
-          })}
-        />
-        <LanguageSelector
-          language={language}
-          availableLanguages={artifact.available_languages}
-          onChange={setLanguage}
-          storageError={storageError}
-        />
-        <FavoriteButton
-          isFavorite={isFavorite}
-          onPress={() => slug && toggleFavorite(slug)}
-        />
-      </ScrollView>
+      <>
+        <ScrollView contentContainerStyle={styles.content}>
+          <ArtifactImage
+            accessibilityLabel={`Ảnh hiện vật ${artifact.slug}`}
+            source={artifact.image_url}
+            style={styles.image}
+          />
+          <EmptyState
+            title={
+              hasEnglish
+                ? `Chưa có thuyết minh bằng ${getLanguageLabel(language)}`
+                : "Nội dung chưa khả dụng"
+            }
+            message={
+              hasEnglish
+                ? `Hiện vật này chưa có nội dung bằng ${getLanguageLabel(
+                    language,
+                  )}. Nội dung hiện có: ${artifact.available_languages
+                    .map(getLanguageLabel)
+                    .join(", ")}.`
+                : `Hiện chưa có nội dung bằng ${getLanguageLabel(
+                    language,
+                  )} hoặc tiếng Anh cho hiện vật này.`
+            }
+          />
+          <LanguageSelector
+            language={language}
+            onChange={setLanguage}
+            storageError={storageError}
+          />
+          <FavoriteButton
+            isFavorite={isFavorite}
+            onPress={() => slug && toggleFavorite(slug)}
+          />
+        </ScrollView>
+        {canOfferEnglish ? (
+          <EnglishFallbackDialog
+            onAccept={() =>
+              setFallbackChoice({ key: fallbackKey, choice: "accepted" })
+            }
+            onCancel={() =>
+              setFallbackChoice({ key: fallbackKey, choice: "dismissed" })
+            }
+          />
+        ) : null}
+      </>
     );
   }
 
@@ -115,13 +155,12 @@ export default function ArtifactDetailScreen() {
   return (
     <ScrollView contentContainerStyle={styles.content}>
       <ArtifactImage
-        accessibilityLabel={t("artifactImage", { name: translation.title })}
+        accessibilityLabel={`Ảnh hiện vật ${translation.title}`}
         source={artifact.image_url}
         style={styles.image}
       />
       <LanguageSelector
         language={language}
-        availableLanguages={artifact.available_languages}
         onChange={setLanguage}
         storageError={storageError}
       />
@@ -129,32 +168,57 @@ export default function ArtifactDetailScreen() {
         isFavorite={isFavorite}
         onPress={() => slug && toggleFavorite(slug)}
       />
-      <Text style={styles.languageTag}>{getLanguageLabel(language)}</Text>
-      <Text style={styles.title}>
+      {showingEnglishFallback ? (
+        <Text style={styles.fallbackNotice} accessibilityRole="note">
+          Đang hiển thị nội dung tiếng Anh. Lựa chọn ngôn ngữ của bạn vẫn là{" "}
+          {getLanguageLabel(language)}.
+        </Text>
+      ) : null}
+      <Text style={styles.languageTag}>
+        {getLanguageLabel(translation.language_code)}
+      </Text>
+      <Text
+        style={[
+          styles.title,
+          { fontSize: 30 * fontScale, lineHeight: 38 * fontScale },
+        ]}
+      >
         {translation.title}
       </Text>
-      <Text style={styles.summary}>
+      <Text
+        style={[
+          styles.summary,
+          { fontSize: 16 * fontScale, lineHeight: 25 * fontScale },
+        ]}
+      >
         {translation.summary}
       </Text>
       <View style={styles.speechControls}>
         {speech.voiceAvailability === "unavailable" ? (
-          <View>
+          <View style={styles.speechUnavailable}>
             <Text style={styles.speechMessage} accessibilityRole="alert">
-              {t("voiceUnavailable", { language: getLanguageLabel(language) })}
+              Hiện giờ chưa có voice
+            </Text>
+            <Text style={styles.speechMessage}>
+              Thiết bị chưa cài giọng đọc{" "}
+              {getLanguageLabel(translation.language_code)}. Bạn vẫn có thể đọc
+              nội dung bên dưới.
             </Text>
             <Pressable
               accessibilityRole="button"
-              onPress={speech.checkVoices}
-              style={styles.retryVoiceButton}
+              onPress={speech.recheckVoice}
+              style={styles.recheckButton}
             >
-              <Text style={styles.retryVoiceButtonText}>{t("checkVoice")}</Text>
+              <Text style={styles.recheckButtonText}>
+                Kiểm tra lại giọng đọc
+              </Text>
             </Pressable>
           </View>
         ) : speech.status === "idle" ? (
           <Pressable
-            accessibilityLabel={t("listenNarration", {
-              language: getLanguageLabel(language),
-            })}
+            accessibilityLabel={`Nghe thuyết minh bằng ${getLanguageLabel(
+              translation.language_code,
+            )}`}
             accessibilityRole="button"
             disabled={speech.voiceAvailability === "checking"}
             onPress={speech.play}
@@ -165,8 +229,8 @@ export default function ArtifactDetailScreen() {
           >
             <Text style={styles.speechButtonText}>
               {speech.voiceAvailability === "checking"
-                ? t("checkingVoice")
-                : t("listen")}
+                ? "Đang kiểm tra giọng đọc..."
+                : "▶  Nghe thuyết minh"}
             </Text>
           </Pressable>
         ) : (
@@ -177,7 +241,7 @@ export default function ArtifactDetailScreen() {
                 onPress={speech.resume}
                 style={styles.speechButton}
               >
-                <Text style={styles.speechButtonText}>{t("resume")}</Text>
+                <Text style={styles.speechButtonText}>▶  Tiếp tục</Text>
               </Pressable>
             ) : (
               <Pressable
@@ -185,7 +249,7 @@ export default function ArtifactDetailScreen() {
                 onPress={speech.pause}
                 style={styles.speechButton}
               >
-                <Text style={styles.speechButtonText}>{t("pause")}</Text>
+                <Text style={styles.speechButtonText}>Ⅱ  Tạm dừng</Text>
               </Pressable>
             )}
             <Pressable
@@ -193,7 +257,7 @@ export default function ArtifactDetailScreen() {
               onPress={speech.stop}
               style={styles.stopButton}
             >
-              <Text style={styles.stopButtonText}>{t("stop")}</Text>
+              <Text style={styles.stopButtonText}>Dừng</Text>
             </Pressable>
           </View>
         )}
@@ -207,7 +271,10 @@ export default function ArtifactDetailScreen() {
         {paragraphs.map((paragraph, index) => (
           <Text
             key={`${index}-${paragraph}`}
-            style={styles.paragraph}
+            style={[
+              styles.paragraph,
+              { fontSize: 17 * fontScale, lineHeight: 29 * fontScale },
+            ]}
           >
             {paragraph}
           </Text>
@@ -223,14 +290,10 @@ interface FavoriteButtonProps {
 }
 
 function FavoriteButton({ isFavorite, onPress }: FavoriteButtonProps) {
-  const { colors } = useTheme();
-  const { t } = useTranslation();
-  const styles = createStyles(colors);
-
   return (
     <Pressable
       accessibilityLabel={
-        isFavorite ? t("removeFavorite") : t("addFavorite")
+        isFavorite ? "Bỏ khỏi danh sách yêu thích" : "Thêm vào danh sách yêu thích"
       }
       accessibilityRole="button"
       accessibilityState={{ selected: isFavorite }}
@@ -247,50 +310,88 @@ function FavoriteButton({ isFavorite, onPress }: FavoriteButtonProps) {
           isFavorite && styles.favoriteButtonTextSelected,
         ]}
       >
-        {isFavorite ? t("favorited") : t("addFavoriteShort")}
+        {isFavorite ? "♥  Đã yêu thích" : "♡  Thêm yêu thích"}
       </Text>
     </Pressable>
   );
 }
 
+interface EnglishFallbackDialogProps {
+  onAccept: () => void;
+  onCancel: () => void;
+}
+
+function EnglishFallbackDialog({
+  onAccept,
+  onCancel,
+}: EnglishFallbackDialogProps) {
+  return (
+    <Modal
+      animationType="fade"
+      onRequestClose={onCancel}
+      transparent
+      visible
+    >
+      <View style={styles.dialogBackdrop}>
+        <View
+          accessibilityViewIsModal
+          style={styles.dialogCard}
+        >
+          <Text accessibilityRole="header" style={styles.dialogTitle}>
+            Chưa có bản dịch
+          </Text>
+          <Text style={styles.dialogMessage}>
+            Hiện chưa có nội dung bằng ngôn ngữ bạn chọn. Bạn có muốn xem nội
+            dung bằng tiếng Anh không?
+          </Text>
+          <View style={styles.dialogActions}>
+            <Pressable
+              accessibilityRole="button"
+              onPress={onAccept}
+              style={styles.dialogPrimaryButton}
+            >
+              <Text style={styles.dialogPrimaryButtonText}>Xem tiếng Anh</Text>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              onPress={onCancel}
+              style={styles.dialogSecondaryButton}
+            >
+              <Text style={styles.dialogSecondaryButtonText}>Hủy</Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    </Modal>
+  );
+}
+
 interface LanguageSelectorProps {
   language: Language;
-  availableLanguages: Language[];
   onChange: (language: Language) => Promise<void>;
   storageError: string | null;
 }
 
 function LanguageSelector({
   language,
-  availableLanguages,
   onChange,
   storageError,
 }: LanguageSelectorProps) {
-  const { colors } = useTheme();
-  const { t } = useTranslation();
-  const styles = createStyles(colors);
-
   return (
     <View style={styles.languageSelector}>
-      <Text style={styles.languageSelectorLabel}>{t("narrationLanguage")}</Text>
+      <Text style={styles.languageSelectorLabel}>Ngôn ngữ thuyết minh</Text>
       <View style={styles.languageOptions}>
         {languages.map((item) => {
           const isSelected = item.code === language;
-          const isAvailable = availableLanguages.includes(item.code);
           return (
             <Pressable
               accessibilityRole="radio"
-              accessibilityState={{
-                checked: isSelected,
-                disabled: !isAvailable,
-              }}
+              accessibilityState={{ checked: isSelected }}
               key={item.code}
-              disabled={!isAvailable}
               onPress={() => void onChange(item.code)}
               style={[
                 styles.languageOption,
                 isSelected && styles.selectedLanguageOption,
-                !isAvailable && styles.unavailableLanguageOption,
               ]}
             >
               <Text
@@ -299,7 +400,7 @@ function LanguageSelector({
                   isSelected && styles.selectedLanguageOptionText,
                 ]}
               >
-                {isAvailable ? item.label : `${item.label} · ${t("unavailable")}`}
+                {item.label}
               </Text>
             </Pressable>
           );
@@ -307,7 +408,7 @@ function LanguageSelector({
       </View>
       {storageError ? (
         <Text style={styles.storageError} accessibilityRole="alert">
-          {t("storageError")}
+          {storageError}
         </Text>
       ) : null}
     </View>
@@ -323,23 +424,10 @@ function splitIntoParagraphs(content: string): string[] {
   );
 }
 
-function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
-  return StyleSheet.create({
+const styles = StyleSheet.create({
   content: {
     padding: 20,
     paddingBottom: 40,
-  },
-  retryVoiceButton: {
-    minHeight: 44,
-    alignSelf: "flex-start",
-    justifyContent: "center",
-    marginTop: 6,
-    paddingHorizontal: 10,
-  },
-  retryVoiceButtonText: {
-    color: colors.primary,
-    fontSize: 14,
-    fontWeight: "700",
   },
   image: {
     width: "100%",
@@ -425,9 +513,6 @@ function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
     borderColor: colors.primary,
     backgroundColor: colors.highlight,
   },
-  unavailableLanguageOption: {
-    opacity: 0.5,
-  },
   languageOptionText: {
     color: colors.ink,
     fontSize: 14,
@@ -441,6 +526,17 @@ function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
     color: colors.error,
     fontSize: 13,
     lineHeight: 19,
+  },
+  fallbackNotice: {
+    marginBottom: 14,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    backgroundColor: colors.highlight,
+    color: colors.ink,
+    fontSize: 14,
+    lineHeight: 20,
   },
   languageTag: {
     marginBottom: 8,
@@ -506,11 +602,90 @@ function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
     fontSize: 14,
     lineHeight: 21,
   },
+  speechUnavailable: {
+    gap: 8,
+  },
+  recheckButton: {
+    minHeight: 44,
+    alignSelf: "flex-start",
+    justifyContent: "center",
+    marginTop: 4,
+    paddingHorizontal: 14,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: 10,
+    backgroundColor: colors.paper,
+  },
+  recheckButtonText: {
+    color: colors.primary,
+    fontSize: 14,
+    fontWeight: "700",
+  },
   speechError: {
     marginTop: 10,
     color: colors.error,
     fontSize: 14,
     lineHeight: 20,
+  },
+  dialogBackdrop: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "rgba(18, 32, 25, 0.58)",
+  },
+  dialogCard: {
+    width: "100%",
+    maxWidth: 520,
+    padding: 26,
+    borderRadius: 16,
+    backgroundColor: colors.paper,
+  },
+  dialogTitle: {
+    marginBottom: 10,
+    color: colors.ink,
+    fontSize: 24,
+    fontWeight: "700",
+    lineHeight: 30,
+  },
+  dialogMessage: {
+    color: colors.muted,
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  dialogActions: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginTop: 24,
+  },
+  dialogPrimaryButton: {
+    minHeight: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 18,
+    borderRadius: 10,
+    backgroundColor: colors.primary,
+  },
+  dialogPrimaryButtonText: {
+    color: colors.paper,
+    fontSize: 15,
+    fontWeight: "700",
+  },
+  dialogSecondaryButton: {
+    minHeight: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    backgroundColor: colors.paper,
+  },
+  dialogSecondaryButtonText: {
+    color: colors.ink,
+    fontSize: 15,
+    fontWeight: "700",
   },
   article: {
     paddingTop: 18,
@@ -523,5 +698,4 @@ function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
     fontSize: 17,
     lineHeight: 29,
   },
-  });
-}
+});

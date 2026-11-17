@@ -1252,8 +1252,19 @@ p {
   .header-preferences {
     order: 2;
     width: 100%;
+    gap: 8px;
+    flex-wrap: wrap;
     justify-content: flex-end;
     padding-block: 8px;
+  }
+
+  .font-size-picker label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
   }
 
   .primary-nav {

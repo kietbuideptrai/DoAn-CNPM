@@ -1,0 +1,214 @@
+{
+  "cases": [
+    {
+      "name": "QR URL mở đúng hiện vật và ngôn ngữ vi",
+      "pass": true,
+      "evidence": {
+        "title": "Trống đồng (minh họa)",
+        "language": "vi",
+        "contentLang": "vi",
+        "content": "Hiện vật minh họa cho bản demo.Mặt trống hình tròn, chính giữa là hình mặt trời,"
+      }
+    },
+    {
+      "name": "Đổi ngôn ngữ sang en cập nhật URL, nội dung và lang",
+      "pass": true,
+      "evidence": {
+        "language": "en",
+        "url": "?lang=en",
+        "contentLang": "en",
+        "label": "English",
+        "aria": "Nghe thuyết minh bằng English"
+      }
+    },
+    {
+      "name": "TTS hiển thị starting trước khi engine bắt đầu",
+      "pass": true,
+      "evidence": {
+        "button": "Đang khởi tạo giọng đọc...",
+        "stop": true
+      }
+    },
+    {
+      "name": "TTS phát tiếng Anh sau khi engine bắt đầu",
+      "pass": true,
+      "evidence": {
+        "button": "ⅡTạm dừng",
+        "stop": true,
+        "mock": {
+          "utterances": [
+            {
+              "text": "This is a sample artifact for the demo.",
+              "lang": "en-US"
+            }
+          ],
+          "cancelled": 4,
+          "spoken": 1,
+          "paused": 0,
+          "resumed": 0
+        }
+      }
+    },
+    {
+      "name": "TTS tạm dừng đúng trạng thái",
+      "pass": true,
+      "evidence": {
+        "button": "▶Tiếp tục",
+        "mock": {
+          "utterances": [
+            {
+              "text": "This is a sample artifact for the demo.",
+              "lang": "en-US"
+            }
+          ],
+          "cancelled": 4,
+          "spoken": 1,
+          "paused": 1,
+          "resumed": 0
+        }
+      }
+    },
+    {
+      "name": "TTS tiếp tục đúng trạng thái",
+      "pass": true,
+      "evidence": {
+        "button": "ⅡTạm dừng",
+        "mock": {
+          "utterances": [
+            {
+              "text": "This is a sample artifact for the demo.",
+              "lang": "en-US"
+            }
+          ],
+          "cancelled": 4,
+          "spoken": 1,
+          "paused": 1,
+          "resumed": 1
+        }
+      }
+    },
+    {
+      "name": "Đổi ngôn ngữ khi đang đọc dừng voice/hàng đợi",
+      "pass": true,
+      "evidence": {
+        "language": "ja",
+        "statusIdle": true,
+        "mock": {
+          "utterances": [
+            {
+              "text": "This is a sample artifact for the demo.",
+              "lang": "en-US"
+            }
+          ],
+          "cancelled": 6,
+          "spoken": 1,
+          "paused": 1,
+          "resumed": 1
+        },
+        "contentLang": "ja"
+      }
+    },
+    {
+      "name": "Rời trang khi đang đọc dừng voice",
+      "pass": true,
+      "evidence": {
+        "beforeLeave": 7,
+        "afterLeave": {
+          "cancelled": 8,
+          "spoken": 2
+        }
+      }
+    },
+    {
+      "name": "Thiếu voice hiển thị đúng thông báo và giữ văn bản",
+      "pass": true,
+      "evidence": {
+        "before": {
+          "text": "Hiện vật minh họa cho bản demo.Mặt trống hình tròn, chính giữa là hình mặt trời, xung quanh là các vòng hoa văn và chim thú cách điệu.Nội dung không đại diện cho một chiếc trống cụ thể.",
+          "button": "▶ Kiểm tra lại giọng đọc"
+        },
+        "after": {
+          "message": "Hiện giờ chưa có voice",
+          "text": "Hiện vật minh họa cho bản demo.Mặt trống hình tròn, chính giữa là hình mặt trời, xung quanh là các vòng hoa văn và chim thú cách điệu.Nội dung không đại diện cho một chiếc trống cụ thể."
+        }
+      }
+    },
+    {
+      "name": "Fallback hiện đúng hộp thoại và không tự phát TTS",
+      "pass": true,
+      "evidence": {
+        "title": "Chưa có bản dịch",
+        "selected": "ja",
+        "urlLang": "ja",
+        "spoken": 0
+      }
+    },
+    {
+      "name": "Xem tiếng Anh tải nội dung en nhưng không đổi ngôn ngữ đã chọn",
+      "pass": true,
+      "evidence": {
+        "label": "English",
+        "contentLang": "en",
+        "selected": "ja",
+        "urlLang": "ja",
+        "spoken": 0
+      }
+    },
+    {
+      "name": "Hủy không đổi ngôn ngữ và hiện trạng thái thiếu bản dịch",
+      "pass": true,
+      "evidence": {
+        "missing": true,
+        "selected": "ja",
+        "urlLang": "ja",
+        "heading": "Chưa có thuyết minh bằng 日本語"
+      }
+    },
+    {
+      "name": "Thiếu cả bản dịch en hiển thị trạng thái không có nội dung",
+      "pass": true,
+      "evidence": {
+        "heading": "Nội dung chưa khả dụng",
+        "chips": [
+          "Tiếng Việt"
+        ]
+      }
+    },
+    {
+      "name": "Slug không tồn tại hiển thị lỗi 404 thân thiện",
+      "pass": true,
+      "evidence": {
+        "heading": "Không tìm thấy hiện vật",
+        "message": "Không có hiện vật với mã khong-ton-tai."
+      }
+    },
+    {
+      "name": "Mất mạng hiển thị lỗi và Thử lại tải được nội dung",
+      "pass": true,
+      "evidence": {
+        "networkError": {
+          "heading": "Không thể tải hiện vật",
+          "retry": true
+        },
+        "retried": {
+          "title": "Trống đồng (minh họa)",
+          "errorGone": true
+        }
+      }
+    },
+    {
+      "name": "Tìm kiếm Việt/Anh độc lập ngôn ngữ hiển thị",
+      "pass": true,
+      "evidence": {
+        "viSearch": [
+          "/artifacts/demo-trong-dong?lang=ko"
+        ],
+        "enSearch": [
+          "/artifacts/demo-trong-dong?lang=ko"
+        ],
+        "displayLanguage": "ko"
+      }
+    }
+  ],
+  "errors": []
+}

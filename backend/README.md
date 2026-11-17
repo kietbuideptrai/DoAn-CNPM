@@ -14,8 +14,13 @@ cp .env.example .env
 
 Set `DATABASE_URL` in `.env` to the PostgreSQL connection string from Supabase.
 For a long-running Express server, use the Supabase session pooler or direct
-connection details appropriate for your network. Ensure the URL requires TLS
-(`sslmode=require`). Never commit `.env`.
+connection details appropriate for your network. Require TLS and never commit
+`.env`.
+
+For certificate verification, download the Supabase root certificate from
+**Database → SSL Configuration** and use `sslmode=verify-full` with
+`sslrootcert` pointing to the local certificate file in `DATABASE_URL`.
+Keep the certificate local; `.gitignore` excludes `prod-ca-2021.crt`.
 
 Follow the non-production database confirmation, schema preflight, safe seed,
 and read-only verification steps in
@@ -34,10 +39,24 @@ local development.
 
 `src/db/seed.sql` is draft development data. It inserts missing artifact and
 translation rows only, leaves existing rows unchanged, and creates new
-artifacts as unpublished. Its `placehold.co` URLs are development placeholders,
-not approved images. Content and image review status are tracked in
+artifacts as unpublished. Its Vietnamese summaries are paraphrased from the
+Ho Chi Minh Museum's “Artifacts Tell Stories” articles; all five-language text
+is draft content pending expert review. Images remain neutral placeholders
+until usage rights are confirmed. Content and image review status are tracked in
 [`src/db/CONTENT-REVIEW.md`](./src/db/CONTENT-REVIEW.md) and
 [`src/db/image-sources.json`](./src/db/image-sources.json).
+
+For a representative demo database without museum content, use
+`src/db/seed-demo.sql` instead. It inserts eight fictional, **published**
+artifacts with all five translations and placeholder images. Slugs use the
+`demo-` prefix so they do not collide with the museum drafts. This data is not
+museum content and does not replace the real content-review process. Verify it
+with [`src/db/verify-demo-seed.sql`](./src/db/verify-demo-seed.sql) and
+[`src/db/verify-demo-readiness.sql`](./src/db/verify-demo-readiness.sql).
+
+The translation importer accepts UTF-8 comma- or semicolon-delimited CSV. It
+does not overwrite existing metadata or translations by default. Review
+conflicts first; `--overwrite-existing` explicitly enables updates.
 
 After content review, image-rights confirmation, and explicit non-production
 database verification, use [`src/db/verify-seed.sql`](./src/db/verify-seed.sql)

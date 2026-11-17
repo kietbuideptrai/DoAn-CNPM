@@ -11,332 +11,334 @@ interface DemoArtifact {
   translations: Record<Language, Translation>;
 }
 
+const placeholderImage = "/images/artifacts/museum-placeholder.svg";
+
 export const demoArtifacts: DemoArtifact[] = [
   {
-    slug: "uh-1-huey",
-    image_url: "/images/artifacts/uh-1-huey.png",
+    slug: "dong-hai-dong-1946",
+    image_url: placeholderImage,
     translations: {
       vi: {
         language_code: "vi",
-        title: "Máy bay trực thăng UH-1 Huey",
-        summary: "Trực thăng đa dụng gắn với nhiều hoạt động quân sự trong thế kỷ 20.",
+        title: "Đồng Hai đồng năm 1946",
+        summary: "Đồng tiền kim loại mệnh giá cao nhất trong bộ tiền đầu tiên của Việt Nam Dân chủ Cộng hòa.",
         content:
-          "UH-1, thường được gọi là Huey, là dòng trực thăng đa dụng do Hoa Kỳ phát triển. Trong chiến tranh Việt Nam, loại máy bay này được sử dụng cho nhiều nhiệm vụ như vận chuyển người và hàng hóa, tải thương và hỗ trợ trên không. Hiện vật gợi mở câu chuyện về vai trò của trực thăng trong chiến tranh hiện đại.",
+          "Bộ tiền kim loại đầu tiên của Việt Nam Dân chủ Cộng hòa được phát hành từ năm 1945; đồng Hai đồng ra đời vào năm 1946. Bảo tàng Hồ Chí Minh hiện lưu giữ ba đồng tiền do ông Vũ Dương Biền gửi tặng năm 1980. Hiện vật kể câu chuyện về nỗ lực xây dựng nền tài chính của một quốc gia độc lập.",
       },
       en: {
         language_code: "en",
-        title: "UH-1 Huey helicopter",
-        summary: "A utility helicopter associated with many 20th-century military operations.",
+        title: "The 1946 Two-Dong Coin",
+        summary: "The highest denomination in the first metal currency series of the Democratic Republic of Vietnam.",
         content:
-          "The UH-1, commonly known as the Huey, is a utility helicopter developed in the United States. During the Vietnam War, it served in a range of roles, including transporting people and supplies, medical evacuation, and air support. This artifact introduces the role of helicopters in modern warfare.",
+          "The first metal currency of the Democratic Republic of Vietnam began circulating in 1945, and the two-dong coin followed in 1946. The Ho Chi Minh Museum preserves three coins donated by Vu Duong Bien in 1980. They recall the effort to establish a national financial system after independence.",
       },
       zh: {
         language_code: "zh",
-        title: "UH-1“休伊”直升机",
-        summary: "这款多用途直升机参与了二十世纪的多种军事行动。",
+        title: "1946年两盾硬币",
+        summary: "越南民主共和国首套金属货币中面额最高的一种。",
         content:
-          "UH-1通常被称为“休伊”，是美国研制的一种多用途直升机。在越南战争期间，它承担了运输人员和物资、医疗后送以及空中支援等多种任务。这件展品展现了直升机在现代战争中的作用。",
+          "越南民主共和国的首套金属货币自1945年开始发行，两盾硬币于1946年问世。胡志明博物馆保存着三枚硬币，由武阳边先生于1980年捐赠。它们记录了独立后建立国家金融体系的努力。",
       },
       ja: {
         language_code: "ja",
-        title: "UH-1「ヒューイ」ヘリコプター",
-        summary: "20世紀のさまざまな軍事活動に関わった多用途ヘリコプターです。",
+        title: "1946年発行の2ドン硬貨",
+        summary: "ベトナム民主共和国で最初に発行された金属貨幣のうち、最高額面の硬貨です。",
         content:
-          "UH-1は、一般に「ヒューイ」と呼ばれる米国開発の多用途ヘリコプターです。ベトナム戦争では、人員や物資の輸送、負傷者の後送、航空支援など幅広い任務に使われました。この展示品から、近代戦におけるヘリコプターの役割を知ることができます。",
+          "ベトナム民主共和国の最初の金属貨幣は1945年から発行され、2ドン硬貨は1946年に登場しました。ホー・チ・ミン博物館は、1980年にヴー・ズオン・ビエン氏から寄贈された3枚を所蔵しています。独立後に国家の金融制度を築いた歩みを伝える資料です。",
       },
       ko: {
         language_code: "ko",
-        title: "UH-1 휴이 헬리콥터",
-        summary: "20세기의 여러 군사 작전에 사용된 다목적 헬리콥터입니다.",
+        title: "1946년 2동 동전",
+        summary: "베트남민주공화국 최초 금속 화폐 가운데 액면가가 가장 높은 동전입니다.",
         content:
-          "UH-1은 흔히 ‘휴이’라고 불리는 미국 개발 다목적 헬리콥터입니다. 베트남 전쟁에서 인원과 물자 수송, 부상자 후송, 공중 지원 등 다양한 임무에 사용되었습니다. 이 전시품은 현대전에서 헬리콥터가 맡았던 역할을 보여 줍니다.",
+          "베트남민주공화국의 첫 금속 화폐는 1945년부터 발행되었고, 2동 동전은 1946년에 나왔습니다. 호찌민 박물관은 1980년 부즈엉비엔이 기증한 동전 세 점을 소장하고 있습니다. 독립 이후 국가 금융 제도를 세우려던 노력을 보여 주는 자료입니다.",
       },
     },
   },
   {
-    slug: "f-5a-fighter",
-    image_url: "/images/artifacts/f-5a-fighter.png",
+    slug: "me-con-ngay-gap-mat",
+    image_url: placeholderImage,
     translations: {
       vi: {
         language_code: "vi",
-        title: "Máy bay chiến đấu F-5A",
-        summary: "Máy bay phản lực hạng nhẹ được phát triển cho nhiệm vụ chiến đấu.",
+        title: "Bức ảnh “Mẹ con ngày gặp mặt”",
+        summary: "Khoảnh khắc đoàn tụ của người mẹ và người con sau ngày đất nước thống nhất.",
         content:
-          "F-5A là phiên bản đầu của dòng máy bay chiến đấu phản lực F-5 do Hoa Kỳ phát triển. Thiết kế nhỏ gọn và khả năng hoạt động ở tốc độ cao khiến dòng máy bay này được nhiều quốc gia sử dụng. Hiện vật giúp người xem tìm hiểu về sự phát triển của không quân trong thời kỳ máy bay phản lực.",
+          "Nhiếp ảnh gia Lâm Hồng Long chụp bức ảnh tại cảng Rạch Dừa ngày 6/5/1975, khi chuyến tàu đầu tiên đưa 35 tù nhân Côn Đảo trở về đất liền. Bức ảnh ghi lại cuộc hội ngộ giữa bà Trần Thị Bính và con trai Lê Văn Thức sau nhiều năm xa cách. Tác phẩm hiện được giới thiệu tại Bảo tàng Hồ Chí Minh trong chủ đề Tổ quốc thống nhất.",
       },
       en: {
         language_code: "en",
-        title: "F-5A fighter aircraft",
-        summary: "A lightweight jet aircraft developed for combat missions.",
+        title: "“Mother and Son Reunited”",
+        summary: "A mother and son meet again after the country's reunification.",
         content:
-          "The F-5A is an early version of the F-5 jet fighter family developed in the United States. Its compact design and high-speed performance led to its use by many countries. This artifact offers a starting point for exploring the development of air forces in the jet age.",
+          "Photographer Lam Hong Long took this picture at Rach Dua Port on 6 May 1975, when the first boat brought 35 Con Dao prisoners back to the mainland. It captures Tran Thi Binh reuniting with her son Le Van Thuc after years apart. The photograph is presented at the Ho Chi Minh Museum as part of its reunification theme.",
       },
       zh: {
         language_code: "zh",
-        title: "F-5A战斗机",
-        summary: "为作战任务研制的轻型喷气式飞机。",
+        title: "《母子重逢》照片",
+        summary: "国家统一后，一对母子终于团聚的瞬间。",
         content:
-          "F-5A是美国研制的F-5喷气式战斗机系列的早期型号。其机身紧凑、速度较快，因此曾被多个国家使用。这件展品可以帮助观众了解喷气式飞机时代空军的发展。",
+          "摄影记者林鸿龙于1975年5月6日在石榴港拍下这张照片。当时，首艘船将35名昆岛囚犯送回大陆，照片记录了陈氏秉与儿子黎文识多年后重逢的时刻。胡志明博物馆在“祖国统一”主题展中展出这幅作品。",
       },
       ja: {
         language_code: "ja",
-        title: "F-5A戦闘機",
-        summary: "戦闘任務向けに開発された軽量ジェット機です。",
+        title: "「母と子の再会」写真",
+        summary: "南北統一後、母と息子が再会した瞬間を捉えた写真です。",
         content:
-          "F-5Aは、米国で開発されたF-5ジェット戦闘機シリーズの初期型です。小型で高速という特徴があり、多くの国で使用されました。この展示品を通して、ジェット機時代の空軍の発展をたどることができます。",
+          "報道写真家ラム・ホン・ロンは1975年5月6日、コンダオ島の囚人35人を本土へ送り届けた最初の船が着いたラックズア港で撮影しました。長い別離の後、チャン・ティ・ビンさんと息子レ・バン・トゥックさんが再会する場面を記録しています。ホー・チ・ミン博物館の「祖国統一」展示で紹介されています。",
       },
       ko: {
         language_code: "ko",
-        title: "F-5A 전투기",
-        summary: "전투 임무를 위해 개발된 경량 제트 항공기입니다.",
+        title: "‘어머니와 아들의 재회’ 사진",
+        summary: "조국 통일 뒤 어머니와 아들이 다시 만나는 순간을 담았습니다.",
         content:
-          "F-5A는 미국에서 개발된 F-5 제트 전투기 계열의 초기형입니다. 작고 빠른 기체라는 특징으로 여러 나라에서 운용되었습니다. 이 전시품을 통해 제트기 시대 공군의 발전을 살펴볼 수 있습니다.",
+          "사진기자 럼홍롱은 1975년 5월 6일, 꼰다오 수감자 35명을 본토로 데려온 첫 배가 도착한 락즈어 항구에서 이 사진을 촬영했습니다. 오랜 이별 뒤 쩐티빈과 아들 레반특이 만나는 장면을 기록했습니다. 호찌민 박물관의 ‘조국 통일’ 주제 전시에서 소개됩니다.",
       },
     },
   },
   {
-    slug: "m48-patton",
-    image_url: "/images/artifacts/m48-patton.png",
+    slug: "tap-tho-trong-tuyen",
+    image_url: placeholderImage,
     translations: {
       vi: {
         language_code: "vi",
-        title: "Xe tăng M48 Patton",
-        summary: "Xe tăng chiến đấu chủ lực được sử dụng trong thời kỳ Chiến tranh Lạnh.",
+        title: "Tập thơ Trọng Tuyển",
+        summary: "Tập thơ viết tay được đoàn đại biểu miền Nam kính tặng Chủ tịch Hồ Chí Minh năm 1962.",
         content:
-          "M48 Patton là dòng xe tăng chiến đấu chủ lực do Hoa Kỳ phát triển sau Chiến tranh thế giới thứ hai. Xe được trang bị pháo lớn và giáp bảo vệ, đồng thời được nhiều lực lượng sử dụng trong thời kỳ Chiến tranh Lạnh. Hiện vật cho thấy quy mô và công nghệ của chiến tranh cơ giới.",
+          "Tập thơ gồm 38 bài do chiến sĩ, nhà thơ Nguyễn Trọng Tuyển sáng tác trong thời gian bị giam tại nhà tù Gia Định. Năm 1962, đoàn đại biểu Mặt trận Dân tộc Giải phóng miền Nam mang tập thơ ra miền Bắc kính tặng Chủ tịch Hồ Chí Minh. Hiện vật lưu giữ tình cảm của đồng bào miền Nam và câu chuyện về người viết đã hy sinh năm 1959.",
       },
       en: {
         language_code: "en",
-        title: "M48 Patton tank",
-        summary: "A main battle tank used during the Cold War era.",
+        title: "The Trọng Tuyển Poetry Collection",
+        summary: "A handwritten collection presented to President Ho Chi Minh by a southern delegation in 1962.",
         content:
-          "The M48 Patton is a main battle tank developed in the United States after the Second World War. It combined a large-caliber gun with armored protection and was used by many forces during the Cold War. This artifact illustrates the scale and technology of mechanized warfare.",
+          "The collection contains 38 poems written by revolutionary soldier and poet Nguyen Trong Tuyen while imprisoned in Gia Dinh. In 1962, a delegation from the National Liberation Front of South Vietnam brought it north as a gift for President Ho Chi Minh. The artifact preserves a story of southern affection and a poet who died in 1959.",
       },
       zh: {
         language_code: "zh",
-        title: "M48“巴顿”坦克",
-        summary: "一款在冷战时期服役的主战坦克。",
+        title: "《重选诗集》",
+        summary: "1962年，南方代表团将这本手抄诗集赠给胡志明主席。",
         content:
-          "M48“巴顿”是美国在第二次世界大战后研制的主战坦克。它配备大口径火炮和装甲防护，冷战时期曾被多支部队使用。这件展品展现了机械化战争的规模与技术。",
+          "这本诗集收录了革命战士兼诗人阮仲选在嘉定监狱服刑期间创作的38首诗。1962年，南方解放民族阵线代表团将诗集带到北方，赠予胡志明主席。这件文物记录了南方同胞的深情，也讲述了1959年牺牲的诗人。",
       },
       ja: {
         language_code: "ja",
-        title: "M48パットン戦車",
-        summary: "冷戦期に運用された主力戦車です。",
+        title: "チョン・トゥエン詩集",
+        summary: "1962年、南部代表団がホー・チ・ミン主席に贈った手書きの詩集です。",
         content:
-          "M48パットンは、第二次世界大戦後に米国で開発された主力戦車です。大口径砲と装甲を備え、冷戦期に多くの部隊で使用されました。この展示品から、機械化された戦争の規模と技術を知ることができます。",
+          "この詩集には、革命家で詩人のグエン・チョン・トゥエンがザーディン刑務所に収監されていた時に書いた38編が収められています。1962年、南ベトナム解放民族戦線の代表団が北部を訪れ、主席に贈りました。南部の人々の思いと、1959年に命を落とした詩人の歩みを伝えます。",
       },
       ko: {
         language_code: "ko",
-        title: "M48 패튼 전차",
-        summary: "냉전 시기에 운용된 주력 전차입니다.",
+        title: "쫑뚜옌 시집",
+        summary: "1962년 남부 대표단이 호찌민 주석에게 선물한 손글씨 시집입니다.",
         content:
-          "M48 패튼은 제2차 세계대전 이후 미국에서 개발된 주력 전차입니다. 대구경 포와 장갑을 갖추었으며 냉전기에 여러 군대에서 운용되었습니다. 이 전시품은 기계화 전쟁의 규모와 기술을 보여 줍니다.",
+          "이 시집에는 혁명가이자 시인인 응우옌쫑뚜옌이 자딘 감옥에 수감되어 있을 때 쓴 시 38편이 담겨 있습니다. 1962년 남베트남민족해방전선 대표단이 북부를 방문해 호찌민 주석에게 전달했습니다. 남부 주민들의 마음과 1959년 세상을 떠난 시인의 이야기를 전합니다.",
       },
     },
   },
   {
-    slug: "a-1-skyraider",
-    image_url: "/images/artifacts/a-1-skyraider.png",
+    slug: "bao-linh-kach-menh-so-2",
+    image_url: placeholderImage,
     translations: {
       vi: {
         language_code: "vi",
-        title: "Máy bay cường kích A-1 Skyraider",
-        summary: "Máy bay cánh quạt được thiết kế để hỗ trợ và tấn công mặt đất.",
+        title: "Báo Lính kách mệnh số 2",
+        summary: "Số báo cách mạng in giấy sáp tại Quảng Châu vào tháng 2/1927.",
         content:
-          "A-1 Skyraider là máy bay cường kích một động cơ cánh quạt do Hoa Kỳ phát triển sau Chiến tranh thế giới thứ hai. Máy bay có thời gian hoạt động dài và khả năng mang nhiều loại vũ khí. Hiện vật gợi nhắc giai đoạn chuyển tiếp, khi máy bay cánh quạt vẫn đảm nhiệm vai trò trong các lực lượng không quân.",
+          "Báo Lính kách mệnh do Nguyễn Ái Quốc khởi xướng tại Quảng Châu nhằm tuyên truyền và giác ngộ binh lính người Việt. Số 2 được phát hành trong tháng 2/1927, in khổ nhỏ trên giấy sáp để có thể lưu hành bí mật. Tờ báo cho thấy vai trò của báo chí trong việc tổ chức và cổ vũ phong trào cách mạng.",
       },
       en: {
         language_code: "en",
-        title: "A-1 Skyraider attack aircraft",
-        summary: "A propeller-driven aircraft designed for close support and ground attack.",
+        title: "Lính Kách Mệnh, Issue No. 2",
+        summary: "A revolutionary newspaper printed on waxed paper in Guangzhou in February 1927.",
         content:
-          "The A-1 Skyraider is a single-engine, propeller-driven attack aircraft developed in the United States after the Second World War. It was known for long operating time and the ability to carry a variety of weapons. This artifact recalls a period when propeller aircraft still played a role in air forces.",
+          "Nguyen Ai Quoc initiated Lính Kách Mệnh in Guangzhou to inform and engage Vietnamese soldiers. Issue No. 2 appeared in February 1927, printed in a small format on waxed paper for covert circulation. The paper illustrates how publishing supported the organization and encouragement of the revolutionary movement.",
       },
       zh: {
         language_code: "zh",
-        title: "A-1“天袭者”攻击机",
-        summary: "一款为近距支援和对地攻击设计的螺旋桨飞机。",
+        title: "《革命士兵》第2期",
+        summary: "1927年2月在广州以蜡纸印制的一份革命报刊。",
         content:
-          "A-1“天袭者”是美国在第二次世界大战后研制的单发螺旋桨攻击机。它具有较长的留空时间，并能携带多种武器。这件展品让人回想起螺旋桨飞机仍在空军中发挥作用的时期。",
+          "阮爱国在广州发起《革命士兵》，旨在向越南士兵宣传并启发其思想。第2期于1927年2月出版，采用小开本蜡纸印刷，便于秘密传阅。这份报纸体现了出版物在组织和鼓舞革命运动中的作用。",
       },
       ja: {
         language_code: "ja",
-        title: "A-1スカイレイダー攻撃機",
-        summary: "近接航空支援と対地攻撃のために設計されたプロペラ機です。",
+        title: "『革命兵士』第2号",
+        summary: "1927年2月、広州で蝋紙に印刷された革命新聞です。",
         content:
-          "A-1スカイレイダーは、第二次世界大戦後に米国で開発された単発のプロペラ攻撃機です。長時間の飛行が可能で、さまざまな兵器を搭載できました。この展示品は、プロペラ機が空軍で役割を担っていた時代を伝えます。",
+          "グエン・アイ・クォックは、ベトナム人兵士への宣伝と啓発を目的に広州で『革命兵士』を創刊しました。第2号は1927年2月に、小型の蝋紙印刷で秘密裏に配布されました。この新聞は、出版物が革命運動の組織化と鼓舞に果たした役割を伝えます。",
       },
       ko: {
         language_code: "ko",
-        title: "A-1 스카이레이더 공격기",
-        summary: "근접 항공 지원과 지상 공격을 위해 설계된 프로펠러 항공기입니다.",
+        title: "‘혁명 병사’ 제2호",
+        summary: "1927년 2월 광저우에서 밀랍종이에 인쇄한 혁명 신문입니다.",
         content:
-          "A-1 스카이레이더는 제2차 세계대전 이후 미국에서 개발된 단발 프로펠러 공격기입니다. 긴 체공 시간과 다양한 무장을 탑재할 수 있는 능력으로 알려졌습니다. 이 전시품은 프로펠러 항공기가 공군에서 역할을 맡았던 시기를 보여 줍니다.",
+          "응우옌아이꾸옥은 베트남 병사들에게 소식을 알리고 사상을 일깨우기 위해 광저우에서 ‘혁명 병사’를 창간했습니다. 제2호는 1927년 2월 작은 판형의 밀랍종이에 인쇄되어 비밀리에 유통되었습니다. 이 신문은 출판물이 혁명 운동을 조직하고 고무한 역할을 보여 줍니다.",
       },
     },
   },
   {
-    slug: "guillotine",
-    image_url: "/images/artifacts/guillotine.png",
+    slug: "bo-do-an-chu-tich-ho-chi-minh",
+    image_url: placeholderImage,
     translations: {
       vi: {
         language_code: "vi",
-        title: "Máy chém thời Pháp thuộc và chính quyền Ngô Đình Diệm",
-        summary: "Hiện vật gợi nhắc lịch sử trừng phạt và đàn áp trong các giai đoạn khác nhau.",
+        title: "Bộ đồ ăn của Chủ tịch Hồ Chí Minh",
+        summary: "Những vật dụng dùng trong bữa ăn hằng ngày tại Phủ Chủ tịch.",
         content:
-          "Máy chém là một hiện vật gắn với lịch sử nhà tù và các hình thức trừng phạt trong thời kỳ thuộc địa cũng như dưới chính quyền Ngô Đình Diệm. Sự hiện diện của hiện vật đặt ra những câu hỏi về quyền con người, bạo lực và ký ức lịch sử. Nội dung trưng bày nên được đối chiếu với tư liệu của bảo tàng.",
+          "Bộ đồ ăn gồm các vật dụng quen thuộc như bát, đĩa, mâm, thìa và đũa, được Chủ tịch Hồ Chí Minh sử dụng khi sống và làm việc tại Phủ Chủ tịch. Bữa ăn thường ngày giản dị với cơm, rau và các món quen thuộc của người Việt. Hiện vật gợi nhắc nếp sống tiết kiệm và sự trân trọng thành quả lao động.",
       },
       en: {
         language_code: "en",
-        title: "Guillotine from the French colonial period and the Ngô Đình Diệm government",
-        summary: "An artifact recalling punishment and repression in different historical periods.",
+        title: "President Ho Chi Minh's Tableware",
+        summary: "Everyday dining items used at the Presidential Palace.",
         content:
-          "The guillotine is associated with the history of prisons and punishment during the French colonial period and under the Ngô Đình Diệm government. Its presence raises questions about human rights, violence, and historical memory. The museum’s own records should be consulted for the specific history of this exhibit.",
+          "The set includes familiar items such as bowls, plates, a tray, spoons and chopsticks, used by President Ho Chi Minh while living and working at the Presidential Palace. His everyday meals were simple, with rice, vegetables and common Vietnamese dishes. The objects recall a practice of frugality and respect for people's labor.",
       },
       zh: {
         language_code: "zh",
-        title: "法国殖民时期及吴廷琰政权时期的断头台",
-        summary: "这件展品让人回想不同时期的惩罚与压迫历史。",
+        title: "胡志明主席的餐具",
+        summary: "胡志明主席在主席府日常使用的餐具。",
         content:
-          "这座断头台与法国殖民时期及吴廷琰政权时期的监狱和惩罚历史有关。它引发了人们对人权、暴力和历史记忆的思考。关于这件展品的具体历史，应以博物馆档案为准。",
+          "这套餐具包括碗、盘、托盘、勺子和筷子等日常用品，胡志明主席居住并工作于主席府期间曾使用它们。他的日常饮食简单，以米饭、蔬菜和常见越南菜肴为主。这些物品让人想到节俭的生活方式以及对劳动成果的珍惜。",
       },
       ja: {
         language_code: "ja",
-        title: "フランス植民地期およびゴ・ディン・ジエム政権期のギロチン",
-        summary: "異なる時代の処罰と抑圧の歴史を想起させる展示品です。",
+        title: "ホー・チ・ミン主席の食器",
+        summary: "主席府での日常生活に使われた食器です。",
         content:
-          "このギロチンは、フランス植民地期およびゴ・ディン・ジエム政権期の刑務所や処罰の歴史と関わる展示品です。人権、暴力、歴史の記憶について考えるきっかけとなります。展示品の具体的な来歴は、博物館の資料で確認してください。",
+          "この食器一式には、茶碗、皿、盆、スプーン、箸などが含まれ、ホー・チ・ミン主席が主席府で生活し執務していた時に使われました。日々の食事は米や野菜など、ベトナムで親しまれている料理を中心とした質素なものでした。節約と人々の労働への敬意を伝える品々です。",
       },
       ko: {
         language_code: "ko",
-        title: "프랑스 식민지기와 응오딘지엠 정부 시기의 단두대",
-        summary: "서로 다른 역사적 시기의 처벌과 억압을 떠올리게 하는 전시품입니다.",
+        title: "호찌민 주석의 식기",
+        summary: "주석궁에서 일상적으로 사용한 식기류입니다.",
         content:
-          "이 단두대는 프랑스 식민지기와 응오딘지엠 정부 시기의 감옥 및 처벌 역사와 관련된 전시품입니다. 인권, 폭력, 역사적 기억에 대해 생각하게 합니다. 전시품의 구체적인 내력은 박물관 자료를 통해 확인해야 합니다.",
+          "이 식기 세트에는 밥그릇, 접시, 쟁반, 숟가락과 젓가락 등 호찌민 주석이 주석궁에서 생활하고 일할 때 사용한 물건이 포함됩니다. 일상 식사는 밥과 채소, 베트남의 평범한 음식으로 소박하게 차렸습니다. 이 유물은 절약과 노동의 결실을 소중히 여기는 태도를 전합니다.",
       },
     },
   },
   {
-    slug: "con-dao-tiger-cage",
-    image_url: "/images/artifacts/con-dao-tiger-cage.png",
+    slug: "tui-dung-com-nuoc-ho-chi-minh",
+    image_url: placeholderImage,
     translations: {
       vi: {
         language_code: "vi",
-        title: "Mô hình chuồng cọp Côn Đảo",
-        summary: "Mô hình tái hiện một hình thức giam giữ tù nhân tại nhà tù Côn Đảo.",
+        title: "Túi đựng cơm và nước uống",
+        summary: "Chiếc túi Chủ tịch Hồ Chí Minh mang theo trong các chuyến công tác từ năm 1957 đến 1965.",
         content:
-          "Chuồng cọp là tên gọi phổ biến của khu biệt giam tại nhà tù Côn Đảo, nơi tù nhân bị giam trong những không gian chật hẹp và điều kiện khắc nghiệt. Mô hình giúp người xem hình dung một phần lịch sử nhà tù và những trải nghiệm của người bị giam giữ. Các chi tiết cụ thể nên được đối chiếu với thuyết minh chính thức của bảo tàng.",
+          "Văn phòng Phủ Chủ tịch mua chiếc túi tại Hà Nội năm 1957. Chủ tịch Hồ Chí Minh dùng túi để mang cơm và nước trong các chuyến đi địa phương đến tháng 8/1965; năm 1980, Văn phòng bàn giao hiện vật cho Bảo tàng Hồ Chí Minh. Túi làm từ vải, giấy và da, với các ngăn bên trong để sắp xếp đồ dùng.",
       },
       en: {
         language_code: "en",
-        title: "Con Dao tiger cage model",
-        summary: "A model depicting a form of imprisonment at Con Dao Prison.",
+        title: "The Meal and Water Bag",
+        summary: "A bag President Ho Chi Minh carried on work trips from 1957 to 1965.",
         content:
-          "“Tiger cages” is a widely used name for an isolation area at Con Dao Prison, where prisoners were held in cramped and harsh conditions. The model helps visitors picture part of the prison’s history and the experiences of those detained there. Specific details should be checked against the museum’s official interpretation.",
+          "The Presidential Office bought the bag in Hanoi in 1957. President Ho Chi Minh used it to carry food and water on visits to local communities until August 1965; the office transferred it to the Ho Chi Minh Museum in 1980. Made from fabric, paper and leather, it has inner compartments for organizing its contents.",
       },
       zh: {
         language_code: "zh",
-        title: "昆岛“虎笼”监狱模型",
-        summary: "这座模型展示了昆岛监狱的一种囚禁方式。",
+        title: "装饭和饮水的旅行袋",
+        summary: "胡志明主席1957年至1965年外出工作时携带的袋子。",
         content:
-          "“虎笼”是昆岛监狱一处隔离监禁区域的常用名称，囚犯曾被关押在狭小且条件严酷的空间中。这座模型帮助观众了解监狱历史的一部分，以及被囚禁者的经历。具体细节应以博物馆的正式说明为准。",
+          "主席府办公室于1957年在河内购入这只旅行袋。胡志明主席在赴地方工作时用它携带饭食和饮水，直到1965年8月；1980年，办公室将其移交给胡志明博物馆。袋子由布、纸和皮革制成，内部设有隔层以便收纳。",
       },
       ja: {
         language_code: "ja",
-        title: "コンダオ刑務所の「虎の檻」模型",
-        summary: "コンダオ刑務所で行われた拘禁の一形態を再現した模型です。",
+        title: "食事と飲み物を入れたバッグ",
+        summary: "1957年から1965年まで、出張の際にホー・チ・ミン主席が携帯したバッグです。",
         content:
-          "「虎の檻」は、コンダオ刑務所の隔離区域を指す一般的な呼び名です。囚人は狭く過酷な環境に収容されていました。この模型は、刑務所の歴史の一端と、収容された人々の経験を伝えます。具体的な説明は博物館の公式資料で確認してください。",
+          "主席府事務局は1957年にハノイでこのバッグを購入しました。主席は地方への出張で食事と飲み物を運ぶため、1965年8月まで使用しました。1980年に事務局からホー・チ・ミン博物館へ引き渡されました。布、紙、革で作られ、内側に仕切りがあります。",
       },
       ko: {
         language_code: "ko",
-        title: "꼰다오 ‘호랑이 우리’ 감옥 모형",
-        summary: "꼰다오 감옥의 한 수감 형태를 재현한 모형입니다.",
+        title: "식사와 물을 담은 가방",
+        summary: "1957년부터 1965년까지 호찌민 주석이 출장 때 휴대한 가방입니다.",
         content:
-          "‘호랑이 우리’는 꼰다오 감옥의 독방 구역을 가리키는 널리 쓰이는 이름입니다. 수감자들은 좁고 열악한 공간에 갇혀 있었습니다. 이 모형은 감옥 역사의 일부와 수감자들의 경험을 이해하는 데 도움을 줍니다. 구체적인 내용은 박물관의 공식 자료로 확인해야 합니다.",
+          "주석궁 사무실은 1957년 하노이에서 이 가방을 구입했습니다. 호찌민 주석은 지방 방문 때 음식과 물을 담아 1965년 8월까지 사용했습니다. 1980년 사무실이 호찌민 박물관에 인계했습니다. 천, 종이, 가죽으로 만들었으며 내부에 수납 칸이 있습니다.",
       },
     },
   },
   {
-    slug: "blu-82-bomb",
-    image_url: "/images/artifacts/blu-82-bomb.png",
+    slug: "doi-guoc-go-ho-chi-minh",
+    image_url: placeholderImage,
     translations: {
       vi: {
         language_code: "vi",
-        title: "Bom BLU-82 (bom 7 tấn)",
-        summary: "Loại bom cỡ lớn thường được gọi theo khối lượng xấp xỉ 7 tấn.",
+        title: "Đôi guốc gỗ mộc",
+        summary: "Đồ dùng hằng ngày của Chủ tịch Hồ Chí Minh tại Phủ Chủ tịch từ năm 1958.",
         content:
-          "BLU-82 là loại bom hàng không cỡ lớn của Hoa Kỳ, có khối lượng khoảng 6,8 tấn và thường được gọi là bom 7 tấn. Loại bom này được thiết kế để tạo khoảng trống trên mặt đất bằng sức nổ lớn. Hiện vật nhắc người xem về sức tàn phá của vũ khí và hậu quả lâu dài của chiến tranh.",
+          "Đôi guốc dài 24,5 cm được làm thủ công từ gỗ, với quai bằng cao su và các miếng đệm khác nhau ở mỗi chiếc. Chủ tịch Hồ Chí Minh sử dụng guốc từ năm 1958 khi đi lại trong khu Phủ Chủ tịch, thường đặt chúng dưới cầu thang nhà sàn. Dấu mòn trên hiện vật gợi lại một nếp sinh hoạt giản dị.",
       },
       en: {
         language_code: "en",
-        title: "BLU-82 bomb (the 7-ton bomb)",
-        summary: "A large bomb commonly described by its approximate weight of seven tons.",
+        title: "The Plain Wooden Clogs",
+        summary: "Everyday footwear used by President Ho Chi Minh at the Presidential Palace from 1958.",
         content:
-          "The BLU-82 is a large United States aerial bomb weighing about 6.8 metric tonnes, often referred to as the “7-ton bomb.” It was designed to clear areas on the ground through a large blast. The artifact prompts reflection on the destructive power of weapons and the lasting consequences of war.",
+          "The pair is 24.5 cm long and was hand-carved from wood, with rubber-fabric straps and different padding on each clog. President Ho Chi Minh used them around the Presidential Palace from 1958 and often left them beneath the stilt-house stairs. Their worn surfaces recall a simple daily routine.",
       },
       zh: {
         language_code: "zh",
-        title: "BLU-82炸弹（“七吨炸弹”）",
-        summary: "一种大型炸弹，常以约七吨的重量称呼。",
+        title: "朴素的木屐",
+        summary: "胡志明主席自1958年起在主席府日常穿用的木屐。",
         content:
-          "BLU-82是美国研制的大型航空炸弹，重量约为6.8公吨，因此常被称为“七吨炸弹”。它旨在利用强大爆炸清理地面区域。这件展品提醒人们思考武器的破坏力以及战争带来的长期影响。",
+          "这双木屐长24.5厘米，由木料手工削制，配有橡胶布鞋带，两只鞋的衬垫有所不同。胡志明主席自1958年起在主席府内穿着它们，常将木屐放在高脚屋楼梯下。鞋上的磨损痕迹记录了朴素的日常生活。",
       },
       ja: {
         language_code: "ja",
-        title: "BLU-82爆弾（「7トン爆弾」）",
-        summary: "およそ7トンの重量で知られる大型爆弾です。",
+        title: "素朴な木製サンダル",
+        summary: "1958年から主席府でホー・チ・ミン主席が日常的に使った履物です。",
         content:
-          "BLU-82は米国の大型航空爆弾で、重量は約6.8トンあり、「7トン爆弾」とも呼ばれます。大きな爆発によって地上に空間を作る目的で設計されました。この展示品は、兵器の破壊力と戦争が残す長期的な影響を考えるきっかけとなります。",
+          "長さ24.5センチの一足は木を手作業で削って作られ、ゴム布の鼻緒と、左右で異なる当て材が付いています。主席は1958年から主席府内で履き、高床式の家の階段下に置くこともありました。使い込まれた跡が、素朴な日常を伝えます。",
       },
       ko: {
         language_code: "ko",
-        title: "BLU-82 폭탄(‘7톤 폭탄’)",
-        summary: "약 7톤의 무게로 알려진 대형 폭탄입니다.",
+        title: "소박한 나무 나막신",
+        summary: "1958년부터 주석궁에서 호찌민 주석이 일상적으로 신은 신발입니다.",
         content:
-          "BLU-82는 미국의 대형 항공 폭탄으로 무게가 약 6.8톤이며, 흔히 ‘7톤 폭탄’이라고 불립니다. 큰 폭발로 지상의 공간을 확보하도록 설계되었습니다. 이 전시품은 무기의 파괴력과 전쟁이 남기는 장기적인 영향을 생각하게 합니다.",
+          "길이 24.5cm인 이 나막신은 나무를 손으로 깎아 만들었고, 고무 천으로 된 끈과 양쪽이 서로 다른 덧댐이 있습니다. 호찌민 주석은 1958년부터 주석궁 안에서 신었으며, 목조 주택 계단 아래에 두곤 했습니다. 닳은 흔적은 소박한 일상을 전합니다.",
       },
     },
   },
   {
-    slug: "155mm-artillery",
-    image_url: "/images/artifacts/artillery-155mm.png",
+    slug: "tranh-co-dong-cach-mang-thang-tam",
+    image_url: placeholderImage,
     translations: {
       vi: {
         language_code: "vi",
-        title: "Pháo 155 mm",
-        summary: "Khẩu pháo cỡ nòng 155 mm, một loại pháo thường thấy trong pháo binh hiện đại.",
+        title: "Tranh cổ động Cách mạng Tháng Tám và Quốc khánh 2/9",
+        summary: "Tác phẩm của họa sĩ Nguyễn Phúc Khôi về tinh thần độc lập và ngày Quốc khánh.",
         content:
-          "Pháo 155 mm là một loại pháo dã chiến cỡ nòng lớn được sử dụng rộng rãi trong thế kỷ 20 và đến nay. Tùy từng mẫu, pháo có thể được kéo hoặc lắp trên phương tiện cơ giới. Hiện vật giúp người xem tìm hiểu về pháo binh và vai trò của hỏa lực trong chiến tranh.",
+          "Bức tranh bột màu trên giấy, kích thước 60 × 70 cm, do họa sĩ Nguyễn Phúc Khôi sáng tác. Tác phẩm kết hợp hình ảnh Chủ tịch Hồ Chí Minh, nhân dân giành chính quyền tại Hà Nội và lễ đọc Tuyên ngôn Độc lập ngày 2/9/1945. Sau một triển lãm tại Bảo tàng Hồ Chí Minh năm 2004, họa sĩ tặng tranh cho bảo tàng lưu giữ.",
       },
       en: {
         language_code: "en",
-        title: "155 mm artillery gun",
-        summary: "A 155 mm field gun, a common type of modern artillery.",
+        title: "Poster on the August Revolution and National Day",
+        summary: "Artist Nguyen Phuc Khoi's work celebrates independence and Vietnam's National Day.",
         content:
-          "A 155 mm gun is a large-caliber field artillery piece widely used during the 20th century and beyond. Depending on the model, it may be towed or mounted on a vehicle. This artifact introduces field artillery and the role of firepower in warfare.",
+          "Artist Nguyen Phuc Khoi made this 60 by 70 cm poster using opaque watercolor on paper. It combines images of President Ho Chi Minh, Hanoi residents taking power, and the 2 September 1945 Declaration of Independence. After an exhibition at the Ho Chi Minh Museum in 2004, the artist donated the work to the museum.",
       },
       zh: {
         language_code: "zh",
-        title: "155毫米火炮",
-        summary: "一种口径为155毫米的野战炮，是现代炮兵常见装备。",
+        title: "八月革命与国庆日宣传画",
+        summary: "画家阮福魁的作品，展现独立精神与越南国庆日。",
         content:
-          "155毫米火炮是一种大口径野战火炮，在20世纪及之后被广泛使用。根据型号不同，它可以由车辆牵引，也可以安装在机动平台上。这件展品介绍了野战炮兵及火力在战争中的作用。",
+          "画家阮福魁以不透明水彩在纸上创作了这幅60×70厘米的宣传画。画面结合了胡志明主席、河内人民夺取政权以及1945年9月2日宣读《独立宣言》的场景。作品于2004年在胡志明博物馆展出后，由画家捐赠给博物馆收藏。",
       },
       ja: {
         language_code: "ja",
-        title: "155 mm砲",
-        summary: "現代の砲兵で広く用いられる口径155 mmの野戦砲です。",
+        title: "八月革命と国慶節の宣伝画",
+        summary: "グエン・フック・コイ画家が独立と国慶節を描いた作品です。",
         content:
-          "155 mm砲は、20世紀以降広く使用されている大口径の野戦砲です。型式によって、牽引式や車両搭載式があります。この展示品から、野戦砲兵と戦争における火力の役割を知ることができます。",
+          "グエン・フック・コイ画家が紙にガッシュで描いた、60×70センチの宣伝画です。ホー・チ・ミン主席、ハノイ市民による政権獲得、1945年9月2日の独立宣言朗読を一つの画面に表しています。2004年にホー・チ・ミン博物館で展示された後、画家から寄贈されました。",
       },
       ko: {
         language_code: "ko",
-        title: "155mm 야포",
-        summary: "현대 포병에서 널리 쓰이는 155mm 구경의 야포입니다.",
+        title: "8월 혁명과 국경일 포스터",
+        summary: "응우옌푹코이 화가가 독립 정신과 국경일을 그린 작품입니다.",
         content:
-          "155mm 포는 20세기 이후 널리 사용된 대구경 야포입니다. 모델에 따라 차량에 견인되거나 차량에 장착될 수 있습니다. 이 전시품은 야전 포병과 전쟁에서 화력이 맡는 역할을 소개합니다.",
+          "응우옌푹코이 화가가 종이에 과슈로 그린 60×70cm 크기의 포스터입니다. 호찌민 주석, 하노이 시민들의 정권 획득, 1945년 9월 2일 독립선언서 낭독 장면을 한 화면에 담았습니다. 2004년 호찌민 박물관 전시 뒤 작가가 박물관에 기증했습니다.",
       },
     },
   },
@@ -346,7 +348,7 @@ export function getDemoArtifacts(
   language: Language,
   query = "",
 ): ArtifactListItem[] {
-  const normalizedQuery = query.trim().toLocaleLowerCase(language);
+  const normalizedQuery = query.trim().toLocaleLowerCase();
 
   return demoArtifacts.flatMap((artifact) => {
     const translation = artifact.translations[language];
@@ -354,12 +356,7 @@ export function getDemoArtifacts(
       return [];
     }
 
-    if (
-      normalizedQuery &&
-      !Object.values(artifact.translations).some((item) =>
-        item.title.toLocaleLowerCase(language).includes(normalizedQuery),
-      )
-    ) {
+    if (normalizedQuery && !matchesSearch(artifact, normalizedQuery)) {
       return [];
     }
 
@@ -370,6 +367,16 @@ export function getDemoArtifacts(
       summary: translation.summary,
     }];
   });
+}
+
+/**
+ * Search matches the original Vietnamese name and the English title, no matter
+ * which language is currently used for display (PRD WEB-03 / AC-02).
+ */
+function matchesSearch(artifact: DemoArtifact, normalizedQuery: string): boolean {
+  return [artifact.translations.vi.title, artifact.translations.en.title].some(
+    (title) => title.toLocaleLowerCase().includes(normalizedQuery),
+  );
 }
 
 export function getDemoArtifact(

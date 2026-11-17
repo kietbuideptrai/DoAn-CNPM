@@ -34,6 +34,7 @@ interface ArtifactMeta {
 async function main(): Promise<void> {
   const args = process.argv.slice(2);
   const dryRun = args.includes("--dry-run");
+  const overwriteExisting = args.includes("--overwrite-existing");
   const filePath = args.find((arg) => !arg.startsWith("--"));
 
   if (!filePath) {
@@ -43,15 +44,24 @@ async function main(): Promise<void> {
 
   let rows: CsvRow[];
   try {
-    const fileContent = readFileSync(filePath, "utf8");
+    const fileContent = new TextDecoder("utf-8", { fatal: true }).decode(
+      readFileSync(filePath),
+    );
+    const header = fileContent.split(/\r?\n/, 1)[0] ?? "";
+    const delimiter =
+      (header.match(/;/g)?.length ?? 0) > (header.match(/,/g)?.length ?? 0)
+        ? ";"
+        : ",";
     rows = parse(fileContent, {
       columns: true,
       bom: true,
       skip_empty_lines: true,
       relax_column_count: false,
+      delimiter,
     }) as CsvRow[];
   } catch (error) {
-    console.error(`Không thể đọc file CSV: ${error.message}`);
+    const detail = error instanceof Error ? error.message : String(error);
+    console.error(`Không thể đọc file CSV UTF-8: ${detail}`);
     process.exit(1);
   }
 
@@ -109,6 +119,10 @@ async function main(): Promise<void> {
     }
   });
 
+  if (translations.length === 0 && errors.length === 0) {
+    errors.push("File CSV không có bản dịch hợp lệ.");
+  }
+
   const slugs = [...new Set(translations.map((item) => item.slug))];
   const idBySlug = new Map<string, string>();
   if (slugs.length > 0) {
@@ -139,6 +153,11 @@ async function main(): Promise<void> {
   }
 
   console.log(`Đọc ${rows.length} dòng: ${translations.length} bản dịch hợp lệ, ${skipped} dòng trống bị bỏ qua.`);
+  if (overwriteExisting) {
+    console.warn("Đã bật --overwrite-existing: metadata và bản dịch trùng khóa sẽ được cập nhật.");
+  } else {
+    console.log("Bản ghi hiện có sẽ không bị ghi đè; dùng --overwrite-existing chỉ sau khi rà soát.");
+  }
 
   if (dryRun) {
     console.log("Chế độ --dry-run: không ghi vào database.");
@@ -150,36 +169,47 @@ async function main(): Promise<void> {
   try {
     await client.query("BEGIN");
 
-    for (const [slug, meta] of metaBySlug) {
-      await client.query(
-        `UPDATE artifacts
-            SET name = COALESCE(NULLIF($2, ''), name),
-                image_url = COALESCE(NULLIF($3, ''), image_url),
-                category = COALESCE(NULLIF($4, ''), category),
-                updated_at = NOW()
-          WHERE slug = $1`,
-        [slug, meta.name, meta.imageUrl, meta.category],
-      );
+    if (overwriteExisting) {
+      for (const [slug, meta] of metaBySlug) {
+        await client.query(
+          `UPDATE artifacts
+              SET name = COALESCE(NULLIF($2, ''), name),
+                  image_url = COALESCE(NULLIF($3, ''), image_url),
+                  category = COALESCE(NULLIF($4, ''), category),
+                  updated_at = NOW()
+            WHERE slug = $1`,
+          [slug, meta.name, meta.imageUrl, meta.category],
+        );
+      }
     }
 
     for (const item of translations) {
+      const conflictAction = overwriteExisting
+        ? `ON CONFLICT (artifact_id, language_code) DO UPDATE
+             SET title = EXCLUDED.title,
+                 summary = EXCLUDED.summary,
+                 content = EXCLUDED.content,
+                 updated_at = NOW()`
+        : "ON CONFLICT (artifact_id, language_code) DO NOTHING";
       await client.query(
         `INSERT INTO artifact_translations (artifact_id, language_code, title, summary, content)
          VALUES ($1, $2, $3, $4, $5)
-         ON CONFLICT (artifact_id, language_code) DO UPDATE
-           SET title = EXCLUDED.title,
-               summary = EXCLUDED.summary,
-               content = EXCLUDED.content,
-               updated_at = NOW()`,
+         ${conflictAction}`,
         [idBySlug.get(item.slug), item.language, item.title, item.summary, item.content],
       );
     }
 
     await client.query("COMMIT");
-    console.log(`Đã ghi ${translations.length} bản dịch và cập nhật ${metaBySlug.size} hiện vật.`);
+    console.log(
+      overwriteExisting
+        ? `Đã ghi ${translations.length} bản dịch và cập nhật ${metaBySlug.size} hiện vật.`
+        : `Đã thêm bản dịch còn thiếu; giữ nguyên metadata và bản dịch hiện có.`,
+    );
   } catch (error) {
     await client.query("ROLLBACK");
-    console.error(`Lỗi khi ghi vào database: ${error.message}`);
+    const detail = error instanceof Error ? error.message : String(error);
+    console.error(`Lỗi khi ghi vào database: ${detail}`);
+    process.exitCode = 1;
   } finally {
     client.release();
     await pool.end();

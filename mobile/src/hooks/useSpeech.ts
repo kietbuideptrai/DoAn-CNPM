@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Platform } from "react-native";
 import * as Speech from "expo-speech";
 import type { Language } from "../../../shared/types";
-import { useTranslation } from "@/utils/i18n";
 
 const speechLocales: Record<Language, string> = {
   vi: "vi-VN",
@@ -19,15 +18,14 @@ export interface UseSpeechResult {
   status: SpeechStatus;
   voiceAvailability: VoiceAvailability;
   error: string | null;
-  checkVoices: () => void;
   play: () => void;
   pause: () => void;
   resume: () => void;
   stop: () => void;
+  recheckVoice: () => void;
 }
 
 export function useSpeech(text: string, language: Language): UseSpeechResult {
-  const { t } = useTranslation();
   const [statusState, setStatusState] = useState<{
     key: string;
     status: SpeechStatus;
@@ -35,12 +33,13 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
   const [voiceResult, setVoiceResult] = useState<{
     locale: string;
     availability: Exclude<VoiceAvailability, "checking">;
+    identifier: string | null;
   } | null>(null);
-  const [voiceCheckVersion, setVoiceCheckVersion] = useState(0);
   const [errorState, setErrorState] = useState<{
     key: string;
     error: string | null;
   } | null>(null);
+  const [voiceCheckVersion, setVoiceCheckVersion] = useState(0);
   const sentences = useRef<string[]>([]);
   const currentSentenceIndex = useRef(0);
   const requestId = useRef(0);
@@ -55,11 +54,8 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
     errorState?.key === playbackKey ? errorState.error : null;
   const voiceAvailability =
     voiceResult?.locale === locale ? voiceResult.availability : "checking";
-
-  const checkVoices = useCallback(() => {
-    setVoiceResult(null);
-    setVoiceCheckVersion((version) => version + 1);
-  }, []);
+  const voiceIdentifier =
+    voiceResult?.locale === locale ? voiceResult.identifier : null;
 
   const cancelSpeech = useCallback(() => {
     requestId.current += 1;
@@ -76,10 +72,10 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
     void stopRequest.catch(() => {
       setErrorState({
         key: playbackKeyRef.current,
-        error: t("speechStopError"),
+        error: "Không thể dừng thuyết minh trên thiết bị này.",
       });
     });
-  }, [cancelSpeech, t]);
+  }, [cancelSpeech]);
 
   useEffect(() => {
     let isActive = true;
@@ -91,22 +87,30 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
         }
 
         const normalizedLocale = locale.toLowerCase();
-        const hasVoice = voices.some((voice) => {
-          const voiceLocale = voice.language.toLowerCase();
-          return (
-            voiceLocale === normalizedLocale ||
-            voiceLocale.startsWith(`${normalizedLocale}-`) ||
-            voiceLocale.split("-")[0] === normalizedLocale.split("-")[0]
+        const languagePrefix = normalizedLocale.split("-")[0];
+        const selectedVoice =
+          voices.find(
+            (voice) => voice.language.toLowerCase() === normalizedLocale,
+          ) ??
+          voices.find((voice) =>
+            voice.language.toLowerCase().startsWith(`${normalizedLocale}-`),
+          ) ??
+          voices.find(
+            (voice) => voice.language.toLowerCase().split("-")[0] === languagePrefix,
           );
-        });
         setVoiceResult({
           locale,
-          availability: hasVoice ? "available" : "unavailable",
+          availability: selectedVoice ? "available" : "unavailable",
+          identifier: selectedVoice?.identifier ?? null,
         });
       })
       .catch(() => {
         if (isActive) {
-          setVoiceResult({ locale, availability: "unavailable" });
+          setVoiceResult({
+            locale,
+            availability: "unavailable",
+            identifier: null,
+          });
         }
       });
 
@@ -114,6 +118,11 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
       isActive = false;
     };
   }, [locale, voiceCheckVersion]);
+
+  const recheckVoice = useCallback(() => {
+    setVoiceResult(null);
+    setVoiceCheckVersion((version) => version + 1);
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -138,6 +147,7 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
 
       Speech.speak(sentence, {
         language: locale,
+        ...(voiceIdentifier ? { voice: voiceIdentifier } : {}),
         onDone: () => {
           if (activeRequestId !== requestId.current) {
             return;
@@ -150,20 +160,20 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
             setStatusState({ key: playbackKey, status: "idle" });
             setErrorState({
               key: playbackKey,
-              error: t("speechPlayError"),
+              error: "Không thể phát thuyết minh trên thiết bị này.",
             });
           }
         },
       });
     };
-  }, [locale, playbackKey, t]);
+  }, [locale, playbackKey, voiceIdentifier]);
 
   const play = useCallback(() => {
     if (voiceAvailability !== "available") {
       if (voiceAvailability === "unavailable") {
         setErrorState({
           key: playbackKey,
-          error: t("speechLocaleUnavailable", { locale }),
+          error: "Hiện giờ chưa có voice",
         });
       }
       return;
@@ -174,7 +184,7 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
     }
 
     if (sentences.current.length === 0) {
-      setErrorState({ key: playbackKey, error: t("speechNoContent") });
+      setErrorState({ key: playbackKey, error: "Không có nội dung để đọc." });
       return;
     }
 
@@ -194,11 +204,11 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
           setStatusState({ key: playbackKey, status: "idle" });
           setErrorState({
             key: playbackKey,
-            error: t("speechStartError"),
+            error: "Không thể bắt đầu phát thuyết minh trên thiết bị này.",
           });
         }
       });
-  }, [locale, playbackKey, t, text, voiceAvailability]);
+  }, [playbackKey, text, voiceAvailability]);
 
   const pause = useCallback(() => {
     if (status !== "speaking") {
@@ -213,7 +223,7 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
         setStatusState({ key: playbackKey, status: "speaking" });
         setErrorState({
           key: playbackKey,
-          error: t("speechPauseError"),
+          error: "Không thể tạm dừng thuyết minh trên thiết bị này.",
         });
       });
     } else {
@@ -221,12 +231,12 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
         setStatusState({ key: playbackKey, status: "speaking" });
         setErrorState({
           key: playbackKey,
-          error: t("speechPauseError"),
+          error: "Không thể tạm dừng thuyết minh trên thiết bị này.",
         });
       });
     }
     setStatusState({ key: playbackKey, status: "paused" });
-  }, [playbackKey, status, t]);
+  }, [playbackKey, status]);
 
   const resume = useCallback(() => {
     if (status !== "paused") {
@@ -249,7 +259,7 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
             setStatusState({ key: playbackKey, status: "idle" });
             setErrorState({
               key: playbackKey,
-              error: t("speechResumeError"),
+              error: "Không thể tiếp tục thuyết minh trên thiết bị này.",
             });
           }
         });
@@ -260,21 +270,21 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
       setStatusState({ key: playbackKey, status: "idle" });
       setErrorState({
         key: playbackKey,
-        error: t("speechResumeError"),
+        error: "Không thể tiếp tục thuyết minh trên thiết bị này.",
       });
     });
     setStatusState({ key: playbackKey, status: "speaking" });
-  }, [playbackKey, status, t]);
+  }, [playbackKey, status]);
 
   return {
     status,
     voiceAvailability,
     error,
-    checkVoices,
     play,
     pause,
     resume,
     stop,
+    recheckVoice,
   };
 }
 

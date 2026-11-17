@@ -1,32 +1,58 @@
-# Mobile Test Checklist
+# Mobile Test Checklist — MVP
 
-Run the required checks on each target physical Android or iOS device before the demo. For every run, record the device model, OS version, app/runtime (Expo Go or build), date, and tester below. Use `Not tested`, `Pass`, `Fail`, or `Blocked` for each case; include steps to reproduce and evidence for failures. Do not mark device-only checks as passed based on code review or simulator results.
+Chạy các bước dưới đây trên **thiết bị Android hoặc iOS thật** trước buổi demo.
+Điền `Pass`, `Fail` hoặc `Blocked` vào cột kết quả; ghi rõ thiết bị, phiên bản OS,
+chế độ dữ liệu (demo hoặc backend thật) và ảnh/video làm bằng chứng khi cần.
 
-| Device model | OS version | App/runtime | Date | Tester |
-| --- | --- | --- | --- | --- |
-|  |  |  |  |  |
+## Thiết bị kiểm thử
+
+| Thông tin | Giá trị |
+| --- | --- |
+| Thiết bị / model | |
+| Phiên bản OS | |
+| Expo Go / development build | |
+| Chế độ dữ liệu (`EXPO_PUBLIC_DEMO_MODE`) | |
+| Backend URL (nếu dùng API thật) | |
+| Người kiểm thử / ngày | |
+
+## Luồng bắt buộc (MVP)
 
 | ID | Steps | Expected result | Status / notes |
 | --- | --- | --- | --- |
-| MOB-01 | Start the app in Expo Go and open the Artifacts tab. | Published artifacts load from the backend with title, summary, and image. | |
-| MOB-02 | With display language set to Vietnamese, search for a known Vietnamese name and an English name. Repeat with display languages English and Korean. | Search matches Vietnamese and English artifact names regardless of the selected display language; result titles stay in the selected display language. A non-matching query shows a clear empty state. | |
-| MOB-03 | Open an artifact from the list. | The correct detail opens. | |
-| MOB-04 | Scan a valid QR containing `/artifacts/<slug>`. | The scanner opens the matching artifact detail. | |
-| MOB-05 | Scan a QR that is not an HTTP(S) artifact URL. | The app reports an invalid QR and allows scanning again. | |
-| MOB-06 | Scan a valid-format URL with an unknown slug. | A not-found message appears without crashing. | |
-| MOB-07 | Deny camera permission, then grant it; repeat with permission permanently denied. | The app explains the permission requirement and offers request permission or device settings as appropriate. | |
-| MOB-08 | Turn off network access, load the list/detail, then restore it and tap Retry. | A clear network error and retry action appear; retry succeeds after connectivity returns. | |
-| MOB-09 | Change languages on the detail screen, including one without a translation. | Available translation updates; missing translation lists available languages and text remains usable. | |
-| MOB-10 | Restart the app after choosing a language. | The chosen language remains selected. | |
-| MOB-11 | Play narration, pause, resume, and stop; change language or leave the detail screen during playback. Repeat on each available target language and with a device that lacks that voice. | Controls work; audio stops on language change or screen exit; text remains visible and a clear message appears if the voice is unavailable. | |
-| MOB-12 | Use the main flow with TalkBack (Android) or VoiceOver (iOS): navigate the artifact list, open a detail, change language, and operate narration controls. | Focus order is usable; controls announce meaningful labels, roles, and selected/disabled state; image descriptions are announced. | |
-| MOB-13 | Open an artifact with a missing or failed image and inspect it with the screen reader. | The image fallback appears without breaking the detail screen and has an appropriate accessible description. | |
-| MOB-14 | Select dark mode in the Personal tab, navigate to the artifact list/detail and QR scanner, then restart the app. Select light mode and repeat. | All screens use the selected palette, both options remain readable, and the selection persists after restart. | |
-| MOB-15 | In Personal, select Vietnamese, English, Chinese, Japanese, and Korean in turn. Visit Home, Artifacts, QR scanner, Favorites, Personal, artifact details, phrase translation, and translation history; check loading, empty, permission, and error states where available. | Every visible UI label, action, state message, and screen-reader label follows the selected language; artifact content uses that language when a translation is available. The language choice does not change the selected theme. | |
-| MOB-16 | Fully close and reopen the app. Select each supported language from the startup screen, press OK, then wait for the welcome message and main interface. Change the language in Personal, close, and reopen again. | A language picker appears on every launch; selection does not continue until OK is pressed. Confirmation shows a brief fade-in welcome message in that language, then opens the main interface in the same language. The selection made in Personal is highlighted at the next launch and remains consistent throughout the app. | |
+| MOB-01 | Mở app trong Expo Go, vào tab Hiện vật. | Danh sách hiện vật đã xuất bản hiển thị đúng tiêu đề, tóm tắt và ảnh; trạng thái tải rõ ràng. | |
+| MOB-02 | Tìm một hiện vật bằng tên tiếng Việt khi đang chọn ngôn ngữ Nhật/Hàn; sau đó tìm bằng tên tiếng Anh khi đang chọn tiếng Việt. | Kết quả khớp tên Việt hoặc Anh, không phân biệt hoa/thường, khớp một phần và **không phụ thuộc ngôn ngữ nội dung đang chọn**. | |
+| MOB-03 | Tìm một cụm từ không tồn tại. | Hiện thông báo không có kết quả dễ hiểu, không màn hình trắng. | |
+| MOB-04 | Mở một hiện vật từ danh sách. | Mở đúng trang chi tiết, nội dung theo ngôn ngữ đã chọn. | |
+| MOB-05 | Quét mã QR hợp lệ chứa `/artifacts/<slug>`. | Mở đúng trang chi tiết hiện vật tương ứng. | |
+| MOB-06 | Quét QR sai định dạng (không phải URL HTTP(S) đến `/artifacts/<slug>`). | Báo QR không hợp lệ và cho phép quét lại. | |
+| MOB-07 | Quét URL đúng định dạng nhưng slug không tồn tại. | Hiện thông báo không tìm thấy hiện vật, không crash. | |
+| MOB-08 | Từ chối quyền camera, sau đó cấp lại; lặp lại với trường hợp bị từ chối vĩnh viễn. | App giải thích quyền camera và đưa ra nút yêu cầu quyền hoặc mở cài đặt thiết bị phù hợp. | |
+| MOB-09 | Tắt mạng, mở danh sách/chi tiết, bật mạng lại rồi bấm Thử lại. | Hiện lỗi mạng dễ hiểu kèm nút Thử lại; thử lại thành công sau khi có mạng. | |
+| MOB-10 | Đổi ngôn ngữ trên trang chi tiết, gồm cả ngôn ngữ chưa có bản dịch. | Nội dung đổi đúng; vùng nội dung dùng đúng ngôn ngữ; nếu thiếu bản dịch, hiện hộp thoại **“Chưa có bản dịch”** khi có tiếng Anh. | |
+| MOB-11 | Trong hộp thoại thiếu bản dịch, bấm **“Xem tiếng Anh”**. | Tải nội dung tiếng Anh, ghi rõ đang hiển thị tiếng Anh; lựa chọn ngôn ngữ của người dùng **không đổi**; TTS không tự phát. | |
+| MOB-12 | Lặp lại MOB-10 và bấm **“Hủy”**. | Hộp thoại đóng, không tự chuyển sang tiếng Anh, không màn hình trắng; có thông báo nội dung chưa khả dụng hoặc danh sách ngôn ngữ hiện có. | |
+| MOB-13 | Khởi động lại app sau khi chọn ngôn ngữ. | Ngôn ngữ đã chọn vẫn được ghi nhớ. | |
+| MOB-14 | Phát, tạm dừng, tiếp tục và dừng thuyết minh. | Trạng thái nút phản ánh đúng; không có hai luồng đọc chồng nhau. | |
+| MOB-15 | Đang phát thuyết minh, đổi ngôn ngữ; sau đó lặp lại và rời màn hình chi tiết. | Âm thanh và hàng đợi dừng ngay; ngôn ngữ mới không tự phát; văn bản vẫn hiển thị. | |
+| MOB-16 | Chọn ngôn ngữ không có voice trên thiết bị và bấm nghe. | Hiện chính xác **“Hiện giờ chưa có voice”**, giữ nội dung văn bản và không tự dùng voice ngôn ngữ khác; nút kiểm tra lại hoạt động khi đã cài voice. | |
+| MOB-17 | Bật VoiceOver (iOS) hoặc TalkBack (Android), đi qua danh sách và chi tiết. | Tab/nút có nhãn đọc được, tiêu đề có heading hợp lý, ảnh có nhãn thay thế, trạng thái lỗi/TTS được đọc và không lặp liên tục. | |
+| MOB-18 | Đổi cỡ chữ Nhỏ/Vừa/Lớn rồi mở lại chi tiết và khởi động lại app. | Tiêu đề, tóm tắt và nội dung đổi theo cỡ chữ; lựa chọn được ghi nhớ; không cắt nội dung. | |
+| MOB-19 | Mở hiện vật có ảnh lỗi hoặc thiếu ảnh. | Ảnh thay thế/khung giữ chỗ không làm hỏng trang; nhãn ảnh vẫn phù hợp. | |
 
-The following existing features are optional and are not MVP acceptance criteria:
+## Should — chỉ kiểm tra nếu đã làm
 
-| Optional check | Steps | Expected result | Status / notes |
+| ID | Steps | Expected result | Status / notes |
 | --- | --- | --- | --- |
-| Favorites | Add an artifact to Favorites, restart the app, then remove it. | Favorite appears, persists across restart, opens the correct detail, and can be removed. | |
+| MOB-S1 | Thêm một hiện vật vào Yêu thích, mở tab Yêu thích, khởi động lại app rồi xóa. | Yêu thích hiển thị, được ghi nhớ qua lần khởi động lại, mở đúng chi tiết và xóa được. | |
+
+## Ngoài phạm vi MVP — không dùng làm điều kiện nghiệm thu
+
+- Lịch sử xem và giới hạn 20 mục (code hiện có được giữ nguyên, không mở rộng).
+- Điều chỉnh tốc độ đọc TTS.
+- Deep link mở thẳng app từ QR bên ngoài.
+
+## Ghi chú
+
+- Xoay màn hình, chế độ tối và mạng chậm chỉ cần ghi nhận nếu phát hiện lỗi nghiêm trọng.
+- Với TTS, kiểm tra đủ 5 ngôn ngữ `vi/en/zh/ja/ko` trên thiết bị mục tiêu; voice phụ thuộc gói giọng nói đã cài.
+- Khi dùng backend thật, gọi `/api/health` trước khi kiểm tra để xác nhận backend và database cùng sẵn sàng.

@@ -5,24 +5,8 @@ import {
   Text,
   View,
 } from "react-native";
-import type {
-  ImageSourcePropType,
-  ImageStyle,
-  StyleProp,
-} from "react-native";
-import { useTheme } from "@/theme";
-import { useTranslation } from "@/utils/i18n";
-
-const localArtifactImages: Record<string, ImageSourcePropType> = {
-  "/images/artifacts/uh-1-huey.png": require("../../assets/artifacts/uh-1-huey.png"),
-  "/images/artifacts/f-5a-fighter.png": require("../../assets/artifacts/f-5a-fighter.png"),
-  "/images/artifacts/m48-patton.png": require("../../assets/artifacts/m48-patton.png"),
-  "/images/artifacts/a-1-skyraider.png": require("../../assets/artifacts/a-1-skyraider.png"),
-  "/images/artifacts/guillotine.png": require("../../assets/artifacts/guillotine.png"),
-  "/images/artifacts/con-dao-tiger-cage.png": require("../../assets/artifacts/con-dao-tiger-cage.png"),
-  "/images/artifacts/blu-82-bomb.png": require("../../assets/artifacts/blu-82-bomb.png"),
-  "/images/artifacts/artillery-155mm.png": require("../../assets/artifacts/artillery-155mm.png"),
-};
+import type { ImageStyle, StyleProp } from "react-native";
+import { colors } from "@/theme";
 
 interface ArtifactImageProps {
   accessibilityLabel: string;
@@ -36,11 +20,10 @@ export function ArtifactImage({
   style,
 }: ArtifactImageProps) {
   const [hasLoadError, setHasLoadError] = useState(false);
-  const { colors } = useTheme();
-  const { t } = useTranslation();
-  const styles = createStyles(colors);
+  const isRightsPlaceholder =
+    source === "/images/artifacts/museum-placeholder.svg";
 
-  if (hasLoadError) {
+  if (hasLoadError || isRightsPlaceholder) {
     return (
       <View
         accessibilityLabel={accessibilityLabel}
@@ -48,7 +31,11 @@ export function ArtifactImage({
         style={[style, styles.placeholder]}
       >
         <Text style={styles.placeholderMark}>◇</Text>
-        <Text style={styles.placeholderText}>{t("imageLoadError")}</Text>
+        <Text style={styles.placeholderText}>
+          {isRightsPlaceholder
+            ? "Ảnh chờ xác nhận quyền sử dụng"
+            : "Không tải được ảnh hiện vật"}
+        </Text>
       </View>
     );
   }
@@ -59,14 +46,13 @@ export function ArtifactImage({
       accessibilityRole="image"
       onError={() => setHasLoadError(true)}
       resizeMode="cover"
-      source={localArtifactImages[source] ?? { uri: source }}
+      source={{ uri: source }}
       style={style}
     />
   );
 }
 
-function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
-  return StyleSheet.create({
+const styles = StyleSheet.create({
   placeholder: {
     alignItems: "center",
     justifyContent: "center",
@@ -82,5 +68,4 @@ function createStyles(colors: ReturnType<typeof useTheme>["colors"]) {
     fontSize: 13,
     textAlign: "center",
   },
-  });
-}
+});
