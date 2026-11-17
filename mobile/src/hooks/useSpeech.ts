@@ -33,6 +33,7 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
   const [voiceResult, setVoiceResult] = useState<{
     locale: string;
     availability: Exclude<VoiceAvailability, "checking">;
+    identifier: string | null;
   } | null>(null);
   const [errorState, setErrorState] = useState<{
     key: string;
@@ -53,6 +54,8 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
     errorState?.key === playbackKey ? errorState.error : null;
   const voiceAvailability =
     voiceResult?.locale === locale ? voiceResult.availability : "checking";
+  const voiceIdentifier =
+    voiceResult?.locale === locale ? voiceResult.identifier : null;
 
   const cancelSpeech = useCallback(() => {
     requestId.current += 1;
@@ -84,22 +87,30 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
         }
 
         const normalizedLocale = locale.toLowerCase();
-        const hasVoice = voices.some((voice) => {
-          const voiceLocale = voice.language.toLowerCase();
-          return (
-            voiceLocale === normalizedLocale ||
-            voiceLocale.startsWith(`${normalizedLocale}-`) ||
-            voiceLocale.split("-")[0] === normalizedLocale.split("-")[0]
+        const languagePrefix = normalizedLocale.split("-")[0];
+        const selectedVoice =
+          voices.find(
+            (voice) => voice.language.toLowerCase() === normalizedLocale,
+          ) ??
+          voices.find((voice) =>
+            voice.language.toLowerCase().startsWith(`${normalizedLocale}-`),
+          ) ??
+          voices.find(
+            (voice) => voice.language.toLowerCase().split("-")[0] === languagePrefix,
           );
-        });
         setVoiceResult({
           locale,
-          availability: hasVoice ? "available" : "unavailable",
+          availability: selectedVoice ? "available" : "unavailable",
+          identifier: selectedVoice?.identifier ?? null,
         });
       })
       .catch(() => {
         if (isActive) {
-          setVoiceResult({ locale, availability: "unavailable" });
+          setVoiceResult({
+            locale,
+            availability: "unavailable",
+            identifier: null,
+          });
         }
       });
 
@@ -136,6 +147,7 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
 
       Speech.speak(sentence, {
         language: locale,
+        ...(voiceIdentifier ? { voice: voiceIdentifier } : {}),
         onDone: () => {
           if (activeRequestId !== requestId.current) {
             return;
@@ -154,14 +166,14 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
         },
       });
     };
-  }, [locale, playbackKey]);
+  }, [locale, playbackKey, voiceIdentifier]);
 
   const play = useCallback(() => {
     if (voiceAvailability !== "available") {
       if (voiceAvailability === "unavailable") {
         setErrorState({
           key: playbackKey,
-          error: `Thiết bị không có giọng đọc ${locale}.`,
+          error: "Hiện giờ chưa có voice",
         });
       }
       return;
@@ -196,7 +208,7 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
           });
         }
       });
-  }, [locale, playbackKey, text, voiceAvailability]);
+  }, [playbackKey, text, voiceAvailability]);
 
   const pause = useCallback(() => {
     if (status !== "speaking") {

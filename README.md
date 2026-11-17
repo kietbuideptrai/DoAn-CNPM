@@ -1,111 +1,151 @@
 # Thuyết minh hiện vật đa ngôn ngữ
 
-Hệ thống hướng dẫn tham quan bảo tàng qua mã QR: khách quét mã để mở trang
-hiện vật, chọn một trong năm ngôn ngữ (`vi`, `en`, `zh`, `ja`, `ko`), đọc nội
-dung và nghe thuyết minh bằng TTS.
+Đây là ứng dụng giới thiệu hiện vật bảo tàng bằng mã QR. Người tham quan có thể mở trang hiện vật, chọn ngôn ngữ, đọc nội dung hoặc nghe thuyết minh bằng giọng nói.
 
-Repository gồm ba phần:
+Ứng dụng hỗ trợ năm ngôn ngữ: Tiếng Việt, English, 中文, 日本語 và 한국어.
 
-| Thư mục | Thành phần |
+## Dành cho người xem demo
+
+Cách đơn giản nhất là chạy **website demo**. Website dùng sẵn dữ liệu mẫu trong máy, nên không cần cài database, tạo tài khoản Supabase hay chạy backend.
+
+Bạn cần có:
+
+- Máy tính cài Node.js bản LTS. Kiểm tra bằng lệnh `node --version` trong Terminal hoặc Command Prompt.
+- Trình duyệt hiện đại như Chrome, Edge, Firefox hoặc Safari.
+
+### Mở website demo
+
+1. Mở Terminal trong thư mục dự án này.
+2. Chạy lần lượt các lệnh sau:
+
+   ```bash
+   cd web
+   npm install
+   cp .env.example .env.local
+   npm run dev
+   ```
+
+   Trên Windows Command Prompt, thay lệnh `cp .env.example .env.local` bằng:
+
+   ```bat
+   copy .env.example .env.local
+   ```
+
+3. Terminal sẽ hiện một địa chỉ tương tự `http://localhost:5173/`.
+4. Giữ Terminal đang chạy, mở địa chỉ đó bằng trình duyệt.
+5. Khi muốn dừng demo, quay lại Terminal và bấm `Ctrl + C`.
+
+> Nếu chỉ cần trình bày đồ án, bạn chỉ cần chạy phần `web/`. Cấu hình mẫu đã bật `VITE_DEMO_MODE=true` nên không cần backend.
+
+### Cách dùng website
+
+1. Ở trang chủ, chọn **Khám phá hiện vật** hoặc mở mục **Hiện vật**.
+2. Gõ tên hiện vật vào ô tìm kiếm. Có thể tìm bằng tên tiếng Việt hoặc tên tiếng Anh, không phân biệt chữ hoa/chữ thường.
+3. Bấm vào một thẻ hiện vật để xem chi tiết.
+4. Chọn ngôn ngữ ở đầu trang. Lựa chọn này được ghi nhớ cho lần mở tiếp theo.
+5. Bấm **Nghe thuyết minh** để nghe nội dung. Bạn có thể tạm dừng, tiếp tục hoặc dừng.
+6. Nếu thiết bị không có giọng đọc phù hợp, trang vẫn hiển thị nội dung chữ và báo **“Hiện giờ chưa có voice”**.
+
+Để mở trực tiếp một hiện vật, dùng địa chỉ có dạng:
+
+```text
+http://localhost:5173/artifacts/<slug>
+```
+
+Ví dụ, `http://localhost:5173/artifacts/demo-trong-dong?lang=en` sẽ mở hiện vật mẫu với nội dung tiếng Anh.
+
+### Lưu ý khi nghe thuyết minh
+
+- Âm thanh chỉ bắt đầu sau khi bạn bấm nút nghe.
+- Kiểm tra âm lượng máy tính và tab trình duyệt trước khi demo.
+- Voice phụ thuộc vào hệ điều hành và các gói ngôn ngữ đã cài. Tiếng Việt/Anh thường có sẵn hơn Trung, Nhật, Hàn.
+- Khi đổi ngôn ngữ hoặc rời trang hiện vật, phần đọc đang chạy sẽ dừng để không đọc chồng nội dung.
+
+### Nếu website không mở được
+
+| Hiện tượng | Cách xử lý |
 | --- | --- |
-| `web/` | Website React + Vite, hỗ trợ truy cập trực tiếp qua `/artifacts/<slug>` |
-| `mobile/` | Ứng dụng Expo SDK 58 (React Native), quét QR, xem và nghe thuyết minh |
-| `backend/` | API Express + PostgreSQL/Supabase cung cấp hiện vật và bản dịch |
-| `shared/` | Kiểu dữ liệu API và bộ dữ liệu demo dùng chung |
-| `docs/` | PRD, backlog và checklist kiểm thử |
+| Báo `npm` hoặc `node` không tồn tại | Cài Node.js LTS, đóng và mở lại Terminal. |
+| Cổng 5173 đang được dùng | Dừng tiến trình web cũ bằng `Ctrl + C`, hoặc chạy `npm run dev -- --port 5174` rồi mở địa chỉ Terminal in ra. |
+| Trang trống hoặc lỗi tải dữ liệu | Dừng server, kiểm tra `web/.env.local` có `VITE_DEMO_MODE=true`, rồi chạy lại `npm run dev`. |
+| Không nghe tiếng | Bấm nút nghe một lần nữa, kiểm tra âm lượng/voice của hệ điều hành và thử bằng Chrome hoặc Edge. |
 
-Phạm vi MVP không có CMS. Nội dung hiện vật được nạp bằng seed/database và cần
-được chuyên gia, bảo tàng xác nhận trước khi công bố.
+## Demo ứng dụng trên điện thoại
 
-## Yêu cầu chung
+Ứng dụng mobile có danh sách hiện vật, tìm kiếm, quét QR, yêu thích, tùy chọn cỡ chữ và nghe thuyết minh. Demo mobile cũng dùng dữ liệu mẫu cục bộ, không cần backend.
 
-- Node.js LTS và npm
-- Trình duyệt hiện đại cho bản web
-- Expo Go trên điện thoại cho bản mobile
-- Tài khoản Supabase/PostgreSQL chỉ khi chạy API thật
+Bạn cần điện thoại Android hoặc iPhone, cài **Expo Go**, cùng Wi-Fi với máy tính.
 
-## Chạy demo web
+1. Mở Terminal trong thư mục dự án và chạy:
 
-Demo web dùng dữ liệu và ảnh cục bộ, không cần backend hay database:
+   ```bash
+   cd mobile
+   npm install
+   cp .env.example .env.local
+   npm start
+   ```
 
-```bash
-cd web
-npm install
-cp .env.example .env.local
-npm run dev
-```
+   Trên Windows Command Prompt, dùng `copy .env.example .env.local`.
 
-Mở URL Vite hiển thị (mặc định `http://localhost:5173`). Cấu hình mẫu đặt
-`VITE_DEMO_MODE=true`; đổi thành `false` và cấu hình `VITE_API_URL` khi muốn
-dùng API thật. Chi tiết xem [web/README.md](web/README.md).
+2. Chờ Terminal hiện QR do Expo tạo.
+3. Mở Expo Go trên điện thoại và quét QR đó.
+4. Vào tab **Hiện vật** để duyệt nội dung, hoặc tab **QR** để quét QR của một URL hiện vật.
+5. Khi ứng dụng hỏi quyền camera, chọn cho phép nếu muốn dùng chức năng quét.
 
-## Chạy demo mobile
+> `localhost` chỉ dùng được trên chính máy tính. Nếu sau này chạy mobile với backend local, điện thoại cần dùng IP mạng LAN của máy tính, ví dụ `http://192.168.1.10:3000`.
 
-Cài Expo Go trên điện thoại, sau đó:
+## Điều đang được demo
 
-```bash
-cd mobile
-npm install
-cp .env.example .env.local
-npm start
-```
+| Có thể trải nghiệm | Ý nghĩa |
+| --- | --- |
+| Danh sách và tìm kiếm | Tìm theo tên tiếng Việt hoặc tiêu đề tiếng Anh. |
+| Chi tiết hiện vật | Mở theo đường dẫn `/artifacts/<slug>`. |
+| Đa ngôn ngữ | Chuyển giữa năm ngôn ngữ được hỗ trợ. |
+| Giọng nói | Đọc nội dung bằng voice sẵn có của trình duyệt hoặc điện thoại. |
+| Xử lý thiếu bản dịch | Hỏi người dùng trước khi dùng tiếng Anh thay thế. |
+| Trạng thái lỗi | Hiển thị tải dữ liệu, không tìm thấy hiện vật và lỗi mạng có nút thử lại. |
 
-Dùng Expo Go quét mã QR do Expo CLI hiển thị. Điện thoại và máy tính cần cùng
-mạng Wi-Fi khi chạy qua LAN. Demo app dùng dữ liệu cục bộ và không cần backend.
-Chi tiết cấu hình, quyền camera và TTS xem [mobile/README.md](mobile/README.md).
+## Lưu ý về dữ liệu demo
 
-## Chạy backend và API thật
+- Dữ liệu hiện vật và năm bản dịch là **nội dung mẫu nháp**; chưa phải nội dung được bảo tàng/chuyên gia xác nhận để công bố.
+- Ảnh là ảnh giữ chỗ cho mục đích demo; chưa được xác nhận quyền sử dụng ảnh hiện vật thật.
+- Chế độ demo web/mobile chạy không cần database. Vì vậy, nó không chứng minh một Supabase hoặc backend triển khai bên ngoài đang hoạt động.
+
+## Dành cho người phát triển hoặc tích hợp API
+
+Repository gồm các phần sau:
+
+| Thư mục | Vai trò |
+| --- | --- |
+| `web/` | Website React + Vite. |
+| `mobile/` | Ứng dụng React Native + Expo. |
+| `backend/` | REST API Express + PostgreSQL/Supabase. |
+| `shared/` | Kiểu dữ liệu dùng chung và dữ liệu demo. |
+| `docs/` | Yêu cầu, backlog, checklist và báo cáo kiểm thử. |
+
+### Chạy backend với database thật
+
+Chỉ thực hiện khi bạn có một database Supabase/PostgreSQL **phi production đã được xác nhận**. Không dán `DATABASE_URL` vào chat, ảnh chụp hay commit vào Git.
 
 ```bash
 cd backend
 npm install
 cp .env.example .env
-```
-
-Điền `DATABASE_URL` của một dự án Supabase **phi production đã được xác nhận**
-vào `backend/.env`. Không commit file `.env` và không dán chuỗi kết nối vào
-chat, log hoặc ảnh chụp màn hình.
-
-Các biến backend:
-
-| Biến | Mô tả |
-| --- | --- |
-| `DATABASE_URL` | Chuỗi kết nối PostgreSQL, bật TLS |
-| `PORT` | Cổng API local, mặc định `3000` |
-| `CORS_ORIGINS` | Danh sách origin web chính xác, phân tách bằng dấu phẩy |
-| `NODE_ENV` | `development` khi chạy local, `production` khi triển khai |
-
-Trước khi tạo schema hoặc nạp seed, đọc kỹ
-[backend/src/db/README.md](backend/src/db/README.md): kiểm tra project ref,
-không chạy trên database production/dùng chung/chưa xác nhận, và chỉ áp dụng
-`schema.sql` cho database rỗng. `seed.sql` tạo 8 hiện vật bảo tàng ở trạng thái
-chưa công bố với nội dung nháp.
-
-Nếu chỉ cần **database tượng trưng cho demo**, dùng
-`backend/src/db/seed-demo.sql` trên một project Supabase demo riêng. Seed này
-tạo 8 hiện vật hư cấu đã công bố, đủ 5 ngôn ngữ và dùng ảnh `placehold.co`; slug
-có tiền tố `demo-` để không trộn với dữ liệu thật. Đây không phải dữ liệu bảo
-tàng và không thay thế bước duyệt nội dung thật.
-
-Khởi động API:
-
-```bash
 npm run dev
 ```
 
-Kiểm tra `GET http://localhost:3000/api/health`. HTTP 200 và cả `backend` lẫn
-`database` đều `ok` mới xác nhận API đọc được database. Sau đó kiểm tra
-`/api/languages` và `/api/artifacts?lang=vi|en|zh|ja|ko`. Hướng dẫn triển khai
-Render/Railway và mô tả API nằm trong [backend/README.md](backend/README.md).
+Trước khi seed hoặc tạo schema, đọc kỹ [hướng dẫn an toàn database](backend/src/db/README.md). Sau khi chạy API, mở `http://localhost:3000/api/health`; chỉ khi HTTP 200 và cả `backend`, `database` đều là `ok` thì API mới sẵn sàng.
 
-Kết nối web với API thật: đặt `VITE_DEMO_MODE=false` và
-`VITE_API_URL=http://localhost:3000` trong `web/.env.local`.
+Để web dùng API thay cho demo data, đặt trong `web/.env.local`:
 
-Kết nối mobile với API thật: đặt `EXPO_PUBLIC_DEMO_MODE=false` và
-`EXPO_PUBLIC_API_URL` trong `mobile/.env.local`. Với điện thoại thật, dùng IP
-LAN của máy tính (ví dụ `http://192.168.1.10:3000`), không dùng `localhost`.
+```env
+VITE_DEMO_MODE=false
+VITE_API_URL=http://localhost:3000
+```
 
-## Kiểm thử và build
+Khởi động lại web sau khi sửa `.env.local`.
+
+### Kiểm tra mã nguồn
 
 ```bash
 cd web
@@ -121,21 +161,4 @@ npm run typecheck
 npm run lint
 ```
 
-Mobile chưa có bộ kiểm thử tự động; cần kiểm thử thủ công trên thiết bị thật
-theo [docs/MOBILE-TEST-CHECKLIST.md](docs/MOBILE-TEST-CHECKLIST.md).
-
-## Lưu ý về dữ liệu và phạm vi
-
-- Nội dung năm ngôn ngữ trong `shared/demoArtifacts.ts` và seed backend là bản
-  nháp, cần chuyên gia/bảo tàng kiểm chứng.
-- Ảnh trong bản demo là hình giữ chỗ. Chỉ thay bằng ảnh hiện vật khi đã xác
-  nhận quyền sử dụng.
-- Tìm kiếm khớp không phân biệt hoa/thường với tên hiện vật tiếng Việt hoặc
-  tiêu đề tiếng Anh, không phụ thuộc ngôn ngữ đang hiển thị.
-- Nếu thiếu bản dịch, ứng dụng hỏi trước khi chuyển sang nội dung tiếng Anh.
-  Nếu thiếu cả tiếng Anh, ứng dụng thông báo chưa có nội dung.
-- Không tự phát TTS khi mở trang. Nếu thiết bị thiếu voice phù hợp, giao diện
-  giữ nguyên văn bản và hiển thị `Hiện giờ chưa có voice`.
-- Không có CMS, lịch sử phiên bản hay điều chỉnh tốc độ đọc trong MVP.
-
-Xem thêm [docs/PRD.md](docs/PRD.md) và [docs/TASKS.md](docs/TASKS.md).
+Mobile cần kiểm thử thêm trên điện thoại thật theo [checklist mobile](docs/MOBILE-TEST-CHECKLIST.md). Xem [PRD](docs/PRD.md), [backlog](docs/TASKS.md) và [bộ câu hỏi vấn đáp](docs/BAO-CAO-DO-AN.md) để hiểu phạm vi, tiến độ và giới hạn hiện tại.
