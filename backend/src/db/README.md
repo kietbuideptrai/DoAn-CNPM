@@ -27,9 +27,16 @@ paste this URL into chat, logs, tickets, or shell output.
    unpublished. It also does not remove or unpublish any previously seeded
    War Remnants Museum artifacts; review those rows separately before changing
    publication state in a confirmed non-production project.
-5. Run `verify-seed.sql` to inspect seed-row presence and translation/image
-   status. Run `verify-demo-readiness.sql` to check the number of published
-   artifacts that have all five translations. These scripts are read-only.
+
+   If the goal is only a representative demo and not real museum content, use
+   `seed-demo.sql` instead. It inserts eight fictional, published artifacts
+   with all five translations, placeholder images, and `demo-` slugs. This
+   data is clearly synthetic; do not present it as museum content, and still
+   use a dedicated demo/non-production project.
+5. Run `verify-seed.sql` to inspect the museum seed rows, or
+   `verify-demo-seed.sql` to inspect the synthetic demo rows. Run
+   `verify-demo-readiness.sql` to check the number of published artifacts that
+   have all five translations. These scripts are read-only.
    Resolve missing translations and placeholder images through an approved,
    reviewed change; do not mark drafts published as a verification shortcut.
 6. Start the backend using the same confirmed `DATABASE_URL`. Verify

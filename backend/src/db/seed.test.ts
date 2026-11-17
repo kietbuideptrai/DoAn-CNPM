@@ -5,6 +5,10 @@ import { describe, it } from "node:test";
 import { parse } from "csv-parse/sync";
 
 const seed = readFileSync(join(process.cwd(), "src/db/seed.sql"), "utf8");
+const demoSeed = readFileSync(
+  join(process.cwd(), "src/db/seed-demo.sql"),
+  "utf8",
+);
 const csv = new TextDecoder("utf-8", { fatal: true }).decode(
   readFileSync(join(process.cwd(), "data/noi-dung-bao-tang.csv")),
 );
@@ -103,5 +107,55 @@ describe("development seed safety", () => {
         "tranh-co-dong-cach-mang-thang-tam",
       ].sort(),
     );
+  });
+});
+
+describe("synthetic demo seed", () => {
+  it("publishes only clearly named sample artifacts with placeholder images", () => {
+    const artifactRows = [
+      ...demoSeed.matchAll(
+        /\('([^']+)', '[^']+', '([^']+)', '[^']+', (TRUE|FALSE)\)/g,
+      ),
+    ];
+
+    assert.equal(artifactRows.length, 8);
+    assert.ok(
+      artifactRows.every(
+        ([, slug, imageUrl, published]) =>
+          slug.startsWith("demo-") &&
+          imageUrl.startsWith("https://placehold.co/") &&
+          published === "TRUE",
+      ),
+    );
+    assert.doesNotMatch(demoSeed, /ON CONFLICT \(slug\) DO UPDATE/);
+    assert.doesNotMatch(
+      demoSeed,
+      /ON CONFLICT \(artifact_id, language_code\) DO UPDATE/,
+    );
+    assert.match(demoSeed, /ON CONFLICT \(slug\) DO NOTHING/);
+    assert.doesNotMatch(demoSeed, /baotanghochiminh\.vn/);
+  });
+
+  it("provides all five languages for every sample artifact", () => {
+    const entries = [
+      ...demoSeed.matchAll(
+        /^\s*\('([a-z0-9-]+)', '(vi|en|zh|ja|ko)',/gm,
+      ),
+    ].map(([, slug, language]) => ({ slug, language }));
+    const slugs = [...new Set(entries.map(({ slug }) => slug))];
+
+    assert.equal(slugs.length, 8);
+    assert.equal(entries.length, 8 * supportedLanguages.length);
+    for (const slug of slugs) {
+      assert.ok(slug.startsWith("demo-"));
+      assert.deepEqual(
+        entries
+          .filter((entry) => entry.slug === slug)
+          .map(({ language }) => language)
+          .sort(),
+        [...supportedLanguages].sort(),
+      );
+    }
+    assert.match(demoSeed, /ON CONFLICT \(artifact_id, language_code\) DO NOTHING/);
   });
 });

@@ -22,6 +22,7 @@ export interface UseSpeechResult {
   pause: () => void;
   resume: () => void;
   stop: () => void;
+  recheckVoice: () => void;
 }
 
 export function useSpeech(text: string, language: Language): UseSpeechResult {
@@ -37,6 +38,7 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
     key: string;
     error: string | null;
   } | null>(null);
+  const [voiceCheckVersion, setVoiceCheckVersion] = useState(0);
   const sentences = useRef<string[]>([]);
   const currentSentenceIndex = useRef(0);
   const requestId = useRef(0);
@@ -104,7 +106,12 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
     return () => {
       isActive = false;
     };
-  }, [locale]);
+  }, [locale, voiceCheckVersion]);
+
+  const recheckVoice = useCallback(() => {
+    setVoiceResult(null);
+    setVoiceCheckVersion((version) => version + 1);
+  }, []);
 
   useEffect(() => {
     return () => {
@@ -257,7 +264,16 @@ export function useSpeech(text: string, language: Language): UseSpeechResult {
     setStatusState({ key: playbackKey, status: "speaking" });
   }, [playbackKey, status]);
 
-  return { status, voiceAvailability, error, play, pause, resume, stop };
+  return {
+    status,
+    voiceAvailability,
+    error,
+    play,
+    pause,
+    resume,
+    stop,
+    recheckVoice,
+  };
 }
 
 function splitIntoSentences(content: string): string[] {

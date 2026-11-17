@@ -1,7 +1,8 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useFocusEffect, useLocalSearchParams } from "expo-router";
 import {
   ActivityIndicator,
+  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -18,16 +19,31 @@ import { useSpeech } from "@/hooks/useSpeech";
 import { colors, styles as sharedStyles } from "@/theme";
 import { getLanguageLabel, languages } from "@/utils/languages";
 
+type FallbackChoice = "accepted" | "dismissed";
+
 export default function ArtifactDetailScreen() {
   const { slug: requestedSlug } = useLocalSearchParams<{ slug: string }>();
   const slug = Array.isArray(requestedSlug) ? requestedSlug[0] : requestedSlug;
   const { language, setLanguage, storageError } = useLanguage();
   const { favoriteSlugs, fontScale, recordViewed, toggleFavorite } = useLocalData();
-  const { state, isNotFound, retry } = useArtifact(slug, language);
+  const fallbackKey = `${slug ?? ""}\u0000${language}`;
+  const [fallbackChoice, setFallbackChoice] = useState<{
+    key: string;
+    choice: FallbackChoice;
+  } | null>(null);
+  const currentFallbackChoice =
+    fallbackChoice?.key === fallbackKey ? fallbackChoice : null;
+  const showingEnglishFallback =
+    currentFallbackChoice?.choice === "accepted";
+  const contentLanguage = showingEnglishFallback ? "en" : language;
+  const { state, isNotFound, retry } = useArtifact(slug, contentLanguage);
   const artifact = state.status === "success" ? state.data : null;
   const translation = artifact?.translation;
   const isFavorite = slug ? favoriteSlugs.includes(slug) : false;
-  const speech = useSpeech(translation?.content ?? "", language);
+  const speech = useSpeech(
+    translation?.content ?? "",
+    translation?.language_code ?? contentLanguage,
+  );
   const stopSpeech = speech.stop;
 
   useFocusEffect(
@@ -78,29 +94,59 @@ export default function ArtifactDetailScreen() {
   }
 
   if (!translation) {
+    const hasEnglish = artifact.available_languages.includes("en");
+    const canOfferEnglish =
+      !showingEnglishFallback &&
+      hasEnglish &&
+      currentFallbackChoice?.choice !== "dismissed";
+
     return (
-      <ScrollView contentContainerStyle={styles.content}>
-        <ArtifactImage
-          accessibilityLabel={`Ảnh hiện vật ${artifact.slug}`}
-          source={artifact.image_url}
-          style={styles.image}
-        />
-        <EmptyState
-          title={`Chưa có thuyết minh bằng ${getLanguageLabel(language)}`}
-          message={`Ngôn ngữ này chưa có bản dịch. Nội dung hiện có: ${artifact.available_languages
-            .map(getLanguageLabel)
-            .join(", ")}.`}
-        />
-        <LanguageSelector
-          language={language}
-          onChange={setLanguage}
-          storageError={storageError}
-        />
-        <FavoriteButton
-          isFavorite={isFavorite}
-          onPress={() => slug && toggleFavorite(slug)}
-        />
-      </ScrollView>
+      <>
+        <ScrollView contentContainerStyle={styles.content}>
+          <ArtifactImage
+            accessibilityLabel={`Ảnh hiện vật ${artifact.slug}`}
+            source={artifact.image_url}
+            style={styles.image}
+          />
+          <EmptyState
+            title={
+              hasEnglish
+                ? `Chưa có thuyết minh bằng ${getLanguageLabel(language)}`
+                : "Nội dung chưa khả dụng"
+            }
+            message={
+              hasEnglish
+                ? `Hiện vật này chưa có nội dung bằng ${getLanguageLabel(
+                    language,
+                  )}. Nội dung hiện có: ${artifact.available_languages
+                    .map(getLanguageLabel)
+                    .join(", ")}.`
+                : `Hiện chưa có nội dung bằng ${getLanguageLabel(
+                    language,
+                  )} hoặc tiếng Anh cho hiện vật này.`
+            }
+          />
+          <LanguageSelector
+            language={language}
+            onChange={setLanguage}
+            storageError={storageError}
+          />
+          <FavoriteButton
+            isFavorite={isFavorite}
+            onPress={() => slug && toggleFavorite(slug)}
+          />
+        </ScrollView>
+        {canOfferEnglish ? (
+          <EnglishFallbackDialog
+            onAccept={() =>
+              setFallbackChoice({ key: fallbackKey, choice: "accepted" })
+            }
+            onCancel={() =>
+              setFallbackChoice({ key: fallbackKey, choice: "dismissed" })
+            }
+          />
+        ) : null}
+      </>
     );
   }
 
@@ -122,7 +168,15 @@ export default function ArtifactDetailScreen() {
         isFavorite={isFavorite}
         onPress={() => slug && toggleFavorite(slug)}
       />
-      <Text style={styles.languageTag}>{getLanguageLabel(language)}</Text>
+      {showingEnglishFallback ? (
+        <Text style={styles.fallbackNotice} accessibilityRole="note">
+          Đang hiển thị nội dung tiếng Anh. Lựa chọn ngôn ngữ của bạn vẫn là{" "}
+          {getLanguageLabel(language)}.
+        </Text>
+      ) : null}
+      <Text style={styles.languageTag}>
+        {getLanguageLabel(translation.language_code)}
+      </Text>
       <Text
         style={[
           styles.title,
@@ -141,13 +195,30 @@ export default function ArtifactDetailScreen() {
       </Text>
       <View style={styles.speechControls}>
         {speech.voiceAvailability === "unavailable" ? (
-          <Text style={styles.speechMessage} accessibilityRole="alert">
-            Thiết bị không có giọng đọc {getLanguageLabel(language)}. Bạn vẫn có
-            thể đọc nội dung bên dưới.
-          </Text>
+          <View style={styles.speechUnavailable}>
+            <Text style={styles.speechMessage} accessibilityRole="alert">
+              Hiện giờ chưa có voice
+            </Text>
+            <Text style={styles.speechMessage}>
+              Thiết bị chưa cài giọng đọc{" "}
+              {getLanguageLabel(translation.language_code)}. Bạn vẫn có thể đọc
+              nội dung bên dưới.
+            </Text>
+            <Pressable
+              accessibilityRole="button"
+              onPress={speech.recheckVoice}
+              style={styles.recheckButton}
+            >
+              <Text style={styles.recheckButtonText}>
+                Kiểm tra lại giọng đọc
+              </Text>
+            </Pressable>
+          </View>
         ) : speech.status === "idle" ? (
           <Pressable
-            accessibilityLabel={`Nghe thuyết minh bằng ${getLanguageLabel(language)}`}
+            accessibilityLabel={`Nghe thuyết minh bằng ${getLanguageLabel(
+              translation.language_code,
+            )}`}
             accessibilityRole="button"
             disabled={speech.voiceAvailability === "checking"}
             onPress={speech.play}
@@ -242,6 +313,56 @@ function FavoriteButton({ isFavorite, onPress }: FavoriteButtonProps) {
         {isFavorite ? "♥  Đã yêu thích" : "♡  Thêm yêu thích"}
       </Text>
     </Pressable>
+  );
+}
+
+interface EnglishFallbackDialogProps {
+  onAccept: () => void;
+  onCancel: () => void;
+}
+
+function EnglishFallbackDialog({
+  onAccept,
+  onCancel,
+}: EnglishFallbackDialogProps) {
+  return (
+    <Modal
+      animationType="fade"
+      onRequestClose={onCancel}
+      transparent
+      visible
+    >
+      <View style={styles.dialogBackdrop}>
+        <View
+          accessibilityViewIsModal
+          style={styles.dialogCard}
+        >
+          <Text accessibilityRole="header" style={styles.dialogTitle}>
+            Chưa có bản dịch
+          </Text>
+          <Text style={styles.dialogMessage}>
+            Hiện chưa có nội dung bằng ngôn ngữ bạn chọn. Bạn có muốn xem nội
+            dung bằng tiếng Anh không?
+          </Text>
+          <View style={styles.dialogActions}>
+            <Pressable
+              accessibilityRole="button"
+              onPress={onAccept}
+              style={styles.dialogPrimaryButton}
+            >
+              <Text style={styles.dialogPrimaryButtonText}>Xem tiếng Anh</Text>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              onPress={onCancel}
+              style={styles.dialogSecondaryButton}
+            >
+              <Text style={styles.dialogSecondaryButtonText}>Hủy</Text>
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    </Modal>
   );
 }
 
@@ -406,6 +527,17 @@ const styles = StyleSheet.create({
     fontSize: 13,
     lineHeight: 19,
   },
+  fallbackNotice: {
+    marginBottom: 14,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    backgroundColor: colors.highlight,
+    color: colors.ink,
+    fontSize: 14,
+    lineHeight: 20,
+  },
   languageTag: {
     marginBottom: 8,
     color: colors.primary,
@@ -470,11 +602,90 @@ const styles = StyleSheet.create({
     fontSize: 14,
     lineHeight: 21,
   },
+  speechUnavailable: {
+    gap: 8,
+  },
+  recheckButton: {
+    minHeight: 44,
+    alignSelf: "flex-start",
+    justifyContent: "center",
+    marginTop: 4,
+    paddingHorizontal: 14,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: 10,
+    backgroundColor: colors.paper,
+  },
+  recheckButtonText: {
+    color: colors.primary,
+    fontSize: 14,
+    fontWeight: "700",
+  },
   speechError: {
     marginTop: 10,
     color: colors.error,
     fontSize: 14,
     lineHeight: 20,
+  },
+  dialogBackdrop: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
+    backgroundColor: "rgba(18, 32, 25, 0.58)",
+  },
+  dialogCard: {
+    width: "100%",
+    maxWidth: 520,
+    padding: 26,
+    borderRadius: 16,
+    backgroundColor: colors.paper,
+  },
+  dialogTitle: {
+    marginBottom: 10,
+    color: colors.ink,
+    fontSize: 24,
+    fontWeight: "700",
+    lineHeight: 30,
+  },
+  dialogMessage: {
+    color: colors.muted,
+    fontSize: 16,
+    lineHeight: 24,
+  },
+  dialogActions: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 10,
+    marginTop: 24,
+  },
+  dialogPrimaryButton: {
+    minHeight: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 18,
+    borderRadius: 10,
+    backgroundColor: colors.primary,
+  },
+  dialogPrimaryButtonText: {
+    color: colors.paper,
+    fontSize: 15,
+    fontWeight: "700",
+  },
+  dialogSecondaryButton: {
+    minHeight: 48,
+    alignItems: "center",
+    justifyContent: "center",
+    paddingHorizontal: 18,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 10,
+    backgroundColor: colors.paper,
+  },
+  dialogSecondaryButtonText: {
+    color: colors.ink,
+    fontSize: 15,
+    fontWeight: "700",
   },
   article: {
     paddingTop: 18,

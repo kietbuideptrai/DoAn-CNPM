@@ -29,6 +29,36 @@ describe("local web demo data", () => {
     ]);
   });
 
+  it("searches Vietnamese names regardless of the display language", async () => {
+    vi.stubEnv("VITE_DEMO_MODE", "true");
+
+    await expect(getArtifacts("ja", "Đồng Hai")).resolves.toMatchObject([
+      { slug: "dong-hai-dong-1946", title: "1946年発行の2ドン硬貨" },
+    ]);
+    await expect(getArtifacts("en", "guốc gỗ")).resolves.toMatchObject([
+      { slug: "doi-guoc-go-ho-chi-minh" },
+    ]);
+  });
+
+  it("searches English titles regardless of the display language", async () => {
+    vi.stubEnv("VITE_DEMO_MODE", "true");
+
+    await expect(getArtifacts("vi", "poetry")).resolves.toMatchObject([
+      { slug: "tap-tho-trong-tuyen", title: "Tập thơ Trọng Tuyển" },
+    ]);
+    await expect(getArtifacts("ko", "WOODEN CLOGS")).resolves.toMatchObject([
+      { slug: "doi-guoc-go-ho-chi-minh" },
+    ]);
+  });
+
+  it("matches partial names without case sensitivity", async () => {
+    vi.stubEnv("VITE_DEMO_MODE", "true");
+
+    await expect(getArtifacts("zh", "mẹ CON")).resolves.toMatchObject([
+      { slug: "me-con-ngay-gap-mat" },
+    ]);
+  });
+
   it.each(supportedLanguages)(
     "provides all eight artifacts in %s",
     async (language) => {

@@ -94,7 +94,18 @@ describe("artifact detail page", () => {
     ).toBeTruthy();
     expect(screen.getByRole("button", { name: "Xem tiếng Anh" })).toBeTruthy();
 
-    fireEvent.click(screen.getByRole("button", { name: "Hủy" }));
+    const dialog = screen.getByRole("dialog");
+    const acceptButton = screen.getByRole("button", { name: "Xem tiếng Anh" });
+    const cancelButton = screen.getByRole("button", { name: "Hủy" });
+    expect(document.activeElement).toBe(cancelButton);
+
+    fireEvent.keyDown(dialog, { key: "Tab" });
+    expect(document.activeElement).toBe(acceptButton);
+
+    fireEvent.keyDown(dialog, { key: "Tab", shiftKey: true });
+    expect(document.activeElement).toBe(cancelButton);
+
+    fireEvent.click(cancelButton);
 
     expect(screen.queryByRole("dialog")).toBeNull();
     expect(

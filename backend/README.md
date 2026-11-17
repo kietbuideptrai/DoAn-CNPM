@@ -46,6 +46,14 @@ until usage rights are confirmed. Content and image review status are tracked in
 [`src/db/CONTENT-REVIEW.md`](./src/db/CONTENT-REVIEW.md) and
 [`src/db/image-sources.json`](./src/db/image-sources.json).
 
+For a representative demo database without museum content, use
+`src/db/seed-demo.sql` instead. It inserts eight fictional, **published**
+artifacts with all five translations and placeholder images. Slugs use the
+`demo-` prefix so they do not collide with the museum drafts. This data is not
+museum content and does not replace the real content-review process. Verify it
+with [`src/db/verify-demo-seed.sql`](./src/db/verify-demo-seed.sql) and
+[`src/db/verify-demo-readiness.sql`](./src/db/verify-demo-readiness.sql).
+
 The translation importer accepts UTF-8 comma- or semicolon-delimited CSV. It
 does not overwrite existing metadata or translations by default. Review
 conflicts first; `--overwrite-existing` explicitly enables updates.

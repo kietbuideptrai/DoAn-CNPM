@@ -348,7 +348,7 @@ export function getDemoArtifacts(
   language: Language,
   query = "",
 ): ArtifactListItem[] {
-  const normalizedQuery = query.trim().toLocaleLowerCase(language);
+  const normalizedQuery = query.trim().toLocaleLowerCase();
 
   return demoArtifacts.flatMap((artifact) => {
     const translation = artifact.translations[language];
@@ -356,10 +356,7 @@ export function getDemoArtifacts(
       return [];
     }
 
-    if (
-      normalizedQuery &&
-      !translation.title.toLocaleLowerCase(language).includes(normalizedQuery)
-    ) {
+    if (normalizedQuery && !matchesSearch(artifact, normalizedQuery)) {
       return [];
     }
 
@@ -370,6 +367,16 @@ export function getDemoArtifacts(
       summary: translation.summary,
     }];
   });
+}
+
+/**
+ * Search matches the original Vietnamese name and the English title, no matter
+ * which language is currently used for display (PRD WEB-03 / AC-02).
+ */
+function matchesSearch(artifact: DemoArtifact, normalizedQuery: string): boolean {
+  return [artifact.translations.vi.title, artifact.translations.en.title].some(
+    (title) => title.toLocaleLowerCase().includes(normalizedQuery),
+  );
 }
 
 export function getDemoArtifact(

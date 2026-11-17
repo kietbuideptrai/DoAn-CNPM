@@ -522,10 +522,16 @@ function EnglishFallbackDialog({
   onAccept,
   onCancel,
 }: EnglishFallbackDialogProps) {
+  const dialogRef = useRef<HTMLElement>(null);
   const cancelButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
     cancelButtonRef.current?.focus();
+
+    return () => {
+      previouslyFocused?.focus?.();
+    };
   }, []);
 
   return (
@@ -537,9 +543,34 @@ function EnglishFallbackDialog({
         className="translation-fallback-dialog"
         onKeyDown={(event) => {
           if (event.key === "Escape") {
+            event.stopPropagation();
             onCancel();
+            return;
+          }
+
+          if (event.key !== "Tab") {
+            return;
+          }
+
+          const focusableElements =
+            dialogRef.current?.querySelectorAll<HTMLElement>(
+              'button:not([disabled]), [href], input, select, textarea, [tabindex]:not([tabindex="-1"])',
+            );
+          if (!focusableElements || focusableElements.length === 0) {
+            return;
+          }
+
+          const firstElement = focusableElements[0];
+          const lastElement = focusableElements[focusableElements.length - 1];
+          if (event.shiftKey && document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement.focus();
+          } else if (!event.shiftKey && document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement.focus();
           }
         }}
+        ref={dialogRef}
         role="dialog"
         tabIndex={-1}
       >
