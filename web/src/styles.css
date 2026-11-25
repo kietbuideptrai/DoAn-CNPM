@@ -501,6 +501,59 @@ p {
   gap: 9px;
 }
 
+.button-qr {
+  border: 1px solid #cbd9d0;
+  background: var(--color-paper);
+  color: var(--color-green);
+  cursor: pointer;
+}
+
+.button-qr:hover {
+  background: #edf3ef;
+}
+
+.artifact-qr-control {
+  display: contents;
+}
+
+.artifact-qr-panel {
+  display: grid;
+  flex-basis: 100%;
+  justify-items: center;
+  gap: 10px;
+  max-width: 280px;
+  padding: 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-paper);
+  text-align: center;
+}
+
+.artifact-qr-panel > p {
+  margin: 0;
+  color: var(--color-ink);
+  font-size: calc(var(--font-scale) * 14px);
+  line-height: 1.5;
+}
+
+.artifact-qr-panel img {
+  width: 224px;
+  max-width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+}
+
+.artifact-qr-panel a {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  color: var(--color-green);
+  font-size: calc(var(--font-scale) * 12px);
+}
+
+.artifact-qr-panel .artifact-qr-hint {
+  color: var(--color-muted);
+}
+
 .speech-message {
   max-width: 300px;
   margin: 0;

@@ -141,6 +141,33 @@ describe("artifact detail page", () => {
     ).toBeTruthy();
   });
 
+  it("shows a QR code that opens the current artifact and language", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify(apiSamples.artifactDetail), {
+          status: 200,
+          headers: { "Content-Type": "application/json" },
+        }),
+      ),
+    );
+
+    renderApp("/artifacts/tank-001?lang=en");
+    fireEvent.click(
+      await screen.findByRole("button", { name: "Hiện QR để quét" }),
+    );
+
+    const qrImage = await screen.findByRole("img", {
+      name: "Mã QR mở hiện vật Historic tank",
+    });
+    expect(qrImage.getAttribute("src")).toMatch(/^data:image\/png;base64,/u);
+    expect(
+      screen.getByRole("link", {
+        name: "http://localhost:5173/artifacts/tank-001?lang=en",
+      }),
+    ).toBeTruthy();
+  });
+
   it("loads English only after confirmation without changing the selected language or auto-playing TTS", async () => {
     const fetchMock = vi.fn((input: RequestInfo | URL) => {
       const requestUrl = new URL(String(input), "http://localhost");

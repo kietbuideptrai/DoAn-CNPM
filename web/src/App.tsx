@@ -10,6 +10,7 @@ import { useArtifacts } from "./hooks/useArtifacts";
 import { useArtifact } from "./hooks/useArtifact";
 import { useSpeech } from "./hooks/useSpeech";
 import { useViewHistory } from "./hooks/useViewHistory";
+import { ArtifactQrCode } from "./components/ArtifactQrCode";
 import type {
   ArtifactDetail,
   ArtifactListItem,
@@ -497,6 +498,11 @@ function ArtifactDetailContent({ artifact }: ArtifactDetailContentProps) {
               {speech.error}
             </p>
           )}
+          <ArtifactQrCode
+            slug={artifact.slug}
+            title={translation.title}
+            language={translation.language_code}
+          />
         </div>
       </div>
       <ArtifactImage
