@@ -1,52 +1,44 @@
-## Apply and verify data safely
+# Database: schema, seed và kiểm tra
 
-The backend connects to PostgreSQL using `DATABASE_URL` from `pool.ts`. Never
-paste this URL into chat, logs, tickets, or shell output.
+Backend kết nối PostgreSQL qua `DATABASE_URL`. Không dán connection string vào
+chat, log, ảnh chụp hoặc commit.
 
-1. Select the intended Supabase project in its dashboard and confirm that it is
-   a dedicated non-production project. Compare its project ref with the host
-   in `DATABASE_URL` locally; for pooler URLs, also check the username's
-   `postgres.<project-ref>` portion. Do not connect or run SQL if they do not
-   match. The application cannot determine whether a project is shared or
-   production merely from the hostname.
-2. Before applying schema changes to an existing project, inspect its tables
-   and constraints in the Supabase dashboard. `schema.sql` uses plain
-   `CREATE TABLE`, not an idempotent migration. Apply it only to an empty,
-   confirmed non-production database. If any target table already exists,
-   stop and review the schema/migration plan instead of rerunning it.
-3. Before seeding, run read-only checks for the eight known sample slugs and
-   record which already exist. Review `CONTENT-REVIEW.md` and
-   `image-sources.json`; the sample copy and translations are unapproved draft
-   text. Images are neutral placeholders because reuse rights for the museum's
-   images have not been confirmed.
-4. Run `seed.sql` only after explicitly confirming the target project. The
-   script inserts missing artifacts as unpublished and inserts missing
-   translations. Its `ON CONFLICT DO NOTHING` clauses do not update existing
-   artifact names, image URLs, publication state, or translations. Existing
-   rows with the same slug keep their current values; new rows remain
-   unpublished. It also does not remove or unpublish any previously seeded
-   War Remnants Museum artifacts; review those rows separately before changing
-   publication state in a confirmed non-production project.
+## Môi trường local
 
-   If the goal is only a representative demo and not real museum content, use
-   `seed-demo.sql` instead. It inserts eight fictional, published artifacts
-   with all five translations, placeholder images, and `demo-` slugs. This
-   data is clearly synthetic; do not present it as museum content, and still
-   use a dedicated demo/non-production project.
-5. Run `verify-seed.sql` to inspect the museum seed rows, or
-   `verify-demo-seed.sql` to inspect the synthetic demo rows. Run
-   `verify-demo-readiness.sql` to check the number of published artifacts that
-   have all five translations. These scripts are read-only.
-   Resolve missing translations and placeholder images through an approved,
-   reviewed change; do not mark drafts published as a verification shortcut.
-6. Start the backend using the same confirmed `DATABASE_URL`. Verify
-   `GET /api/health` returns HTTP 200 with backend and database both `ok`.
-   Then request `GET /api/languages` and
-   `GET /api/artifacts?lang=vi`, `en`, `zh`, `ja`, and `ko`; confirm the API
-   returns the expected published artifacts in each language. A healthy
-   database check alone does not establish that schema/data or API reads are
-   correct.
+```bash
+bash backend/scripts/setup-local-db.sh
+```
 
-Do not run schema or seed against production, shared, or unconfirmed
-databases. If the project ref does not match, stop and correct the local
-configuration before any connection attempt.
+Script dựng container `studyhub-postgres`, tạo schema nếu chưa có, nạp
+`seed.sql` (chỉ thêm bản ghi còn thiếu) và xuất bản 8 hiện vật bảo tàng.
+
+## Supabase hoặc PostgreSQL khác
+
+1. Xác nhận project là **non-production** và so project ref với host trong
+   `DATABASE_URL`. Nếu không khớp, dừng lại.
+2. Chỉ chạy `schema.sql` trên database trống. Nếu bảng đã tồn tại, xem lại kế
+   hoạch migration thay vì chạy lại.
+3. Chạy `seed.sql`. Script không ghi đè tên, ảnh, trạng thái xuất bản hay bản
+   dịch đã có.
+4. Xuất bản các hiện vật đã duyệt bằng `UPDATE artifacts SET is_published = TRUE`
+   cho đúng slug; không xuất bản hàng loạt dữ liệu chưa rà soát.
+5. Kiểm tra bằng `verify-seed.sql` và `verify-demo-readiness.sql` (chỉ đọc).
+6. Gọi `/api/health`, `/api/languages` và `/api/artifacts?lang=vi|en|zh|ja|ko`.
+
+## Kiểm tra nhanh
+
+```sql
+SELECT COUNT(*) AS artifacts, COUNT(*) FILTER (WHERE is_published) AS published
+FROM artifacts;
+
+SELECT language_code, COUNT(*)
+FROM artifact_translations
+GROUP BY language_code
+ORDER BY language_code;
+```
+
+Mục tiêu tối thiểu: 3 hiện vật đã xuất bản, mỗi hiện vật đủ 5 ngôn ngữ. Bộ dữ
+liệu hiện tại có 8 hiện vật và 40 bản dịch.
+
+Nội dung và nguồn ảnh: [`CONTENT-REVIEW.md`](./CONTENT-REVIEW.md) và
+[`image-sources.json`](./image-sources.json).

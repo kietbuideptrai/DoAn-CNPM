@@ -1,5 +1,10 @@
 # Kết quả kiểm thử — 2026-11-17
 
+> Báo cáo dưới đây chạy ngày 2026-11-17 với dữ liệu `demo-*`. Từ 2026-11-25,
+> database local đã chuyển sang 8 hiện vật bảo tàng và web/mobile tắt demo mode;
+> các số liệu E2E/responsive/accessibility bên dưới vẫn là bằng chứng lịch sử,
+> cần chạy lại trên bộ dữ liệu mới trước khi kết luận nghiệm thu.
+
 Thư mục này ghi lại các công việc kiểm thử trong `docs/TASKS.md` đã thực hiện
 trên môi trường local. Kết quả chỉ áp dụng cho cấu hình đã ghi trong từng báo
 cáo; không thay thế kiểm thử trên thiết bị thật hoặc nghiệm thu dữ liệu bảo tàng.
@@ -21,6 +26,8 @@ cáo; không thay thế kiểm thử trên thiết bị thật hoặc nghiệm t
 
 | Task | Kết quả | Báo cáo |
 | --- | --- | --- |
+| P1-03 — Database thật | **Đạt**: 8 hiện vật published, 40 bản dịch, health 200 | [P1-03-database-verification.md](./P1-03-database-verification.md) |
+| P2-01 — Web với API thật | **Một phần**: danh sách 8 hiện vật, chi tiết `ja` đúng; còn TTS/fallback/mất mạng | [P2-01-web-real-api.md](./P2-01-web-real-api.md) |
 | P2-01 — Responsive web | **Đạt 20/20 case** tại 320/375/390/768/1440 CSS px | [P2-01-responsive.md](./P2-01-responsive.md) |
 | P2-02 — Accessibility web | **Một phần**: axe 0 vi phạm, keyboard/zoom/tap target đạt; chưa có screen reader thật | [P2-02-accessibility.md](./P2-02-accessibility.md) |
 | P2-03 — Mobile trên thiết bị thật | **Chặn**: môi trường không có thiết bị/emulator Android/iOS | [P2-03-mobile-device.md](./P2-03-mobile-device.md) |
@@ -47,8 +54,9 @@ cáo; không thay thế kiểm thử trên thiết bị thật hoặc nghiệm t
 
 ## Giới hạn
 
-- Dữ liệu dùng để kiểm thử là `demo-*`; chưa có dữ liệu nghiệm thu bảo tàng
-  (P1-02/P1-06 vẫn chặn).
+- Các báo cáo ngày 17/11 dùng dữ liệu `demo-*`; từ 25/11 database local dùng 8
+  hiện vật bảo tàng (xem [P1-03](./P1-03-database-verification.md)). Cần chạy
+  lại responsive/accessibility/E2E trên bộ dữ liệu mới trước khi kết luận.
 - Chưa kiểm tra Firefox/Safari, thiết bị Android/iOS thật, mạng di động thật,
   VoiceOver/TalkBack/NVDA/Orca.
 - P2-05 dùng mô phỏng mạng/CPU của DevTools, không phải phép đo trên carrier

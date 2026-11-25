@@ -119,7 +119,7 @@ Chọn một luồng ngắn, có chuẩn bị trước:
 
 Nêu kết quả đúng theo báo cáo QA hiện có (ngày 17/11/2026):
 
-- **Web unit/component:** 52/52 test đạt; production build thành công.
+- **Web unit/component:** 55/55 test đạt; production build thành công.
 - **Backend:** 14/14 test đạt; build thành công.
 - **Mobile:** typecheck và lint đạt; chưa có automated test suite riêng.
 - **Web responsive:** 20/20 case đạt ở viewport 320, 375, 390, 768, 1440 px.
@@ -134,7 +134,7 @@ Nêu kết quả đúng theo báo cáo QA hiện có (ngày 17/11/2026):
 
 - Bộ seed tham khảo 8 hiện vật trong chuyên mục “Hiện vật kể chuyện” của Bảo tàng Hồ Chí Minh, có bản nháp 5 ngôn ngữ; bản dịch chưa được chuyên gia/bảo tàng duyệt.
 - Ảnh hiện tại là ảnh giữ chỗ; quyền sử dụng ảnh hiện vật chưa được xác nhận.
-- Chưa xác minh/seed dữ liệu thật trên Supabase trong lần rà soát; backlog ghi P1-02/P1-06 còn chặn do duyệt nội dung và xác nhận project ref non-production.
+- Database thật hiện chạy PostgreSQL local bằng Podman: 8 hiện vật đã xuất bản, 40 bản dịch, `/api/health` trả 200; web/mobile đã tắt demo mode. Chưa triển khai Supabase cloud.
 - Hướng phát triển: kiểm duyệt nội dung/bản dịch và bản quyền ảnh; hoàn tất kiểm thử app trên thiết bị Android/iOS; kiểm tra screen reader thật; đo hiệu năng trên mạng/thiết bị thật; triển khai bản demo ổn định; cân nhắc CMS sau MVP.
 - Kết luận: sản phẩm đã hiện thực hóa luồng cốt lõi ở web và có mã mobile, backend; nêu rõ phạm vi đã xác minh và công việc còn lại.
 
@@ -186,11 +186,11 @@ Nêu kết quả đúng theo báo cáo QA hiện có (ngày 17/11/2026):
 
 ### Nhóm đã kiểm thử những gì?
 
-“Web có 52 unit/component test; backend có 14 test. Responsive web đạt 20/20 case; web E2E đạt 16/16 với dữ liệu demo; axe không tìm thấy vi phạm trên 10 tổ hợp trang và viewport. Mobile mới typecheck/lint, chưa chạy trên thiết bị thật. Hiệu năng 468 ms p95 là số đo mô phỏng local, chưa phải kết quả production.”
+“Web có 55 unit/component test; backend có 14 test. Responsive web đạt 20/20 case; web E2E đạt 16/16 với dữ liệu demo; axe không tìm thấy vi phạm trên 10 tổ hợp trang và viewport. Mobile mới typecheck/lint, chưa chạy trên thiết bị thật. Hiệu năng 468 ms p95 là số đo mô phỏng local, chưa phải kết quả production.”
 
 ### Đồ án đã hoàn thành hoàn toàn chưa?
 
-“Luồng web và phần lớn mã nguồn mobile/backend đã được triển khai. Tuy nhiên chưa thể nói nghiệm thu hoàn toàn: mobile chưa được kiểm thử trên thiết bị thật; screen reader thật chưa kiểm tra; nội dung và bản dịch bảo tàng chưa được chuyên gia duyệt; ảnh giữ chỗ và quyền ảnh chưa chốt; hiệu năng chưa đo trên mạng/thiết bị thật; dữ liệu nghiệm thu thật chưa được xác minh trên Supabase.”
+“Luồng web và phần lớn mã nguồn mobile/backend đã được triển khai, database thật đã chạy local với 8 hiện vật và 40 bản dịch. Tuy nhiên chưa thể nói nghiệm thu hoàn toàn: mobile chưa được kiểm thử trên thiết bị thật; screen reader thật chưa kiểm tra; nội dung và bản dịch bảo tàng chưa được chuyên gia duyệt; ảnh giữ chỗ và quyền ảnh chưa chốt; hiệu năng chưa đo trên mạng/thiết bị thật; chưa triển khai Supabase cloud.”
 
 ### Hạn chế lớn nhất hiện tại là gì?
 
@@ -328,7 +328,7 @@ Hãy trả lời theo mẫu: “Em phụ trách **[phần thật]**. Đầu vào
 - Không nói “đạt accessibility hoàn toàn”; chưa kiểm tra screen reader thật và một số phép đo contrast/zoom còn giới hạn.
 - Không nói “đạt mục tiêu hiệu năng production”; 468 ms là kết quả mô phỏng, web/API local.
 - Không gọi 8 bản dịch/ảnh demo là nội dung bảo tàng chính thức; dữ liệu đang là bản nháp/placeholder.
-- Không nói database Supabase đã sẵn sàng cho nghiệm thu nội dung thật; tài liệu ghi chưa xác minh project ref và chưa seed dữ liệu nghiệm thu.
+- Không nói Supabase cloud đã sẵn sàng cho nghiệm thu nội dung thật; hiện database thật chạy local, chưa triển khai cloud.
 - Không trình bày CMS, lịch sử xem, dịch câu hoặc yêu thích là tiêu chí Must của MVP. Một số code phụ đang tồn tại, nhưng phạm vi PRD có loại trừ hoặc xếp Should.
 - Không khẳng định nhóm dùng Scrum/Agile, ai phụ trách phần nào, hay mốc thời gian nào nếu không đúng với thực tế nhóm.
 
@@ -336,7 +336,7 @@ Hãy trả lời theo mẫu: “Em phụ trách **[phần thật]**. Đầu vào
 
 - [PRD và yêu cầu sản phẩm](PRD.md)
 - [Backlog và trạng thái công việc](TASKS.md)
-- [Checklist kiểm thử mobile](MOBILE-TEST-CHECKLIST.md)
+- [Checklist kiểm thử mobile](../mobile/docs/MOBILE-TEST-CHECKLIST.md)
 - [Tổng hợp QA](qa/README.md)
 - [Responsive web](qa/P2-01-responsive.md)
 - [Accessibility web](qa/P2-02-accessibility.md)

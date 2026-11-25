@@ -25,10 +25,11 @@ dung do Bảo tàng Hồ Chí Minh phê duyệt trước khi duyệt bản dịc
 
 ## Hình ảnh và trạng thái xuất bản
 
-Seed tạo hiện vật mới ở trạng thái chưa xuất bản và không cập nhật bản ghi đã
-có. Ảnh gốc trên trang bảo tàng chưa được sử dụng vì chưa có xác nhận quyền sử
-dụng; bộ dữ liệu dùng ảnh giữ chỗ trung tính. Trạng thái nguồn ảnh được ghi
-trong [`image-sources.json`](./image-sources.json).
+`seed.sql` tạo hiện vật mới ở trạng thái chưa xuất bản và không cập nhật bản ghi
+đã có. `scripts/setup-local-db.sh` xuất bản 8 slug này cho môi trường demo local.
+Ảnh gốc trên trang bảo tàng chưa được sử dụng vì chưa có xác nhận quyền sử dụng;
+bộ dữ liệu dùng ảnh giữ chỗ trung tính. Trạng thái nguồn ảnh được ghi trong
+[`image-sources.json`](./image-sources.json).
 
 Trước khi xuất bản, cần xin phép sử dụng ảnh, rà soát nội dung tiếng Việt và
 nhờ người có chuyên môn hiệu đính đủ năm ngôn ngữ. Việc bài viết/ảnh được đăng

@@ -1,68 +1,104 @@
-# Backlog MVP — Thuyết minh đa ngôn ngữ
+# Kế hoạch hoàn thiện đồ án
 
-Backlog này phản ánh PRD 1.1 và hiện trạng code đã rà soát ngày 2026-11-02, cập nhật kiểm tra ngày 2026-11-16 và kết quả kiểm thử ngày 2026-11-17 (xem `docs/qa/README.md`). Ưu tiên luồng QR → nội dung hiện vật → đổi ngôn ngữ → nghe thuyết minh. CMS, lịch sử xem và tốc độ TTS không phải mục tiêu MVP; code liên quan đang có được giữ nguyên, không mở rộng hoặc xóa trong các task này.
+Cập nhật 2026-11-25. Phạm vi MVP theo [PRD 1.1](./PRD.md); luồng chính:
+**QR → trang hiện vật → đổi ngôn ngữ → đọc/nghe thuyết minh**.
 
-## Hiện trạng đã kiểm tra (2026-11-16)
+## 1. Trạng thái hiện tại
 
-| Khu vực | Trạng thái hiện tại |
+| Khu vực | Trạng thái |
 | --- | --- |
-| Web | Có trang chủ, danh sách, chi tiết, chọn ngôn ngữ, fallback tiếng Anh có xác nhận, TTS và demo data; `npm run build` đạt; `npm test` đạt **52/52** với cấu hình test độc lập `.env.local`. Tìm kiếm demo đã khớp tên Việt/Anh độc lập ngôn ngữ hiển thị. |
-| Mobile | Có danh sách, tìm kiếm, quét QR, quyền camera, chi tiết, TTS, fallback tiếng Anh có xác nhận và lưu ngôn ngữ; `npm run typecheck` và `npm run lint` đạt. Chưa có automated test suite riêng; cần kiểm thử trên thiết bị thật theo `docs/MOBILE-TEST-CHECKLIST.md`. |
-| Backend | Có API đọc hiện vật/ngôn ngữ và PostgreSQL pool; `GET /api/health` kiểm tra backend và database riêng biệt. `npm run build` đạt; `npm test` đạt **14/14**. |
-| Dữ liệu | `seed.sql` và web/mobile demo có 8 hiện vật tham khảo chuyên mục “Hiện vật kể chuyện” của Bảo tàng Hồ Chí Minh, mỗi hiện vật có bản nháp 5 ngôn ngữ và ảnh giữ chỗ. `backend/data/noi-dung-bao-tang.csv` đọc được UTF-8 với 40 dòng (8 slug × 5 ngôn ngữ). Đã thêm `backend/src/db/seed-demo.sql` cho database tượng trưng: 8 hiện vật hư cấu đã công bố, đủ 5 ngôn ngữ, slug `demo-`, ảnh `placehold.co`; có test an toàn và script kiểm tra riêng. Nội dung/bản dịch thật vẫn chưa được chuyên gia duyệt; chưa xác minh dữ liệu thực trên Supabase trong lần rà soát này. |
-| Phạm vi cũ | `docs/TASKS.md` trước đây còn giao CMS, upload ảnh và lịch sử xem như việc cần làm; các mục này không còn là tiêu chí MVP theo PRD 1.1. |
+| Database | PostgreSQL 16 chạy local bằng Podman; 8 hiện vật đã xuất bản, 40 bản dịch (8 × 5 ngôn ngữ). |
+| Backend | `npm run build` và `npm test` (14/14) đạt; `/api/health` trả `backend: ok`, `database: ok`. |
+| Web | `npm test` 55/55, `npm run build` đạt; `.env.local` đặt `VITE_DEMO_MODE=false` và gọi API thật. |
+| Mobile | `npm run typecheck` và `npm run lint` đạt; `EXPO_PUBLIC_DEMO_MODE=false`, trỏ API qua IP LAN. Chưa kiểm thử trên thiết bị thật. |
+| Tài liệu | Đã xóa file trùng lặp, gộp các ghi chú rải rác về một mục. |
 
-## P0 — Chặn build/test và tích hợp
+## 2. Task còn lại
 
-| ID | Task | Trạng thái | Phụ trách đề xuất | Tiêu chí hoàn thành |
-| --- | --- | --- | --- | --- |
-| P0-01 | Làm cho web tests độc lập với `.env.local` | Hoàn thành — 52/52 test qua ngày 2026-11-16 | Web | `cd web && npm test` chạy ổn định với cấu hình demo local; test không phụ thuộc URL hoặc secret của môi trường cá nhân. |
-| P0-02 | Giải quyết mismatch cấu hình TypeScript backend | Hoàn thành — `npm run build` đạt ngày 2026-11-16 | Backend | `backend/tsconfig.json` dùng `ignoreDeprecations: "5.0"` tương thích TypeScript đang cài; build không còn lỗi. |
+### P0 — Chốt database thật
 
-## P1 — Hoàn thành yêu cầu MVP cốt lõi
+- [x] **P0-01** Dựng PostgreSQL local bằng Podman, tạo database `studyhub`.
+- [x] **P0-02** Chạy `schema.sql` + `seed.sql`, xuất bản 8 hiện vật bảo tàng.
+- [x] **P0-03** Trỏ `backend/.env` vào database local; `/api/health` trả HTTP 200.
+- [x] **P0-04** Tắt demo mode ở web và mobile; cấu hình `.env.example` mặc định dùng API thật.
+- [x] **P0-05** Kiểm tra CORS khi mở web bằng IP LAN (ví dụ `http://192.168.1.18:5173`).
+  **Đạt khi:** thêm origin vào `CORS_ORIGINS`, gọi được `/api/artifacts` từ trình duyệt điện thoại.
+  Đã kiểm tra: origin LAN trả 200, origin lạ trả 403.
 
-| ID | Task | Trạng thái | Phụ trách đề xuất | Tiêu chí hoàn thành |
-| --- | --- | --- | --- | --- |
-| P1-01 | Sửa tìm kiếm backend theo tên Việt và Anh | Hoàn thành | Backend | `q` tìm trong `artifacts.name` và title bản dịch `en`, không phân biệt hoa/thường, khớp một phần; kết quả không phụ thuộc `lang` đang hiển thị. Bổ sung test cho tìm Việt/Anh khi chọn `vi`, `en` và một ngôn ngữ khác; giữ lọc hiện vật đã xuất bản. |
-| P1-02 | Hoàn thiện bộ dữ liệu nghiệm thu | Chặn — nội dung và bản dịch cần duyệt; project ref trong cấu hình chưa khớp | Backend + Nội dung | Có ít nhất 3 hiện vật với đủ 5 bản dịch `vi/en/zh/ja/ko`, dữ liệu được người phụ trách rà soát. CSV UTF-8 chứa 8 hiện vật tham khảo Bảo tàng Hồ Chí Minh; seed dùng ảnh giữ chỗ vì chưa xác nhận quyền sử dụng ảnh gốc. Cần duyệt nội dung, xác nhận project ref non-production khớp cấu hình, sau đó import/seed có kiểm soát và xác nhận API; không ghi đè dữ liệu hiện có ngoài dự kiến. Chưa chạy database/API. Đã có `seed-demo.sql` cho demo tượng trưng trên project riêng, nhưng không thay thế dữ liệu nghiệm thu thật. |
-| P1-03 | Bổ sung fallback tiếng Anh có xác nhận trên web | Hoàn thành | Web | Khi thiếu bản dịch đã chọn nhưng có `en`, hiện đúng popup theo PRD. “Xem tiếng Anh” tải nội dung tiếng Anh, ghi nhãn rõ tiếng Anh nhưng không đổi lựa chọn/ngôn ngữ URL đã lưu; “Hủy” không tự đổi ngôn ngữ. Nếu thiếu cả `en`, hiện trạng thái không có nội dung. Đặt thuộc tính `lang` theo nội dung thực tế; TTS không tự phát. Có test cho đủ các nhánh. |
-| P1-04 | Đưa TTS web về đúng trạng thái và thông báo PRD | Hoàn thành | Web | Đổi ngôn ngữ/rời trang dừng voice và hàng đợi; không có nhiều lượt đọc chồng; không hiện “đang phát” trước khi engine bắt đầu; thiếu voice hoặc lỗi do thiếu voice hiển thị chính xác “Hiện giờ chưa có voice”, vẫn giữ văn bản. Có thể thử phát lại và kiểm tra voice lại. Bổ sung test cho đổi ngôn ngữ, unmount, thiếu voice và lỗi phát. |
-| P1-05 | Bổ sung trạng thái readiness backend/database | Hoàn thành | Backend | `/api/health` kiểm tra backend và database riêng biệt, trả trạng thái có ý nghĩa khi DB không kết nối được và không làm lộ connection string/chi tiết bí mật. Có test cho DB thành công/thất bại; tài liệu hướng dẫn dùng endpoint trước demo được cập nhật. |
-| P1-06 | Chốt vận hành dữ liệu và kiểm tra Supabase | Chặn — cần xác nhận project ref và chạy seed có kiểm soát | Backend | Schema `artifacts`, `artifact_translations`, `admin_users` đã tạo trên non-production. CSV `backend/data/noi-dung-bao-tang.csv` hiện đọc được UTF-8 (40 dòng, 8 slug × 5 ngôn ngữ). Còn lại: đối chiếu `DATABASE_URL` với project ref non-production, duyệt nội dung/ảnh, chạy seed và xác nhận API. Không chạy schema/seed trên database chưa xác nhận. |
-| P1-07 | Bổ sung fallback tiếng Anh có xác nhận trên mobile | Đã code — chờ kiểm thử thiết bị (P2-03) | Mobile | Khi thiếu bản dịch đã chọn nhưng có `en`, app hiện hộp thoại đúng nội dung PRD; “Xem tiếng Anh” tải nội dung tiếng Anh và ghi rõ đang hiển thị tiếng Anh nhưng không đổi ngôn ngữ đã chọn; “Hủy” không tự chuyển ngôn ngữ; TTS dùng đúng ngôn ngữ nội dung và không tự phát. |
-| P1-08 | Đưa thông báo thiếu voice trên mobile về đúng PRD | Đã code — chờ kiểm thử thiết bị (P2-03) | Mobile | Khi thiếu voice, app hiển thị chính xác “Hiện giờ chưa có voice”, giữ nguyên văn bản và có nút kiểm tra lại giọng đọc; không tự dùng voice ngôn ngữ khác. |
+### P1 — Dữ liệu và API
 
-## P2 — Nghiệm thu trải nghiệm web/mobile
+- [ ] **P1-01** Rà soát 40 bản dịch: chính tả, thuật ngữ lịch sử, tên riêng.
+  **Đạt khi:** mỗi hiện vật có đủ `vi/en/zh/ja/ko`, không còn chỗ đánh dấu “cần sửa”.
+- [ ] **P1-02** Thay ảnh `placehold.co` bằng ảnh có quyền sử dụng (nếu có).
+  **Đạt khi:** `image_url` trỏ ảnh thật hoặc có xác nhận dùng placeholder cho buổi demo.
+- [x] **P1-03** Chạy `verify-seed.sql` và `verify-demo-readiness.sql` trên database thật; lưu kết quả vào `docs/qa/`.
+  **Đạt khi:** 8/8 hiện vật published, đủ 5 ngôn ngữ, kết quả được ghi lại.
+  Kết quả: [P1-03/P1-04](./qa/P1-03-database-verification.md).
+- [x] **P1-04** Smoke test API: 5 ngôn ngữ, tìm tiếng Việt/Anh khi đang xem ngôn ngữ khác, slug sai trả 404, thiếu bản dịch trả `translation: null`.
+  **Đạt khi:** có log/ảnh chụp response cho từng nhánh.
+  Đã chạy; riêng nhánh `translation: null` dùng unit test vì bộ dữ liệu hiện đủ 5 ngôn ngữ.
 
-| ID | Task | Trạng thái | Phụ trách đề xuất | Tiêu chí hoàn thành |
-| --- | --- | --- | --- | --- |
-| P2-01 | Kiểm thử responsive mobile-first trên web | Hoàn thành — 20/20 case Pass (320/375/390/768/1440), Chromium 157 headless; đã sửa lỗi header bị cắt ở 320 px; xem `docs/qa/P2-01-responsive.md` | Web | Kiểm tra viewport 320, 375, 390, 768 và 1440 CSS px; không cuộn ngang ngoài ý muốn, cắt/chồng nội dung; ảnh không méo; popup, ngôn ngữ và điều khiển TTS dùng được. Lưu kết quả Pass/Fail và thiết bị/trình duyệt. |
-| P2-02 | Kiểm thử accessibility web | Một phần — axe 0 vi phạm trên 10 tổ hợp trang/viewport; bàn phím, dialog, zoom 200% và tap target chính đạt; chưa có screen reader thật; đã sửa `aria-label` trên `div` không role; xem `docs/qa/P2-02-accessibility.md` | Web | Hoàn thành luồng chính bằng bàn phím; focus nhìn thấy, popup quản lý/trả focus; zoom 200% không mất chức năng; chữ chính ≥16 CSS px, tương phản văn bản thường ≥4.5:1, nút chính có vùng chạm ≥44×44 CSS px; kiểm tra screen reader, heading, alt text và `lang`. Ghi lại kết quả, sửa lỗi phát hiện. |
-| P2-03 | Kiểm thử luồng mobile trên thiết bị thật | Chặn — môi trường không có thiết bị/emulator Android/iOS, không có `adb`/`xcrun`; typecheck và lint mobile đạt nhưng không thay thế kiểm thử thiết bị; xem `docs/qa/P2-03-mobile-device.md` | Mobile | Trên Android/iOS mục tiêu, kiểm tra quyền camera (cho phép/từ chối), QR đúng/sai, slug không tồn tại, mất mạng/thử lại, đổi ngôn ngữ khi TTS đang chạy, rời màn hình khi đang đọc, thiếu voice và VoiceOver/TalkBack. Ghi thiết bị/OS và kết quả. |
-| P2-04 | Đồng bộ tài liệu checklist mobile với phạm vi MVP | Hoàn thành ngày 2026-11-16 | Mobile + QA | `docs/MOBILE-TEST-CHECKLIST.md` tách rõ case bắt buộc, case Should và mục ngoài MVP; có tìm tiếng Việt/Anh độc lập ngôn ngữ, fallback có xác nhận, TTS dừng đúng lúc, thiếu voice và accessibility; có cột trạng thái cùng phần ghi thiết bị/OS. |
-| P2-05 | Đo mục tiêu tải nội dung trong điều kiện xác định | Một phần — p95 468 ms khi mô phỏng 4G (9/1,5 Mbps, RTT 40 ms) + CPU 4×, mục tiêu ≤3 000 ms; chưa đo trên thiết bị/mạng di động thật nên chưa tuyên bố đạt NFR; xem `docs/qa/P2-05-performance.md` | Cả nhóm | Chọn và ghi thiết bị, trình duyệt, mạng di động; đo từ lúc mở URL hiện vật đến khi nội dung chính hiển thị. Báo kết quả so với mục tiêu ≤3 giây, không tuyên bố đạt nếu chưa đo. |
+### P2 — Web và mobile dùng API thật
 
-## P3 — Đóng gói demo và bàn giao
+- [ ] **P2-01** Chạy web với `VITE_DEMO_MODE=false`, kiểm tra danh sách, tìm kiếm, chi tiết, đổi ngôn ngữ, TTS, fallback, mất mạng/thử lại.
+  **Đạt khi:** các luồng chính chạy trên dữ liệu database, không có lỗi console.
+  Đã xác minh danh sách 8 hiện vật và chi tiết `ja` trên API thật
+  ([báo cáo](./qa/P2-01-web-real-api.md)); còn TTS/fallback/mất mạng.
+- [ ] **P2-02** Chạy mobile qua Expo Go với `EXPO_PUBLIC_API_URL=http://<IP-LAN>:3000`; thực hiện 19 case trong [checklist mobile](../mobile/docs/MOBILE-TEST-CHECKLIST.md).
+  **Đạt khi:** ghi Pass/Fail, model máy, phiên bản OS.
+- [ ] **P2-03** Kiểm thử thiết bị thật: quyền camera, QR đúng/sai, TTS native, VoiceOver/TalkBack.
+  **Đạt khi:** có ảnh/video và kết quả từng case. Cần điện thoại Android/iOS.
+- [ ] **P2-04** Kiểm tra screen reader web bằng NVDA hoặc Orca.
+  **Đạt khi:** đọc được heading, nhãn nút, dialog fallback và trạng thái TTS.
+- [ ] **P2-05** Đo thời gian tải trên mạng di động thật (mục tiêu ≤ 3 giây).
+  **Đạt khi:** ghi thiết bị, mạng, p95 và so với mục tiêu.
 
-| ID | Task | Trạng thái | Phụ trách đề xuất | Tiêu chí hoàn thành |
-| --- | --- | --- | --- | --- |
-| P3-01 | Chạy kiểm thử nghiệm thu xuyên suốt | Một phần — web E2E 16/16 Pass (QR URL, đổi ngôn ngữ, TTS, fallback, 404, mất mạng/retry, tìm kiếm); mobile chưa kiểm thử do P2-03 chặn; dữ liệu `demo-*` chưa phải dữ liệu nghiệm thu bảo tàng; xem `docs/qa/P3-01-e2e.md` | Cả nhóm | Kiểm tra QR → trang hiện vật → đổi ngôn ngữ → TTS trên web và app, cùng các nhánh lỗi trong AC của PRD. Ghi bug, kết quả và bằng chứng; không dùng chế độ demo để tuyên bố database đã kết nối. |
-| P3-02 | Chuẩn bị bản demo triển khai và QR | Chưa làm | Web + Backend + Mobile | Cấu hình URL HTTPS, CORS và môi trường không chứa secret trong repo; mở trực tiếp/tải lại URL QR thành công; app trên điện thoại truy cập được backend. Có cách dự phòng local khi dịch vụ demo không sẵn sàng. |
-| P3-03 | Hoàn thiện hướng dẫn chạy và bàn giao | Hoàn thành ngày 2026-11-16 | Cả nhóm | `README.md` ở thư mục gốc hướng dẫn web demo/API thật, backend + Supabase, mobile Expo Go, biến môi trường, kiểm thử/build và các lưu ý dữ liệu; liên kết tới README từng phần và checklist mobile. Đã thêm `backend/.env.example` chỉ chứa placeholder, không có secret. Đã chạy lại `web npm test` (52/52) và `npm run build`, `backend npm test` (14/14) và `npm run build`, `mobile npm run typecheck` và `npm run lint` — tất cả đạt. |
+### P3 — Đóng gói và báo cáo
 
-## Không nằm trong backlog MVP
+- [ ] **P3-01** Triển khai backend (Render/Railway) và web (Vercel) với Supabase non-production.
+  **Đạt khi:** HTTPS hoạt động, `CORS_ORIGINS` đúng domain, `/api/health` trả 200.
+- [ ] **P3-02** Tạo QR cho 8 hiện vật, trỏ domain web thật; thử mở và tải lại URL.
+- [ ] **P3-03** Chạy lại E2E trên bản deploy; ghi bug và bằng chứng.
+- [ ] **P3-04** Cập nhật [báo cáo/vấn đáp](./BAO-CAO-DO-AN.md): 55 test web, 14 test backend, database thật, ảnh placeholder.
+- [ ] **P3-05** Commit phần dọn repo (đã bỏ theo dõi `node_modules`, `dist`, `.env.local`).
 
-- Không triển khai hoặc mở rộng CMS, đăng nhập quản trị, CRUD qua giao diện, upload ảnh qua CMS.
-- Không mở rộng lịch sử xem hoặc điều chỉnh tốc độ TTS.
-- Không xóa các phần CMS/lịch sử đã có nếu chưa đánh giá phụ thuộc và chưa có yêu cầu riêng.
-- Yêu thích và chỉnh cỡ chữ mobile là Should; chỉ làm sau P0/P1 và các kiểm thử nghiệm thu bắt buộc.
+## 3. Thứ tự đề xuất
 
-## Thứ tự đề xuất
+1. P1-03, P1-04 — xác minh database và API thật.
+2. P2-01 — web chạy đúng trên API thật.
+3. P2-02, P2-03 — mobile trên máy thật.
+4. P3-01, P3-02 — deploy và QR.
+5. P3-04, P3-05 — báo cáo và dọn repo.
 
-1. P0-02 để backend build được; P0-01 để suite web ổn định.
-2. P1-01, P1-02 để chốt tìm kiếm và nội dung mẫu.
-3. P1-03, P1-04 để hoàn thiện fallback và TTS web theo PRD.
-4. P1-05, P1-06 và P2-01–P2-05 để xác minh database, responsive và accessibility.
-5. P3-01–P3-03 trước buổi demo/nghiệm thu.
+## 4. Lệnh vận hành
 
-Task không được đánh dấu hoàn thành chỉ vì code đã tồn tại; cần đạt tiêu chí và có kết quả kiểm thử tương ứng.
+```bash
+# Database local (Podman)
+podman start studyhub-postgres
+podman exec studyhub-postgres pg_isready -U postgres -d studyhub
+
+# Backend
+cd backend && npm run dev
+curl http://localhost:3000/api/health
+
+# Web
+cd web && npm run dev
+
+# Mobile
+cd mobile && npm start
+```
+
+Khi cần chuyển sang Supabase: tạo project non-production, đổi `DATABASE_URL`
+trong `backend/.env`, chạy `schema.sql` + `seed.sql`, rồi kiểm tra lại
+`/api/health` trước khi seed.
+
+## 5. Ghi chú dữ liệu
+
+8 hiện vật tham khảo chuyên mục “Hiện vật kể chuyện” của Bảo tàng Hồ Chí Minh.
+Bản dịch là bản nháp cần hiệu đính; ảnh đang dùng placeholder. Trước khi công bố
+chính thức cần duyệt nội dung và xác nhận quyền sử dụng ảnh.
+
+## 6. Ngoài phạm vi MVP
+
+CMS/giao diện quản trị, upload ảnh qua CMS, lịch sử xem, điều chỉnh tốc độ TTS,
+deep link mở thẳng app. Code liên quan đang có được giữ nguyên, không mở rộng.

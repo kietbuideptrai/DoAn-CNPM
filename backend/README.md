@@ -1,119 +1,71 @@
-# Artifact Guide Backend
+# Backend
 
-Express API for the multilingual artifact guide.
+REST API Express + TypeScript cho ứng dụng thuyết minh hiện vật.
 
-## Local setup
+## Cài đặt local
 
-From the repository root:
+Cách nhanh nhất là dùng PostgreSQL trong Podman:
 
 ```bash
-cd backend
-npm install
-cp .env.example .env
+bash scripts/setup-local-db.sh
 ```
 
-Set `DATABASE_URL` in `.env` to the PostgreSQL connection string from Supabase.
-For a long-running Express server, use the Supabase session pooler or direct
-connection details appropriate for your network. Require TLS and never commit
-`.env`.
-
-For certificate verification, download the Supabase root certificate from
-**Database → SSL Configuration** and use `sslmode=verify-full` with
-`sslrootcert` pointing to the local certificate file in `DATABASE_URL`.
-Keep the certificate local; `.gitignore` excludes `prod-ca-2021.crt`.
-
-Follow the non-production database confirmation, schema preflight, safe seed,
-and read-only verification steps in
-[`src/db/README.md`](./src/db/README.md) before applying schema or sample data.
-Then start the API:
+Script tạo container `studyhub-postgres`, chạy schema, nạp 8 hiện vật và in ra
+`DATABASE_URL`. Sau đó:
 
 ```bash
+npm install
+cp .env.example .env
+# Dán DATABASE_URL vào .env
 npm run dev
 ```
 
-The API listens on `http://localhost:3000` by default. Vite's
-`http://localhost:5173` and `http://127.0.0.1:5173` origins are allowed for
-local development.
+API chạy tại `http://localhost:3000`. Kiểm tra
+`http://localhost:3000/api/health`; HTTP 200 với `backend` và `database` đều `ok`
+nghĩa là sẵn sàng.
 
-## Sample data
+### Dùng Supabase
 
-`src/db/seed.sql` is draft development data. It inserts missing artifact and
-translation rows only, leaves existing rows unchanged, and creates new
-artifacts as unpublished. Its Vietnamese summaries are paraphrased from the
-Ho Chi Minh Museum's “Artifacts Tell Stories” articles; all five-language text
-is draft content pending expert review. Images remain neutral placeholders
-until usage rights are confirmed. Content and image review status are tracked in
-[`src/db/CONTENT-REVIEW.md`](./src/db/CONTENT-REVIEW.md) and
-[`src/db/image-sources.json`](./src/db/image-sources.json).
+Tạo project **non-production**, lấy connection string (TLS bật) và thay
+`DATABASE_URL`. Chạy `src/db/schema.sql` một lần trên database trống, sau đó
+`src/db/seed.sql`. Không chạy schema/seed trên database production hoặc chưa xác
+nhận. Chi tiết: [`src/db/README.md`](./src/db/README.md).
 
-For a representative demo database without museum content, use
-`src/db/seed-demo.sql` instead. It inserts eight fictional, **published**
-artifacts with all five translations and placeholder images. Slugs use the
-`demo-` prefix so they do not collide with the museum drafts. This data is not
-museum content and does not replace the real content-review process. Verify it
-with [`src/db/verify-demo-seed.sql`](./src/db/verify-demo-seed.sql) and
-[`src/db/verify-demo-readiness.sql`](./src/db/verify-demo-readiness.sql).
+## Biến môi trường
 
-The translation importer accepts UTF-8 comma- or semicolon-delimited CSV. It
-does not overwrite existing metadata or translations by default. Review
-conflicts first; `--overwrite-existing` explicitly enables updates.
-
-After content review, image-rights confirmation, and explicit non-production
-database verification, use [`src/db/verify-seed.sql`](./src/db/verify-seed.sql)
-and [`src/db/verify-demo-readiness.sql`](./src/db/verify-demo-readiness.sql)
-as read-only checks, then verify the public API. Do not publish draft records
-or describe unreviewed content/placeholders as approved data.
-
-## Deploy to Render
-
-Create a **Web Service** from the repository and configure:
-
-- **Root Directory:** `backend`
-- **Build Command:** `npm ci --include=dev && npm run build`
-- **Start Command:** `npm start`
-
-Add these environment variables in the Render service settings:
-
-- `DATABASE_URL`: Supabase PostgreSQL connection string with TLS enabled.
-- `CORS_ORIGINS`: comma-separated exact web origins, for example
-  `https://your-project.vercel.app`.
-- `NODE_ENV`: `production` (Render provides `PORT` for the service).
-
-## Deploy to Railway
-
-Create a Railway service from the repository and set its **Root Directory** to
-`/backend`. Configure:
-
-- **Build Command:** `npm ci --include=dev && npm run build`
-- **Start Command:** `npm start`
-
-Set `DATABASE_URL`, `CORS_ORIGINS`, and `NODE_ENV=production` in the service
-variables. Railway provides `PORT` automatically. If using a Supabase pooler,
-use its session mode for this long-running Express process.
-
-`CORS_ORIGINS` accepts comma-separated exact origins without path segments or
-trailing slashes. Local HTTP origins on `localhost`, `127.0.0.1`, and `::1` are
-also allowed.
+| Biến | Mô tả |
+| --- | --- |
+| `DATABASE_URL` | Chuỗi kết nối PostgreSQL. |
+| `PORT` | Cổng API, mặc định `3000`. |
+| `CORS_ORIGINS` | Danh sách origin web được phép, cách nhau bằng dấu phẩy. |
+| `NODE_ENV` | `development` hoặc `production`. |
 
 ## API
 
-- `GET /api/health` — returns separate backend and database checks. HTTP 200
-  means both checks passed; HTTP 503 means the API is running but the database
-  is unavailable. The response never includes connection details.
-- `GET /api/languages`
-- `GET /api/artifacts?lang=vi&q=tank`
-- `GET /api/artifacts/:slug?lang=vi`
+| Method | Endpoint | Chức năng |
+| --- | --- | --- |
+| GET | `/api/health` | Trạng thái backend và database riêng biệt. |
+| GET | `/api/languages` | Danh sách ngôn ngữ hỗ trợ. |
+| GET | `/api/artifacts?lang=vi&q=tank` | Danh sách hiện vật đã xuất bản. |
+| GET | `/api/artifacts/:slug?lang=vi` | Chi tiết và các ngôn ngữ có sẵn. |
 
-Artifact list searches `q` case-insensitively and partially against the
-Vietnamese artifact name and English translation title, regardless of the
-requested display language. Only published artifacts are returned.
+`q` tìm không phân biệt hoa/thường trong tên tiếng Việt và tiêu đề tiếng Anh,
+độc lập với ngôn ngữ đang hiển thị.
 
-Before a demo, call the deployed backend's `/api/health` endpoint and confirm
-HTTP 200 with both checks marked `ok`. If it returns HTTP 503, the backend is
-reachable but the database check failed; verify service/database availability
-and configuration without sharing the `DATABASE_URL`. Call the endpoint early
-enough to allow a paused free-tier service to wake up, then check it again
-before the demo.
+## Kiểm thử
 
-Run `npm test` from `backend/` to verify backend health, database failure
-handling, seed safety, and search query behavior.
+```bash
+npm test          # 14 test
+npm run build
+```
+
+## Triển khai
+
+Render hoặc Railway, root directory `backend`:
+
+- Build: `npm ci --include=dev && npm run build`
+- Start: `npm start`
+- Biến: `DATABASE_URL`, `CORS_ORIGINS`, `NODE_ENV=production`
+  (`PORT` do nền tảng cấp).
+
+Gọi `/api/health` trước buổi demo để làm nóng dịch vụ và xác nhận database.

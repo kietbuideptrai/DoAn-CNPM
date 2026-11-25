@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Local environment files (keep .env.example)
+.env
+.env*.local
+!.env.example
+
+# Certificates and secrets
+prod-ca-*.crt
+*.pem
+*.key
+
+# Logs and caches
+*.log
+*.tsbuildinfo
+.vite/
+.expo/
+
+# OS files
+.DS_Store
