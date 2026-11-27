@@ -86,6 +86,8 @@ Mobile cần kiểm thử thêm trên máy thật theo
 
 - [PRD](docs/PRD.md) — yêu cầu và tiêu chí nghiệm thu.
 - [Kế hoạch hoàn thiện](docs/TASKS.md) — việc còn lại và thứ tự ưu tiên.
+- [Kế hoạch bổ sung](docs/KE-HOACH-ADMIN-MAP-THONG-KE.md) — quản trị, thống kê
+  truy cập, bản đồ bảo tàng (schema, API, phân công).
 - [Bộ vấn đáp](docs/BAO-CAO-DO-AN.md) — chuẩn bị bảo vệ đồ án.
 - [Kết quả kiểm thử](docs/qa/README.md) — responsive, accessibility, E2E.
 - [Hướng dẫn database](backend/src/db/README.md) — schema, seed, kiểm tra an toàn.

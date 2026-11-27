@@ -1,6 +1,6 @@
 # PRD — Thuyết minh tự động đa ngôn ngữ
 
-**Phiên bản 1.1 — cập nhật phạm vi MVP.** Hệ thống thuyết minh hiện vật qua mã QR, hỗ trợ 5 ngôn ngữ và giọng đọc tổng hợp (TTS), gồm website, ứng dụng di động và backend. MVP không có CMS; dữ liệu được quản lý qua seed hoặc database.
+**Phiên bản 1.1 — cập nhật phạm vi MVP.** Hệ thống thuyết minh hiện vật qua mã QR, hỗ trợ 5 ngôn ngữ và giọng đọc tổng hợp (TTS), gồm website, ứng dụng di động và backend. MVP không có CMS; dữ liệu được quản lý qua seed hoặc database. Từ 2026-11-27, nhóm bổ sung giao diện quản trị, thống kê truy cập và bản đồ bảo tàng; xem [Phụ lục A](#phụ-lục-a--phạm-vi-bổ-sung-2026-11-27).
 
 ## 1. Tổng quan sản phẩm
 
@@ -29,16 +29,16 @@ Xây dựng hệ thống cho phép du khách quét mã QR bằng điện thoại
 | Nền tảng | Vai trò |
 | --- | --- |
 | Website | Truy cập trực tiếp bằng trình duyệt, đặc biệt từ mã QR |
-| Ứng dụng di động | Danh sách hiện vật, tìm kiếm, nút quét QR nhanh ở giữa thanh điều hướng |
+| Ứng dụng di động | Danh sách hiện vật, tìm kiếm, nút quét QR nhanh trên thanh điều hướng và tab bản đồ |
 | Backend | Cung cấp dữ liệu hiện vật và bản dịch dùng chung cho cả hai nền tảng |
-| Quản lý dữ liệu | Dùng seed hoặc database; không có giao diện quản trị trong MVP |
+| Quản lý dữ liệu | MVP dùng seed hoặc database; từ 2026-11-27 bổ sung giao diện quản trị (Phụ lục A) |
 
 ## 2. Người dùng và nhu cầu
 
 | Vai trò | Nhu cầu chính |
 | --- | --- |
 | Visitor — Khách tham quan | Tìm hiện vật, quét QR, đổi ngôn ngữ, đọc và nghe thuyết minh |
-| Người phụ trách nội dung (ngoài MVP) | Cập nhật dữ liệu hiện vật và bản dịch qua seed/database; không thao tác qua CMS của sản phẩm |
+| Người phụ trách nội dung | Cập nhật hiện vật, bản dịch, trạng thái xuất bản và vị trí bản đồ qua giao diện quản trị (bổ sung 2026-11-27) |
 
 **User stories:**
 
@@ -46,7 +46,8 @@ Xây dựng hệ thống cho phép du khách quét mã QR bằng điện thoại
 - Là khách nước ngoài, tôi muốn chọn ngôn ngữ mình hiểu để tiếp nhận thông tin.
 - Là người muốn nghe thuyết minh, tôi muốn phát, tạm dừng và tiếp tục âm thanh.
 - Là người khó đọc chữ, tôi muốn có giọng đọc và giao diện dễ sử dụng.
-- Ngoài MVP: người phụ trách nội dung muốn quản lý hiện vật bằng giao diện CMS.
+- Là khách tham quan, tôi muốn xem bản đồ bảo tàng để tìm hiện vật theo khu vực.
+- Là người phụ trách nội dung, tôi muốn đăng nhập, thêm/sửa/xóa hiện vật và xem thống kê truy cập.
 
 ## 3. Yêu cầu chức năng
 
@@ -65,6 +66,7 @@ Mỗi chức năng có mã định danh để dễ phân công, theo dõi tiến
 | WEB-07 | Hiển thị trạng thái tải, lỗi mạng, hiện vật không tồn tại và nội dung/bản dịch chưa khả dụng | Must |
 | WEB-08 | Khi thiếu bản dịch, hỏi người dùng trước khi dùng nội dung tiếng Anh dự phòng | Must |
 | WEB-09 | Trải nghiệm mobile-first, đọc được và thao tác được bằng cảm ứng, bàn phím và screen reader | Must |
+| WEB-10 | Trang bản đồ bảo tàng, xem khu vực và mở hiện vật từ ghim (bổ sung 2026-11-27) | Must (bổ sung) |
 
 **Luồng chính:** Quét QR bằng camera điện thoại → mở URL hiện vật → chọn ngôn ngữ → xem nội dung → (tùy chọn) nghe thuyết minh.
 
@@ -92,16 +94,24 @@ Mỗi chức năng có mã định danh để dễ phân công, theo dõi tiến
 | APP-08 | Danh sách yêu thích lưu trên thiết bị (tab Yêu thích) | Should |
 | APP-09 | Điều chỉnh cỡ chữ | Should |
 | APP-10 | Kiểm thử các luồng chính bằng VoiceOver hoặc TalkBack trên thiết bị phù hợp | Must |
+| APP-11 | Tab bản đồ bảo tàng, xem khu vực và mở hiện vật từ ghim (bổ sung 2026-11-27) | Must (bổ sung) |
 
-**Các tab:** Trang chủ – Hiện vật – **Quét QR** (ở giữa, nổi bật hơn) – Yêu thích – Cá nhân. Tab Cá nhân chứa ngôn ngữ và cỡ chữ. Lịch sử xem và điều chỉnh tốc độ đọc không thuộc phạm vi nghiệm thu MVP.
+**Các tab:** Trang chủ – Hiện vật – **Quét QR** (nổi bật) – **Bản đồ** (bổ sung 2026-11-27) – Yêu thích – Cá nhân. Tab Cá nhân chứa ngôn ngữ và cỡ chữ. Lịch sử xem và điều chỉnh tốc độ đọc không thuộc phạm vi nghiệm thu MVP.
 
 ### 3.3. Quản trị nội dung
 
-CMS và giao diện quản trị không thuộc phạm vi MVP. Dữ liệu hiện vật và bản dịch được quản lý bằng seed data hoặc thao tác trực tiếp trên database có kiểm soát. Các thành phần quản trị/API đã có trong codebase được giữ nguyên trong lần rà soát phạm vi này; không cần hoàn thiện, mở rộng hay xóa chúng để đạt nghiệm thu MVP. Có thể xem xét CMS ở giai đoạn sau.
+Từ 2026-11-27, giao diện quản trị thuộc phạm vi bổ sung (Phụ lục A). MVP gốc vẫn quản lý dữ liệu bằng seed/database; phần bổ sung không làm thay đổi luồng khách tham quan.
 
 | ID | Chức năng | Mức độ |
 | --- | --- | --- |
-| ADM-01–ADM-08 | Đăng nhập, CRUD nội dung, upload ảnh, thống kê và tạo QR trong trang quản trị | Ngoài MVP |
+| ADM-01 | Đăng nhập quản trị bằng email/mật khẩu, phiên JWT | Must (bổ sung) |
+| ADM-02 | Danh sách hiện vật, gồm cả bản nháp/đang ẩn | Must (bổ sung) |
+| ADM-03 | Thêm, sửa hiện vật và bản dịch 5 ngôn ngữ | Must (bổ sung) |
+| ADM-04 | Ẩn/hiện và xóa vĩnh viễn hiện vật (có xác nhận) | Must (bổ sung) |
+| ADM-05 | Gán khu vực và tọa độ hiện vật trên bản đồ | Must (bổ sung) |
+| ADM-06 | Biểu đồ lượt truy cập web theo ngày | Must (bổ sung) |
+| ADM-07 | Tạo và tải mã QR cho hiện vật | Should (đã có UI) |
+| ADM-08 | Upload ảnh qua giao diện | Ngoài phạm vi (dùng URL ảnh) |
 
 > Mã QR có thể được tạo từ URL hiện vật bằng công cụ/thư viện sẵn có trong bước chuẩn bị dữ liệu; không cần giao diện quản trị để tạo QR.
 
@@ -181,9 +191,13 @@ Giao tiếp giữa các thành phần: REST API / JSON qua HTTPS.
 | `artifact_translations` | Nội dung đa ngôn ngữ | `id`, `artifact_id`, `language_code`, `title`, `summary`, `content`, `updated_at` |
 | `admin_users` | Tài khoản quản trị cho giai đoạn sau, không bắt buộc dùng trong MVP | `id`, `email` (duy nhất), `password_hash`, `created_at` |
 
+> **Bổ sung 2026-11-27:** thêm bảng `museum_zones` (khu vực bản đồ) và
+> `page_views` (lượt truy cập web), cùng các cột `zone_id`, `map_x`, `map_y` trên
+> `artifacts`. Chi tiết ở Phụ lục A.
+
 - Mỗi hiện vật có nhiều bản dịch; `artifact_id` liên kết sang bảng hiện vật.
 - Ràng buộc: `slug` là duy nhất; cặp (`artifact_id`, `language_code`) là duy nhất.
-- Ẩn hiện vật bằng `is_published = false`; không xóa cứng ở MVP.
+- Ẩn hiện vật bằng `is_published = false`; từ 2026-11-27 admin có thể xóa vĩnh viễn hiện vật kèm bản dịch (có xác nhận).
 - `name` là tên gốc tiếng Việt; dùng làm từ khóa tìm kiếm cùng `title` của bản dịch tiếng Anh. Tên hiển thị lấy từ `title` theo ngôn ngữ yêu cầu.
 - Bảng `languages` có thể thêm sau. Lịch sử xem và yêu thích lưu trên thiết bị, không cần thêm bảng.
 
@@ -196,9 +210,15 @@ Giao tiếp giữa các thành phần: REST API / JSON qua HTTPS.
 | GET | `/api/languages` | Danh sách ngôn ngữ |
 | GET | `/api/health` | Kiểm tra tình trạng backend và database riêng biệt; dùng để xác nhận sẵn sàng trước demo |
 
+> **API bổ sung 2026-11-27:** `/api/admin/auth/login`, CRUD
+> `/api/admin/artifacts`, `/api/admin/analytics/summary`,
+> `POST /api/analytics/pageview`, `/api/museum/map`, `/api/museum/zones`. Chi tiết
+> và ví dụ ở Phụ lục A.
+
 > Mã QR trỏ tới URL ổn định như `/artifacts/tank-001`. Backend tìm hiện vật theo `slug`; không nhúng toàn bộ nội dung vào mã QR.
 
-Các API quản trị và upload không thuộc MVP. Nếu chúng đã tồn tại, giữ nguyên nhưng không xem việc hoàn thiện chúng là điều kiện nghiệm thu.
+Các API quản trị và upload ảnh không thuộc MVP gốc. Từ 2026-11-27, API quản trị
+và bản đồ thuộc phạm vi bổ sung (Phụ lục A); upload ảnh vẫn ngoài phạm vi.
 
 **Ví dụ phản hồi (chốt API contract từ ngày 1):** `GET /api/artifacts/tank-001?lang=en`
 
@@ -244,9 +264,10 @@ Với 3 người và 5 tuần, cần giới hạn rõ phần bắt buộc.
 | --- | --- |
 | **Must** — Bắt buộc | Website mobile-first và ứng dụng di động; danh sách, tìm kiếm theo tên Việt/Anh, chi tiết; QR mở đúng hiện vật; 5 ngôn ngữ; ghi nhớ lựa chọn ngôn ngữ; fallback tiếng Anh có xác nhận khi thiếu bản dịch; TTS phát/tạm dừng/tiếp tục/phát lại và dừng đúng lúc; backend/database; dữ liệu mẫu; tiếp cận tối thiểu; triển khai demo |
 | **Should** — Nên có | Danh sách yêu thích trên thiết bị; chỉnh cỡ chữ bổ sung ngoài khả năng zoom trình duyệt; build APK Android nếu cần |
-| **Ngoài MVP** | Lịch sử xem; điều chỉnh tốc độ đọc; CMS/giao diện quản trị; upload ảnh qua giao diện quản trị; thống kê lượt nghe; xem offline; tạo QR trong trang quản trị; GPS, bản đồ, tự phát âm thanh khi đến gần hiện vật, AI hội thoại, dịch máy trực tiếp, deep link mở thẳng app |
+| **Bổ sung sau MVP (2026-11-27)** | Giao diện quản trị + đăng nhập; CRUD hiện vật/bản dịch; xóa vĩnh viễn; thống kê lượt truy cập web; bản đồ bảo tàng trên web và mobile; gán vị trí hiện vật trên bản đồ |
+| **Ngoài MVP** | Lịch sử xem; điều chỉnh tốc độ đọc; upload ảnh qua giao diện quản trị; thống kê lượt nghe; xem offline; tạo QR trong trang quản trị; GPS/beacon, tự phát âm thanh khi đến gần hiện vật, AI hội thoại, dịch máy trực tiếp, deep link mở thẳng app |
 
-MVP không cần CMS: nội dung được quản lý bằng seed data hoặc thao tác database có kiểm soát. Code quản trị/lịch sử đã có không bị xóa trong lần cập nhật phạm vi này; các tính năng đó không thuộc điều kiện nghiệm thu và không được mở rộng nếu không có quyết định phạm vi riêng.
+MVP gốc không cần CMS: nội dung được quản lý bằng seed data hoặc thao tác database có kiểm soát. Từ 2026-11-27, nhóm quyết định mở rộng phạm vi sang giao diện quản trị, thống kê truy cập và bản đồ (Phụ lục A). Các tính năng lịch sử xem, upload ảnh và tốc độ TTS vẫn ngoài phạm vi.
 
 ## 9. Tiến độ
 
@@ -310,7 +331,7 @@ Mỗi mục phải được kiểm thử trước khi đánh dấu hoàn thành.
 | AC-17 | Đo thời gian đến khi nội dung chính hiển thị theo thiết bị/trình duyệt và cấu hình mạng di động đã ghi nhận; mục tiêu không quá 3 giây |
 | AC-18 | `/api/health` thể hiện riêng backend và database để có thể xác nhận trạng thái sẵn sàng trước demo |
 
-CMS, đăng nhập quản trị, CRUD qua giao diện, lịch sử xem và tốc độ TTS không phải tiêu chí nghiệm thu MVP. Nếu API ghi/quản trị vẫn được triển khai, các kiểm soát bảo mật hiện có không được suy giảm.
+Các tiêu chí AC-01–AC-18 là MVP gốc. Tiêu chí cho phần bổ sung (quản trị, thống kê, bản đồ) nằm ở Phụ lục A. Lịch sử xem, upload ảnh và tốc độ TTS vẫn ngoài phạm vi.
 
 **Bộ kiểm thử tối thiểu:** 3 hiện vật × 5 ngôn ngữ; QR hợp lệ, sai định dạng và slug không tồn tại; tìm kiếm tiếng Việt/Anh khi chọn ngôn ngữ khác; thiếu bản dịch/cả bản dịch tiếng Anh; thiếu voice; đổi ngôn ngữ và rời trang khi đang phát; mất mạng; các viewport và kiểm thử accessibility ở trên.
 
@@ -336,9 +357,68 @@ CMS, đăng nhập quản trị, CRUD qua giao diện, lịch sử xem và tốc
 | # | Quyết định | Lựa chọn | Phương án dự phòng |
 | --- | --- | --- | --- |
 | 1 | Số ngôn ngữ nghiệm thu | 5 ngôn ngữ: Việt, Anh, Trung, Nhật, Hàn | Chỉ giảm số ngôn ngữ nếu nhóm/giảng viên chấp thuận đổi phạm vi; không tự hạ yêu cầu trong quá trình triển khai |
-| 2 | Quản lý dữ liệu | Không làm CMS trong MVP; dùng seed data hoặc thao tác database có kiểm soát | Xem xét CMS ở giai đoạn sau; code quản trị đang tồn tại được giữ nguyên nhưng không mở rộng |
+| 2 | Quản lý dữ liệu | MVP dùng seed data/database; từ 2026-11-27 bổ sung giao diện quản trị | Vẫn giữ seed làm phương án dự phòng khi demo không có mạng |
 | 3 | Cách chạy mobile | Expo Go khi phát triển; cố gắng build APK Android ở tuần 5 | Chỉ demo qua Expo Go nếu không yêu cầu file cài đặt |
 | 4 | Luồng QR | QR là URL web; app có chức năng quét riêng bên trong | Deep link mở thẳng app để sau MVP |
 | 5 | Nơi chạy backend | Render hoặc Railway (gói miễn phí), database trên Supabase | Chạy local khi demo nếu dịch vụ gặp sự cố |
 
 **Bước tiếp theo:** chuyển PRD thành danh sách task theo ngày, GitHub Issues và tiêu chí hoàn thành cho từng thành viên, ưu tiên bản demo xuyên suốt trong 72 giờ đầu.
+
+---
+
+## Phụ lục A — Phạm vi bổ sung (2026-11-27)
+
+Phần này ghi nhận các tính năng nhóm quyết định bổ sung sau MVP. Luồng khách tham
+quan cũ không thay đổi. Thiết kế kỹ thuật, API contract và phân công chi tiết ở
+[Kế hoạch bổ sung](./KE-HOACH-ADMIN-MAP-THONG-KE.md).
+
+### A.1. Tính năng
+
+| Nhóm | Nội dung |
+| --- | --- |
+| Quản trị | Đăng nhập email/mật khẩu + JWT; danh sách gồm cả hiện vật ẩn; thêm/sửa/xóa hiện vật và bản dịch 5 ngôn ngữ; ẩn/hiện; xem trước và tải QR |
+| Vị trí | Gán khu vực và tọa độ hiện vật trên sơ đồ bảo tàng; ghim hiện trên web và app |
+| Thống kê | Ghi nhận lượt xem web bằng mã khách ẩn danh; biểu đồ 7/30 ngày; tổng lượt xem, khách duy nhất, top hiện vật |
+| Bản đồ | Sơ đồ 1 tầng tự vẽ, 7 khu (5 phòng trưng bày + sảnh + hành lang); hiển thị trên web `/map` và tab Bản đồ của app |
+
+### A.2. Database bổ sung
+
+- `museum_zones`: khu vực bản đồ, tọa độ theo hệ `1000 × 600`.
+- `page_views`: `visitor_id` (UUID ẩn danh), `path`, `artifact_slug`, `viewed_at`.
+- `artifacts`: thêm `zone_id`, `map_x`, `map_y`.
+- `artifact_translations`: khóa ngoại chuyển sang `ON DELETE CASCADE`.
+- `admin_users`: seed tài khoản quản trị; mật khẩu băm bcrypt.
+
+### A.3. API bổ sung
+
+| Method | Endpoint | Chức năng |
+| --- | --- | --- |
+| POST | `/api/admin/auth/login` | Đăng nhập, trả JWT |
+| GET/POST | `/api/admin/artifacts` | Danh sách / tạo hiện vật |
+| GET/PATCH/DELETE | `/api/admin/artifacts/:id` | Chi tiết / cập nhật / xóa |
+| PUT | `/api/admin/artifacts/:id/translations/:language` | Upsert bản dịch |
+| GET | `/api/admin/analytics/summary?days=30` | Tổng hợp lượt truy cập |
+| POST | `/api/analytics/pageview` | Ghi một lượt xem công khai |
+| GET | `/api/museum/map?lang=vi` | Khu vực + hiện vật có vị trí |
+| GET | `/api/museum/zones` | Danh sách khu vực |
+
+### A.4. Tiêu chí nghiệm thu bổ sung
+
+| ID | Tiêu chí đạt |
+| --- | --- |
+| AC-19 | Đăng nhập admin đúng/sai hoạt động; token hết hạn bị chặn; đăng xuất xóa phiên |
+| AC-20 | Admin xem được cả hiện vật ẩn; thêm/sửa hiện vật và 5 bản dịch |
+| AC-21 | Xóa hiện vật có xác nhận; hiện vật và bản dịch biến mất khỏi web/app/map |
+| AC-22 | Admin gán khu + tọa độ; ghim hiện trên bản đồ đúng vị trí |
+| AC-23 | Web ghi nhận lượt xem công khai, không ghi `/admin`, không ghi trùng một lần điều hướng |
+| AC-24 | Biểu đồ hiển thị 7/30 ngày, có tổng lượt xem, khách duy nhất, top hiện vật |
+| AC-25 | Bản đồ web và mobile dùng cùng dữ liệu; bấm ghim mở đúng hiện vật |
+| AC-26 | Bản đồ responsive 320–1440px, dùng được bằng bàn phím và screen reader |
+| AC-27 | Dữ liệu seed 30 ngày hiển thị trước khi có truy cập thật |
+| AC-28 | Không lưu IP/cookie cá nhân; API admin yêu cầu JWT |
+
+### A.5. Ngoài phạm vi bổ sung
+
+Upload ảnh qua giao diện, bản đồ nhiều tầng, GPS/beacon, nhiều vai trò admin,
+phân quyền chi tiết, real-time analytics, xuất Excel/CSV, chỉnh sửa khu vực bản
+đồ bằng kéo thả.
