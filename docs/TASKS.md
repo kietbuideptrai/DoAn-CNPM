@@ -12,10 +12,10 @@ bản đồ). Luồng chính vẫn là:
 | Database | **Supabase PostgreSQL non-production** là nguồn chuẩn, kết nối qua pooler/TLS bằng `DATABASE_URL`. Podman local chỉ là dự phòng. Không dán connection string hay project ref thật vào repo. |
 | Backend | API MVP + admin/map/analytics đã có mã và test: `npm test` 45/45, `npm run build` đạt. Đã chạy `setup:supabase` và đối chiếu health/map/analytics trên project Supabase non-production đã duyệt. |
 | Web | Sau khi gộp nhánh bổ sung: `npm test` 92/92, `npm run build` đạt; `.env.local` đặt `VITE_DEMO_MODE=false` và gọi API thật. |
-| Mobile | `npm run typecheck` và `npm run lint` đạt; `EXPO_PUBLIC_DEMO_MODE=false`, trỏ API qua IP LAN. Chưa kiểm thử trên thiết bị thật. |
+| Mobile | Đã có tab **Bản đồ** thứ 6 dùng `/api/museum/map`; `npm run typecheck` và `npm run lint` đạt; API thật trả 7 khu/8 hiện vật và demo mode trả cùng dữ liệu web. Chưa kiểm thử trên thiết bị thật. |
 | Quản trị | Web đã có UI đăng nhập/danh sách/form/ẩn/xóa; backend auth + CRUD đã có mã trên nhánh bổ sung, chờ issue #9/#10 chốt trên Supabase. |
 | Thống kê | Đã có client/chart/tracking trên web; cần bảng `page_views` và API analytics trên Supabase theo issue #12/#14. |
-| Bản đồ | Đã có trang `/map` trên web; cần chốt migration/seed khu + vị trí và API công khai trên Supabase theo issue #11/#15. |
+| Bản đồ | Web `/map` và tab mobile Bản đồ dùng chung dữ liệu demo `shared/demoMuseumMap.ts`; migration/seed và API công khai trên Supabase đã chốt. Chỉ còn kiểm thử trên thiết bị thật. |
 | Tài liệu | Issue backend #7–#16, `backend/README.md` và runbook DB đã cập nhật theo hướng Supabase; vẫn cần chốt API samples và demo theo issue #13/#16. |
 
 ## 2. Task còn lại
@@ -160,17 +160,23 @@ Tổng khoảng 19–20 ngày công; ba người làm song song khoảng 1,5–2
 
 ### P6 — Mobile bản đồ
 
-- [ ] **P6-01** Thêm kiểu dữ liệu map vào `shared/types.ts` + API client.
+- [x] **P6-01** Thêm kiểu dữ liệu map vào `shared/types.ts` + API client.
   **Đạt khi:** `getMuseumMap(language)` gọi được API thật, có abort signal.
-- [ ] **P6-02** Thêm tab **Bản đồ** và màn hình map.
+  Đã kiểm chứng: live 7 khu/8 hiện vật, lỗi mạng thân thiện, demo và abort đều
+  đúng; xem [báo cáo QA](./qa/P6-mobile-map-verification.md).
+- [x] **P6-02** Thêm tab **Bản đồ** và màn hình map.
   **Đạt khi:** tab thứ 6 hiển thị; sơ đồ + ghim + danh sách hiện vật; bấm ghim mở
-  `/artifacts/[slug]`; có tải/lỗi/thử lại.
-- [ ] **P6-03** Demo mode cho bản đồ.
+  `/artifacts/[slug]`; có tải/lỗi/thử lại. Dùng `View` tuyệt đối nên không thêm
+  dependency SVG; chạy được trong Expo Go.
+- [x] **P6-03** Demo mode cho bản đồ.
   **Đạt khi:** `EXPO_PUBLIC_DEMO_MODE=true` vẫn xem được bản đồ từ
-  `shared/demoMuseumMap.ts`; dữ liệu khớp web demo.
-- [ ] **P6-04** Typecheck, lint và checklist thiết bị.
+  `shared/demoMuseumMap.ts`; dữ liệu khớp web demo. File mới là nguồn chuẩn;
+  `shared/demoMap.ts` và `web/src/data/demoMap.ts` chỉ re-export.
+- [x] **P6-04** Typecheck, lint và checklist thiết bị.
   **Đạt khi:** `npm run typecheck`, `npm run lint` pass; 6 tab không tràn trên
   màn hình hẹp; VoiceOver/TalkBack đọc được tên khu/ghim.
+  Đã pass typecheck/lint và ghi checklist MOB-20…MOB-25; các mục cần thiết bị
+  thật được đánh `Blocked` trong môi trường này, không có lỗi code chặn demo.
 
 ### P7 — Dữ liệu demo
 

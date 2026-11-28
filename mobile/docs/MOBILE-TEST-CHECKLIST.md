@@ -39,6 +39,20 @@ chế độ dữ liệu (demo hoặc backend thật) và ảnh/video làm bằng
 | MOB-18 | Đổi cỡ chữ Nhỏ/Vừa/Lớn rồi mở lại chi tiết và khởi động lại app. | Tiêu đề, tóm tắt và nội dung đổi theo cỡ chữ; lựa chọn được ghi nhớ; không cắt nội dung. | |
 | MOB-19 | Mở hiện vật có ảnh lỗi hoặc thiếu ảnh. | Ảnh thay thế/khung giữ chỗ không làm hỏng trang; nhãn ảnh vẫn phù hợp. | |
 
+## Bổ sung bản đồ (P6)
+
+| ID | Steps | Expected result | Status / notes |
+| --- | --- | --- | --- |
+| MOB-20 | Mở tab **Bản đồ** (tab thứ 6), đợi dữ liệu tải. | Hiện 7 khu và 8 ghim; tiêu đề/mô tả theo ngôn ngữ đang chọn. | Blocked — chưa có thiết bị; API thật trả 7 khu/8 hiện vật và typecheck/lint đạt. |
+| MOB-21 | Chạm một ghim trên sơ đồ. | Mở đúng `/artifacts/<slug>` của hiện vật đó. | Blocked — cần thiết bị; client dùng route động `/artifacts/[slug]`. |
+| MOB-22 | Chạm một tên hiện vật trong danh sách nhóm theo khu. | Mở đúng chi tiết; nhóm khu và số thứ tự khớp ghim. | Blocked — cần thiết bị; nhóm được chia sẻ với web qua `shared/mapGroups.ts`. |
+| MOB-23 | Tắt mạng, mở tab Bản đồ, bật mạng rồi bấm **Thử lại**. | Lỗi mạng dễ hiểu, có nút Thử lại và tải lại thành công. | Một phần — client đã kiểm chứng lỗi mạng/abort bằng script; cần thử trên thiết bị. |
+| MOB-24 | Đặt `EXPO_PUBLIC_DEMO_MODE=true`, khởi động lại app rồi mở bản đồ. | Vẫn hiện 7 khu/8 hiện vật, khớp web demo; bật lại `false` dùng API thật. | Pass (dữ liệu)/Blocked (Expo Go) — script demo mode trả 7/8; chưa chạy trên điện thoại. |
+| MOB-25 | Mở app ở màn hình hẹp (~320 px), sau đó bật TalkBack/VoiceOver và đi qua tab/ghim/khu. | 6 tab không tràn; trình đọc nói tên tab, tên khu và nhãn ghim. | Blocked — cần thiết bị; code đã dùng `flex: 1`, nhãn 9 px và `accessibilityLabel` cho khu/ghim. |
+
+Kết quả kiểm chứng không cần thiết bị (2026-11-29): xem
+[docs/qa/P6-mobile-map-verification.md](../../docs/qa/P6-mobile-map-verification.md).
+
 ## Should — chỉ kiểm tra nếu đã làm
 
 | ID | Steps | Expected result | Status / notes |

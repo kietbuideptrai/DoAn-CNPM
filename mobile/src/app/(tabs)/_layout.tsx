@@ -9,6 +9,7 @@ const tabSymbols: Record<string, string> = {
   scan: "▦",
   favorites: "♡",
   profile: "●",
+  map: "◎",
 };
 
 export default function TabLayout() {
@@ -23,6 +24,7 @@ export default function TabLayout() {
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.muted,
         tabBarStyle: styles.tabBar,
+        tabBarItemStyle: styles.tabItem,
         tabBarLabelStyle: styles.tabLabel,
         tabBarIcon: ({ color, focused }) => (
           <Text
@@ -42,6 +44,7 @@ export default function TabLayout() {
       <Tabs.Screen name="scan" options={{ title: t("scanQr") }} />
       <Tabs.Screen name="favorites" options={{ title: t("favorites") }} />
       <Tabs.Screen name="profile" options={{ title: t("profile") }} />
+      <Tabs.Screen name="map" options={{ title: t("map") }} />
     </Tabs>
   );
 }
@@ -55,9 +58,14 @@ return StyleSheet.create({
     borderTopColor: colors.border,
     backgroundColor: colors.paper,
   },
+  tabItem: {
+    flex: 1,
+    paddingHorizontal: 0,
+  },
   tabLabel: {
-    fontSize: 10,
+    fontSize: 9,
     fontWeight: "600",
+    textAlign: "center",
   },
   tabSymbol: {
     width: 28,

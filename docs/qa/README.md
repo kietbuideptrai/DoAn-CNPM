@@ -39,6 +39,7 @@ cáo; không thay thế kiểm thử trên thiết bị thật hoặc nghiệm t
 | P7-03 — Setup/reset Supabase | **Đạt (guard)**: 4/4 test; có đối chiếu project, thứ tự seed và xác nhận reset; chưa chạy ghi DB thật | [P7-03-supabase-setup-script.md](./P7-03-supabase-setup-script.md) |
 | P4/P7 — Chốt backend Supabase (#8–#16) | **Đạt**: backend 45/45, web 92/92, build đạt; đã setup + đối chiếu API trên Supabase non-production | [P4-P7-backend-supabase-final-verification.md](./P4-P7-backend-supabase-final-verification.md) |
 | P4-06 — Tài liệu API Supabase-first | **Đạt (tài liệu)**: mẫu request/response và curl có placeholder; JSON hợp lệ; chưa chạy test/build hay gọi API thật | [P4-06-backend-api-documentation.md](./P4-06-backend-api-documentation.md) |
+| P6 — Bản đồ mobile (#24–#27) | **Đạt (code/API)**: typecheck/lint pass, live 7 khu/8 hiện vật, demo khớp web; thiết bị thật/chạm/TalkBack còn Blocked | [P6-mobile-map-verification.md](./P6-mobile-map-verification.md) |
 
 ## Lỗi phát hiện và đã sửa
 

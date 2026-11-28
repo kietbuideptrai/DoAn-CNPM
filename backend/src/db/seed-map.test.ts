@@ -5,7 +5,7 @@ import { describe, it } from "node:test";
 
 const seed = readFileSync(join(process.cwd(), "src/db/seed-map.sql"), "utf8");
 const demoMap = readFileSync(
-  join(process.cwd(), "../shared/demoMap.ts"),
+  join(process.cwd(), "../shared/demoMuseumMap.ts"),
   "utf8",
 );
 
