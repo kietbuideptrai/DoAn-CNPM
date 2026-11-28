@@ -11,7 +11,7 @@ CREATE TABLE artifacts (
 
 CREATE TABLE artifact_translations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  artifact_id UUID NOT NULL REFERENCES artifacts(id),
+  artifact_id UUID NOT NULL REFERENCES artifacts(id) ON DELETE CASCADE,
   language_code TEXT NOT NULL CHECK (language_code IN ('vi', 'en', 'zh', 'ja', 'ko')),
   title TEXT NOT NULL,
   summary TEXT NOT NULL,
