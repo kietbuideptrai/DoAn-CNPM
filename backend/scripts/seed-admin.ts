@@ -10,18 +10,21 @@ async function main(): Promise<void> {
     throw new Error("Cần đặt ADMIN_EMAIL và ADMIN_PASSWORD trước khi seed admin");
   }
 
-  await pool.query(
-    `INSERT INTO admin_users (email, password_hash)
-     VALUES ($1, $2)
-     ON CONFLICT (email) DO NOTHING`,
-    [email, hashAdminPassword(password)],
-  );
-
-  console.log(`Đã seed tài khoản admin ${email} nếu chưa tồn tại.`);
-  await pool.end();
+  try {
+    await pool.query(
+      `INSERT INTO admin_users (email, password_hash)
+       VALUES ($1, $2)
+       ON CONFLICT (email) DO NOTHING`,
+      [email, hashAdminPassword(password)],
+    );
+    console.log("Đã seed tài khoản admin nếu chưa tồn tại.");
+  } finally {
+    await pool.end();
+  }
 }
 
-void main().catch((error: unknown) => {
-  console.error(error);
+void main().catch(() => {
+  // Không in lỗi DB thô vì có thể kèm chi tiết kết nối.
+  console.error("Seed admin thất bại.");
   process.exitCode = 1;
 });

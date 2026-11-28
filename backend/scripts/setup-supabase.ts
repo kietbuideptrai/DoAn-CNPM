@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { spawnSync } from "node:child_process";
-import { readdirSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { pool } from "../src/db/pool";
 
@@ -44,9 +44,11 @@ if (!parsedUrl.hostname.toLowerCase().includes("supabase")) {
   throw new Error("DATABASE_URL không trỏ tới host Supabase pooler/project");
 }
 
-if (process.env.ADMIN_JWT_SECRET?.trim().length === 0 ||
-    !process.env.ADMIN_EMAIL?.trim() ||
-    !process.env.ADMIN_PASSWORD) {
+if (
+  !process.env.ADMIN_JWT_SECRET?.trim() ||
+  !process.env.ADMIN_EMAIL?.trim() ||
+  !process.env.ADMIN_PASSWORD
+) {
   throw new Error(
     "Cần ADMIN_JWT_SECRET, ADMIN_EMAIL và ADMIN_PASSWORD để seed admin",
   );
@@ -64,15 +66,23 @@ function redact(text: string): string {
     .replace(new RegExp(escapeRegExp(password), "g"), "<redacted>");
 }
 
-function runCommand(command: string, args: string[]): void {
-  const result = spawnSync(command, args, {
+function errorCode(error: unknown): string {
+  if (typeof error === "object" && error !== null && "code" in error) {
+    const code = (error as { code?: unknown }).code;
+    return typeof code === "string" ? ` (mã ${code})` : "";
+  }
+  return "";
+}
+
+function runNpmScript(script: string): void {
+  const result = spawnSync("npm", ["run", script], {
     cwd: backendRoot,
     encoding: "utf8",
     env: process.env,
   });
 
   if (result.error) {
-    throw new Error(`Không chạy được ${command}: ${result.error.message}`);
+    throw new Error(`Không chạy được npm run ${script}: ${result.error.message}`);
   }
   if (result.stdout?.trim()) {
     console.log(redact(result.stdout.trim()));
@@ -81,22 +91,20 @@ function runCommand(command: string, args: string[]): void {
     console.error(redact(result.stderr.trim()));
   }
   if (result.status !== 0) {
-    throw new Error(`${command} kết thúc với mã ${result.status ?? "unknown"}`);
+    throw new Error(`npm run ${script} kết thúc với mã ${result.status ?? "unknown"}`);
   }
 }
 
-function runPsqlFile(fileName: string): void {
-  runCommand("psql", [
-    databaseUrl as string,
-    "-v",
-    "ON_ERROR_STOP=1",
-    "-f",
-    join(dbDirectory, fileName),
-  ]);
-}
-
-function runNpmScript(script: string): void {
-  runCommand("npm", ["run", script]);
+async function runSqlFile(fileName: string): Promise<void> {
+  const sql = readFileSync(join(dbDirectory, fileName), "utf8");
+  try {
+    // Không truyền giá trị nên pg dùng simple query protocol, chạy được nhiều
+    // statement trong cùng một file SQL.
+    await pool.query(sql);
+  } catch (error) {
+    throw new Error(`Chạy SQL ${fileName} thất bại${errorCode(error)}`);
+  }
+  console.log(`Đã apply ${fileName}.`);
 }
 
 async function resetDemoData(): Promise<void> {
@@ -115,7 +123,7 @@ async function resetDemoData(): Promise<void> {
 
 async function main(): Promise<void> {
   console.log(
-    `Đối chiếu Supabase project ${projectRef} — chỉ thao tác trên project non-production.`,
+    "Đối chiếu project Supabase đã cấu hình — chỉ thao tác trên project non-production.",
   );
 
   if (resetRequested) {
@@ -123,17 +131,17 @@ async function main(): Promise<void> {
   }
 
   if (!seedOnly) {
-    runPsqlFile("schema.sql");
+    await runSqlFile("schema.sql");
     const migrations = readdirSync(dbDirectory)
       .filter((file) => file.startsWith("migrate-") && file.endsWith(".sql"))
       .sort();
     for (const migration of migrations) {
-      runPsqlFile(migration);
+      await runSqlFile(migration);
     }
   }
 
-  runPsqlFile("seed.sql");
-  runPsqlFile("seed-map.sql");
+  await runSqlFile("seed.sql");
+  await runSqlFile("seed-map.sql");
   runNpmScript("seed:admin");
   runNpmScript("seed:analytics");
 

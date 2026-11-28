@@ -67,8 +67,8 @@ const DAILY_STATS_SQL = `-- analytics:daily
          COUNT(*)::int AS pageviews,
          COUNT(DISTINCT visitor_id)::int AS unique_visitors
   FROM page_views
-  WHERE viewed_at >= ($1::date AT TIME ZONE 'Asia/Ho_Chi_Minh')
-    AND viewed_at < (($1::date + $2::int) AT TIME ZONE 'Asia/Ho_Chi_Minh')
+  WHERE viewed_at >= ($1::date::timestamp AT TIME ZONE 'Asia/Ho_Chi_Minh')
+    AND viewed_at < (($1::date + $2::int)::timestamp AT TIME ZONE 'Asia/Ho_Chi_Minh')
   GROUP BY 1
   ORDER BY 1
 `;
@@ -83,8 +83,8 @@ const TOTALS_SQL = `-- analytics:totals
            WHERE (viewed_at AT TIME ZONE 'Asia/Ho_Chi_Minh')::date = $3::date
          ) AS integer) AS today_unique_visitors
   FROM page_views
-  WHERE viewed_at >= ($1::date AT TIME ZONE 'Asia/Ho_Chi_Minh')
-    AND viewed_at < (($1::date + $2::int) AT TIME ZONE 'Asia/Ho_Chi_Minh')
+  WHERE viewed_at >= ($1::date::timestamp AT TIME ZONE 'Asia/Ho_Chi_Minh')
+    AND viewed_at < (($1::date + $2::int)::timestamp AT TIME ZONE 'Asia/Ho_Chi_Minh')
 `;
 
 const TOP_ARTIFACTS_SQL = `-- analytics:top-artifacts
@@ -94,8 +94,8 @@ const TOP_ARTIFACTS_SQL = `-- analytics:top-artifacts
   FROM page_views AS pv
   LEFT JOIN artifacts AS a ON a.slug = pv.artifact_slug
   WHERE pv.artifact_slug IS NOT NULL
-    AND pv.viewed_at >= ($1::date AT TIME ZONE 'Asia/Ho_Chi_Minh')
-    AND pv.viewed_at < (($1::date + $2::int) AT TIME ZONE 'Asia/Ho_Chi_Minh')
+    AND pv.viewed_at >= ($1::date::timestamp AT TIME ZONE 'Asia/Ho_Chi_Minh')
+    AND pv.viewed_at < (($1::date + $2::int)::timestamp AT TIME ZONE 'Asia/Ho_Chi_Minh')
   GROUP BY pv.artifact_slug, a.name
   ORDER BY views DESC, pv.artifact_slug ASC
   LIMIT 5

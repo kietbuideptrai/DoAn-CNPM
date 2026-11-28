@@ -17,10 +17,10 @@ describe("Supabase demo setup guard", () => {
   });
 
   it("applies schema, migrations, seeds and admin/analytics scripts in order", () => {
-    assert.match(script, /runPsqlFile\("schema\.sql"\)/);
+    assert.match(script, /runSqlFile\("schema\.sql"\)/);
     assert.match(script, /startsWith\("migrate-"\)/);
-    assert.match(script, /runPsqlFile\("seed\.sql"\)/);
-    assert.match(script, /runPsqlFile\("seed-map\.sql"\)/);
+    assert.match(script, /runSqlFile\("seed\.sql"\)/);
+    assert.match(script, /runSqlFile\("seed-map\.sql"\)/);
     assert.match(script, /runNpmScript\("seed:admin"\)/);
     assert.match(script, /runNpmScript\("seed:analytics"\)/);
 
@@ -47,5 +47,6 @@ describe("Supabase demo setup guard", () => {
     assert.match(script, /<DATABASE_URL>/);
     assert.match(script, /<redacted>/);
     assert.doesNotMatch(script, /console\.log\([^)]*databaseUrl/);
+    assert.doesNotMatch(script, /project \$\{projectRef\}/);
   });
 });

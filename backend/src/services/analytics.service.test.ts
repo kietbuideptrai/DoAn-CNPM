@@ -132,6 +132,14 @@ describe("analytics service queries", () => {
     assert.ok(
       captured.every(({ sql }) => sql.includes("AT TIME ZONE 'Asia/Ho_Chi_Minh'")),
     );
+    // `date AT TIME ZONE` trả timestamp without time zone và có thể loại mất
+    // các hàng ở đầu/cuối ngày khi so với viewed_at (timestamptz).
+    assert.ok(
+      captured.every(({ sql }) =>
+        sql.includes("::date::timestamp AT TIME ZONE 'Asia/Ho_Chi_Minh'"),
+      ),
+      "date bounds must be cast to timestamptz in the museum timezone",
+    );
     assert.deepEqual(captured[0].values, ["2026-11-22", 7]);
     assert.deepEqual(captured[1].values, ["2026-11-22", 7, "2026-11-28"]);
     assert.ok(captured[2].sql.includes("LIMIT 5"));
