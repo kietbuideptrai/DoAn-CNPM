@@ -67,6 +67,7 @@ function toZone(row: ZoneRow): MuseumZone {
     y: Number(row.y),
     width: Number(row.width),
     height: Number(row.height),
+    sort_order: Number(row.sort_order),
   };
 }
 
