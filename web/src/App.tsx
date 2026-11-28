@@ -26,6 +26,7 @@ import {
   ProtectedRoute,
 } from "./components/AdminPages";
 import { AdminArtifactFormPage } from "./components/AdminArtifactForm";
+import { AdminAnalyticsPage } from "./components/AdminAnalyticsPage";
 import { MuseumMapPage } from "./components/MuseumMapPage";
 import { LanguageProvider } from "./context/LanguageContext";
 import { useLanguage } from "./context/LanguageContext";
@@ -701,6 +702,7 @@ export default function App() {
       <Route path="/admin" element={<ProtectedRoute />}>
         <Route element={<AdminLayout />}>
           <Route index element={<AdminDashboard />} />
+          <Route path="analytics" element={<AdminAnalyticsPage />} />
           <Route
             path="artifacts/new"
             element={<AdminArtifactFormPage mode="create" />}

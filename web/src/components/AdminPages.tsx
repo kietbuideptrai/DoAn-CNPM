@@ -139,6 +139,7 @@ export function AdminLoginPage() {
 
 export function AdminLayout() {
   const { logout } = useAuth();
+  const location = useLocation();
 
   return (
     <div className="app-shell">
@@ -149,6 +150,22 @@ export function AdminLayout() {
           </span>
           <span>Quản trị nội dung</span>
         </Link>
+        <nav aria-label="Điều hướng quản trị" className="admin-nav">
+          <Link
+            aria-current={location.pathname === "/admin" ? "page" : undefined}
+            to="/admin"
+          >
+            Tổng quan
+          </Link>
+          <Link
+            aria-current={
+              location.pathname === "/admin/analytics" ? "page" : undefined
+            }
+            to="/admin/analytics"
+          >
+            Thống kê
+          </Link>
+        </nav>
         <div className="header-preferences admin-header-preferences">
           <FontSizePicker />
         </div>
@@ -297,12 +314,17 @@ export function AdminDashboard() {
         Thêm hoặc chỉnh sửa thông tin hiện vật và nội dung thuyết minh đa ngôn
         ngữ.
       </p>
-      <Link
-        className="button button-primary admin-create-artifact-link"
-        to="/admin/artifacts/new"
-      >
-        Thêm hiện vật
-      </Link>
+      <div className="admin-dashboard-actions">
+        <Link
+          className="button button-primary admin-create-artifact-link"
+          to="/admin/artifacts/new"
+        >
+          Thêm hiện vật
+        </Link>
+        <Link className="button admin-analytics-link" to="/admin/analytics">
+          Xem thống kê truy cập
+        </Link>
+      </div>
 
       <section className="admin-artifact-list" aria-labelledby="admin-artifacts-title">
         <h2 id="admin-artifacts-title">Danh sách hiện vật</h2>
