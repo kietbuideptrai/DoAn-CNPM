@@ -52,6 +52,10 @@ echo "Đã nạp seed (chỉ thêm bản ghi còn thiếu)."
 psql_run < "${ROOT}/src/db/migrate-2026-11-28-admin-cascade.sql" >/dev/null
 echo "Đã áp dụng migration khóa ngoại xóa hiện vật."
 
+psql_run < "${ROOT}/src/db/migrate-2026-11-28-map.sql" >/dev/null
+psql_run < "${ROOT}/src/db/seed-map.sql" >/dev/null
+echo "Đã áp dụng migration và seed bản đồ."
+
 # Xuất bản 8 hiện vật bảo tàng để API/web/mobile đọc được.
 psql_run >/dev/null <<'SQL'
 UPDATE artifacts

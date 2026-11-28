@@ -15,7 +15,27 @@ export interface AdminArtifactTranslation {
   content: string;
 }
 
-export interface AdminArtifact {
+export interface MuseumZone {
+  id: string;
+  name: string;
+  short_name: string;
+  description: string;
+  kind: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color: string;
+  sort_order: number;
+}
+
+export interface AdminArtifactMapPosition {
+  zone_id: string | null;
+  map_x: number | null;
+  map_y: number | null;
+}
+
+export interface AdminArtifact extends AdminArtifactMapPosition {
   id: string;
   name: string;
   slug: string;
@@ -25,7 +45,7 @@ export interface AdminArtifact {
   translations: AdminArtifactTranslation[];
 }
 
-export interface AdminArtifactListItem {
+export interface AdminArtifactListItem extends AdminArtifactMapPosition {
   id: string;
   name: string;
   slug: string;
@@ -33,11 +53,76 @@ export interface AdminArtifactListItem {
   is_published: boolean;
 }
 
-export interface AdminArtifactInput {
+export interface AdminArtifactInput extends AdminArtifactMapPosition {
   name: string;
   slug: string;
   category: string;
   image_url: string;
+}
+
+export async function getMuseumZones(): Promise<MuseumZone[]> {
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE_URL}/api/museum/zones`);
+  } catch {
+    throw new ApiRequestError(
+      "Không thể kết nối máy chủ. Hãy kiểm tra mạng.",
+      null,
+    );
+  }
+
+  if (!response.ok) {
+    throw new ApiRequestError(
+      await readErrorMessage(response),
+      response.status,
+    );
+  }
+
+  const payload: unknown = await response.json();
+  const zones =
+    typeof payload === "object" && payload !== null && "zones" in payload
+      ? payload.zones
+      : payload;
+  if (!Array.isArray(zones)) {
+    throw new ApiRequestError("Danh sách khu vực không hợp lệ.", response.status);
+  }
+
+  return zones.map((zone: unknown) => {
+    if (typeof zone !== "object" || zone === null) {
+      throw new ApiRequestError("Dữ liệu khu vực không hợp lệ.", null);
+    }
+    const item = zone as Record<string, unknown>;
+    const readNumber = (value: unknown): number => {
+      if (typeof value !== "number" || !Number.isFinite(value)) {
+        throw new ApiRequestError("Dữ liệu khu vực không hợp lệ.", null);
+      }
+      return value;
+    };
+    if (
+      typeof item.id !== "string" ||
+      typeof item.name !== "string" ||
+      typeof item.short_name !== "string" ||
+      typeof item.kind !== "string" ||
+      typeof item.color !== "string"
+    ) {
+      throw new ApiRequestError("Dữ liệu khu vực không đầy đủ.", null);
+    }
+
+    return {
+      id: item.id,
+      name: item.name,
+      short_name: item.short_name,
+      description:
+        typeof item.description === "string" ? item.description : "",
+      kind: item.kind,
+      x: readNumber(item.x),
+      y: readNumber(item.y),
+      width: readNumber(item.width),
+      height: readNumber(item.height),
+      color: item.color,
+      sort_order: readNumber(item.sort_order),
+    } satisfies MuseumZone;
+  });
 }
 
 export async function loginAdmin(
@@ -175,12 +260,20 @@ export async function getAdminArtifacts(
       throw new ApiRequestError("Dữ liệu hiện vật từ máy chủ không đầy đủ.", null);
     }
 
+    const mapX =
+      typeof item.map_x === "number" ? item.map_x : Number(item.map_x);
+    const mapY =
+      typeof item.map_y === "number" ? item.map_y : Number(item.map_y);
+
     return {
       id: item.id,
       name: item.name,
       slug: item.slug,
       category: item.category,
       is_published: item.is_published,
+      zone_id: typeof item.zone_id === "string" ? item.zone_id : null,
+      map_x: Number.isFinite(mapX) ? mapX : null,
+      map_y: Number.isFinite(mapY) ? mapY : null,
     };
   });
 }

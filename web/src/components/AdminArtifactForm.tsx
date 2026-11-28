@@ -7,18 +7,20 @@ import {
   useNavigate,
   useParams,
 } from "react-router";
-import type { ChangeEvent, FormEvent, ReactNode } from "react";
+import type { ChangeEvent, FormEvent, MouseEvent, ReactNode } from "react";
 import {
   ADMIN_LANGUAGES,
   createAdminArtifact,
   deleteAdminArtifact,
   getAdminArtifact,
+  getMuseumZones,
   saveAdminArtifactTranslation,
   updateAdminArtifact,
 } from "../api/adminClient";
 import type {
   AdminArtifactInput,
   AdminArtifactTranslation,
+  MuseumZone,
 } from "../api/adminClient";
 import { useAuth } from "../context/AuthContext";
 import { getLanguageLabel } from "../utils/language";
@@ -52,7 +54,34 @@ const EMPTY_ARTIFACT: ArtifactFields = {
   slug: "",
   category: "",
   image_url: "",
+  zone_id: null,
+  map_x: null,
+  map_y: null,
 };
+
+const MAP_WIDTH = 1000;
+const MAP_HEIGHT = 600;
+
+function readMapCoordinate(value: unknown): number | null {
+  if (value === undefined || value === null || value === "") {
+    return null;
+  }
+  const parsed = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function isValidMapPosition(
+  zoneId: string | null,
+  x: number | null,
+  y: number | null,
+): boolean {
+  if (zoneId === null || x === null || y === null) {
+    return zoneId === null && x === null && y === null;
+  }
+  return (
+    x >= 0 && x <= MAP_WIDTH && y >= 0 && y <= MAP_HEIGHT
+  );
+}
 
 interface AdminArtifactFormPageProps {
   mode: "create" | "edit";
@@ -117,12 +146,18 @@ function parseAdminArtifact(value: unknown): {
     }
   }
 
+  const mapX = readMapCoordinate(record.map_x);
+  const mapY = readMapCoordinate(record.map_y);
+
   return {
     artifact: {
       name: record.name,
       slug: record.slug,
       category: record.category,
       image_url: record.image_url,
+      zone_id: typeof record.zone_id === "string" ? record.zone_id : null,
+      map_x: mapX,
+      map_y: mapY,
     },
     translations,
     isPublished:
@@ -186,6 +221,8 @@ export function AdminArtifactFormPage({
 
     return null;
   });
+  const [zones, setZones] = useState<MuseumZone[]>([]);
+  const [zonesError, setZonesError] = useState<string | null>(null);
   const [isDirty, setIsDirty] = useState(false);
   const [savedSlug, setSavedSlug] = useState("");
   const [hasManualSlug, setHasManualSlug] = useState(false);
@@ -257,6 +294,30 @@ export function AdminArtifactFormPage({
       void loadArtifact();
     }
   }, [loadArtifact, mode]);
+
+  useEffect(() => {
+    let isCancelled = false;
+    getMuseumZones()
+      .then((loadedZones) => {
+        if (!isCancelled) {
+          setZones(loadedZones);
+          setZonesError(null);
+        }
+      })
+      .catch((error: unknown) => {
+        if (!isCancelled) {
+          setZonesError(
+            error instanceof Error
+              ? error.message
+              : "Không thể tải danh sách khu vực.",
+          );
+        }
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, []);
 
   useEffect(() => {
     let isCancelled = false;
@@ -431,6 +492,54 @@ export function AdminArtifactFormPage({
     }
   }
 
+  function markMapChanged(): void {
+    setIsDirty(true);
+    setErrorMessage(null);
+    setSuccessMessage(null);
+  }
+
+  function placePinFromMap(event: MouseEvent<SVGSVGElement>): void {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    if (bounds.width === 0 || bounds.height === 0) {
+      return;
+    }
+
+    const x = ((event.clientX - bounds.left) / bounds.width) * MAP_WIDTH;
+    const y = ((event.clientY - bounds.top) / bounds.height) * MAP_HEIGHT;
+    setArtifact((currentArtifact) => ({
+      ...currentArtifact,
+      map_x: Math.round(Math.min(MAP_WIDTH, Math.max(0, x)) * 10) / 10,
+      map_y: Math.round(Math.min(MAP_HEIGHT, Math.max(0, y)) * 10) / 10,
+    }));
+    markMapChanged();
+  }
+
+  function centerPinInZone(): void {
+    const zone = zones.find((item) => item.id === artifact.zone_id);
+    if (!zone) {
+      return;
+    }
+
+    setArtifact((currentArtifact) => ({
+      ...currentArtifact,
+      map_x: Math.round((zone.x + zone.width / 2) * 10) / 10,
+      map_y: Math.round((zone.y + zone.height / 2) * 10) / 10,
+    }));
+    markMapChanged();
+  }
+
+  function updateMapCoordinate(
+    field: "map_x" | "map_y",
+    value: string,
+  ): void {
+    const parsed = value.trim().length === 0 ? null : Number(value);
+    setArtifact((currentArtifact) => ({
+      ...currentArtifact,
+      [field]: parsed !== null && Number.isFinite(parsed) ? parsed : null,
+    }));
+    markMapChanged();
+  }
+
   function updateTranslationField(
     field: keyof TranslationFields,
     value: string,
@@ -466,6 +575,12 @@ export function AdminArtifactFormPage({
       setErrorMessage("Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.");
       return;
     }
+    if (!isValidMapPosition(artifact.zone_id, artifact.map_x, artifact.map_y)) {
+      setErrorMessage(
+        "Hãy chọn khu và đặt ghim với tọa độ x trong 0–1000, y trong 0–600.",
+      );
+      return;
+    }
 
     setIsSaving(true);
     try {
@@ -474,6 +589,9 @@ export function AdminArtifactFormPage({
         slug,
         category: artifact.category.trim(),
         image_url: artifact.image_url.trim(),
+        zone_id: artifact.zone_id,
+        map_x: artifact.map_x,
+        map_y: artifact.map_y,
       };
 
       let savedArtifactId = currentArtifactId.current;
@@ -690,6 +808,120 @@ export function AdminArtifactFormPage({
           ) : (
             <p className="admin-image-empty" role="status">
               Chưa có ảnh để xem trước.
+            </p>
+          )}
+        </section>
+
+        <section
+          className="admin-form-section admin-map-section"
+          aria-labelledby="admin-map-title"
+        >
+          <h2 id="admin-map-title">Vị trí trên bản đồ</h2>
+          <label className="admin-field" htmlFor="artifact-zone">
+            Khu vực
+            <select
+              id="artifact-zone"
+              onChange={(event) => {
+                setArtifact((currentArtifact) => ({
+                  ...currentArtifact,
+                  zone_id: event.currentTarget.value || null,
+                }));
+                markMapChanged();
+              }}
+              value={artifact.zone_id ?? ""}
+            >
+              <option value="">Chưa chọn khu</option>
+              {zones
+                .filter((zone) => zone.kind === "gallery")
+                .map((zone) => (
+                  <option key={zone.id} value={zone.id}>
+                    {zone.name}
+                  </option>
+                ))}
+            </select>
+          </label>
+
+          <div className="admin-map-editor">
+            <svg
+              aria-label="Sơ đồ bản đồ bảo tàng, nhấp để đặt ghim"
+              className="admin-map-svg"
+              onClick={placePinFromMap}
+              role="img"
+              viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
+            >
+              {zones.map((zone) => (
+                <rect
+                  key={zone.id}
+                  fill={zone.color}
+                  height={zone.height}
+                  stroke="#809188"
+                  strokeWidth={4}
+                  width={zone.width}
+                  x={zone.x}
+                  y={zone.y}
+                />
+              ))}
+              {artifact.map_x !== null && artifact.map_y !== null ? (
+                <circle
+                  className="admin-map-pin"
+                  cx={artifact.map_x}
+                  cy={artifact.map_y}
+                  fill="#b44a3f"
+                  r={20}
+                  stroke="#ffffff"
+                  strokeWidth={5}
+                />
+              ) : null}
+            </svg>
+          </div>
+
+          <div className="admin-map-coordinates">
+            <label className="admin-field" htmlFor="artifact-map-x">
+              Tọa độ x
+              <input
+                id="artifact-map-x"
+                max={MAP_WIDTH}
+                min={0}
+                onChange={(event) =>
+                  updateMapCoordinate("map_x", event.currentTarget.value)
+                }
+                step={1}
+                type="number"
+                value={artifact.map_x ?? ""}
+              />
+            </label>
+            <label className="admin-field" htmlFor="artifact-map-y">
+              Tọa độ y
+              <input
+                id="artifact-map-y"
+                max={MAP_HEIGHT}
+                min={0}
+                onChange={(event) =>
+                  updateMapCoordinate("map_y", event.currentTarget.value)
+                }
+                step={1}
+                type="number"
+                value={artifact.map_y ?? ""}
+              />
+            </label>
+            <button
+              className="button admin-cancel-button admin-map-center-button"
+              disabled={!zones.some((zone) => zone.id === artifact.zone_id)}
+              onClick={centerPinInZone}
+              type="button"
+            >
+              Về giữa khu
+            </button>
+          </div>
+
+          {zonesError ? (
+            <p className="admin-form-message admin-form-error" role="alert">
+              {zonesError}
+            </p>
+          ) : (
+            <p className="admin-field-hint">
+              Nhấp vào sơ đồ để đặt ghim, hoặc nhập tay tọa độ. Tọa độ x: 0–1000,
+              y: 0–600.
             </p>
           )}
         </section>

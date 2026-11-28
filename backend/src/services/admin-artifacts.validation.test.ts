@@ -23,12 +23,18 @@ describe("admin artifact input", () => {
         slug: "hien-vat-moi",
         category: "Lịch sử",
         image_url: "https://example.test/image.jpg",
+        zone_id: "phong-1",
+        map_x: 120,
+        map_y: 130,
       }),
       {
         name: "Hiện vật mới",
         slug: "hien-vat-moi",
         category: "Lịch sử",
         image_url: "https://example.test/image.jpg",
+        zone_id: "phong-1",
+        map_x: 120,
+        map_y: 130,
       },
     );
   });
@@ -41,6 +47,21 @@ describe("admin artifact input", () => {
     );
     assertBadRequest(() =>
       parseAdminArtifactInput({ name: "Tên", slug: "slug khong hop le" }),
+    );
+  });
+
+  it("rejects coordinates outside the 1000 x 600 map and half-filled pairs", () => {
+    const base = {
+      name: "Hiện vật",
+      slug: "hien-vat",
+      category: "",
+      image_url: "",
+    };
+    assertBadRequest(() => parseAdminArtifactInput({ ...base, map_x: 1200, map_y: 100 }));
+    assertBadRequest(() => parseAdminArtifactInput({ ...base, map_x: 120, map_y: -1 }));
+    assertBadRequest(() => parseAdminArtifactInput({ ...base, map_x: 120 }));
+    assertBadRequest(() =>
+      parseAdminArtifactPatch({ zone_id: "Không hợp lệ" }),
     );
   });
 
