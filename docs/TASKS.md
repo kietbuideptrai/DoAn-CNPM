@@ -1,6 +1,6 @@
 # Kế hoạch hoàn thiện đồ án
 
-Cập nhật 2026-11-27. Phạm vi MVP theo [PRD 1.1](./PRD.md), cộng với
+Cập nhật 2026-11-28. Phạm vi MVP theo [PRD 1.1](./PRD.md), cộng với
 [phạm vi bổ sung](./KE-HOACH-ADMIN-MAP-THONG-KE.md) (quản trị, thống kê truy cập,
 bản đồ). Luồng chính vẫn là:
 **QR → trang hiện vật → đổi ngôn ngữ → đọc/nghe thuyết minh**.
@@ -9,14 +9,14 @@ bản đồ). Luồng chính vẫn là:
 
 | Khu vực | Trạng thái |
 | --- | --- |
-| Database | PostgreSQL 16 chạy local bằng Podman; 8 hiện vật đã xuất bản, 40 bản dịch (8 × 5 ngôn ngữ). |
-| Backend | `npm run build` và `npm test` (14/14) đạt; `/api/health` trả `backend: ok`, `database: ok`. |
-| Web | `npm test` 55/55, `npm run build` đạt; `.env.local` đặt `VITE_DEMO_MODE=false` và gọi API thật. |
+| Database | **Supabase PostgreSQL non-production** là nguồn chuẩn, kết nối qua pooler/TLS bằng `DATABASE_URL`. Podman local chỉ là dự phòng. Không dán connection string hay project ref thật vào repo. |
+| Backend | API MVP chạy ổn; phần admin/map/analytics đang chốt theo issue #8–#16. Sau khi gộp nhánh bổ sung: `npm test` 23/23, `npm run build` đạt, `/api/health` trả `database: ok`. |
+| Web | Sau khi gộp nhánh bổ sung: `npm test` 92/92, `npm run build` đạt; `.env.local` đặt `VITE_DEMO_MODE=false` và gọi API thật. |
 | Mobile | `npm run typecheck` và `npm run lint` đạt; `EXPO_PUBLIC_DEMO_MODE=false`, trỏ API qua IP LAN. Chưa kiểm thử trên thiết bị thật. |
-| Quản trị | Web đã có UI đăng nhập/danh sách/form/ẩn hiện; backend API admin chưa có, chưa seed tài khoản admin. |
-| Thống kê | Chưa có bảng `page_views`, chưa có API và biểu đồ lượt truy cập. |
-| Bản đồ | Chưa có bảng khu vực/vị trí; web và mobile chưa có màn hình bản đồ. |
-| Tài liệu | Đã xóa file trùng lặp, gộp các ghi chú rải rác về một mục. |
+| Quản trị | Web đã có UI đăng nhập/danh sách/form/ẩn/xóa; backend auth + CRUD đã có mã trên nhánh bổ sung, chờ issue #9/#10 chốt trên Supabase. |
+| Thống kê | Đã có client/chart/tracking trên web; cần bảng `page_views` và API analytics trên Supabase theo issue #12/#14. |
+| Bản đồ | Đã có trang `/map` trên web; cần chốt migration/seed khu + vị trí và API công khai trên Supabase theo issue #11/#15. |
+| Tài liệu | Issue backend #7–#16, `backend/README.md` và runbook DB đã cập nhật theo hướng Supabase; vẫn cần chốt API samples và demo theo issue #13/#16. |
 
 ## 2. Task còn lại
 
@@ -29,6 +29,10 @@ bản đồ). Luồng chính vẫn là:
 - [x] **P0-05** Kiểm tra CORS khi mở web bằng IP LAN (ví dụ `http://192.168.1.18:5173`).
   **Đạt khi:** thêm origin vào `CORS_ORIGINS`, gọi được `/api/artifacts` từ trình duyệt điện thoại.
   Đã kiểm tra: origin LAN trả 200, origin lạ trả 403.
+- [ ] **P0-06** Chuyển database chuẩn sang Supabase non-production.
+  **Đạt khi:** `backend/.env` dùng connection string pooler có TLS, đã đối chiếu
+  project ref/host với project được duyệt; schema + migration + seed chạy được
+  trên Supabase; `/api/health` trả `database: ok`; không có secret nào bị commit.
 
 ### P1 — Dữ liệu và API
 
@@ -60,11 +64,13 @@ bản đồ). Luồng chính vẫn là:
 
 ### P3 — Đóng gói và báo cáo
 
-- [ ] **P3-01** Triển khai backend (Render/Railway) và web (Vercel) với Supabase non-production.
-  **Đạt khi:** HTTPS hoạt động, `CORS_ORIGINS` đúng domain, `/api/health` trả 200.
+- [ ] **P3-01** Triển khai backend (Render/Railway) và web (Vercel) dùng Supabase non-production.
+  **Đạt khi:** HTTPS hoạt động; `DATABASE_URL`, `ADMIN_JWT_SECRET` lấy từ secret
+  store; `CORS_ORIGINS` đúng domain; `/api/health` trả `database: ok`. Không dùng
+  anon key ở server.
 - [ ] **P3-02** Tạo QR cho 8 hiện vật, trỏ domain web thật; thử mở và tải lại URL.
 - [ ] **P3-03** Chạy lại E2E trên bản deploy; ghi bug và bằng chứng.
-- [ ] **P3-04** Cập nhật [báo cáo/vấn đáp](./BAO-CAO-DO-AN.md): 55 test web, 14 test backend, database thật, ảnh placeholder.
+- [ ] **P3-04** Cập nhật [báo cáo/vấn đáp](./BAO-CAO-DO-AN.md): 92 test web, 23 test backend (sau gộp), database Supabase non-production, ảnh placeholder.
 - [ ] **P3-05** Commit phần dọn repo (đã bỏ theo dõi `node_modules`, `dist`, `.env.local`).
 
 ### P4 — Backend quản trị và dữ liệu mới
@@ -103,44 +109,49 @@ này có thể làm song song với P1–P3; không thay thế các task cũ.
 
 Tổng khoảng 19–20 ngày công; ba người làm song song khoảng 1,5–2 tuần.
 
-- [ ] **P4-01** Cập nhật schema + migration + seed admin.
-  **Đạt khi:** `schema.sql` chạy lại an toàn; có bảng `museum_zones`, `page_views`;
-  `artifacts` có `zone_id`, `map_x`, `map_y`; xóa hiện vật xóa bản dịch theo;
-  `npm run seed:admin` tạo được tài khoản.
-- [ ] **P4-02** API đăng nhập admin + middleware JWT.
-  **Đạt khi:** đúng email/mật khẩu trả token; sai trả 401; thiếu/hết hạn token
-  trả 401; `npm test` có test cho hash và token.
-- [ ] **P4-03** API CRUD hiện vật và bản dịch.
+- [ ] **P4-01** Cập nhật schema + migration + seed admin trên Supabase non-production.
+  **Đạt khi:** đã đối chiếu project ref/host pooler; `schema.sql` và các
+  `migrate-*.sql` chạy được bằng SQL Editor/`psql "$DATABASE_URL"`; có bảng
+  `museum_zones`, `page_views`; `artifacts` có `zone_id`, `map_x`, `map_y`; xóa
+  hiện vật xóa bản dịch theo; `npm run seed:admin` tạo tài khoản từ secret store.
+- [ ] **P4-02** API đăng nhập admin + middleware JWT với `admin_users` trên Supabase.
+  **Đạt khi:** đúng email/mật khẩu đã seed trả token; sai trả 401; thiếu/hết hạn
+  token trả 401; `ADMIN_JWT_SECRET` nằm ở secret store; `npm test` có test hash/token.
+- [ ] **P4-03** API CRUD hiện vật và bản dịch trên Supabase.
   **Đạt khi:** danh sách gồm cả hiện vật ẩn; tạo/sửa/xóa được; slug trùng trả 409;
-  upsert bản dịch 5 ngôn ngữ; xóa trả 204.
-- [ ] **P4-04** API bản đồ công khai.
+  upsert bản dịch 5 ngôn ngữ; xóa trả 204 nhờ FK `ON DELETE CASCADE`; không lộ
+  lỗi SQL/connection string trong response.
+- [ ] **P4-04** API bản đồ công khai đọc từ `museum_zones` và vị trí trên Supabase.
   **Đạt khi:** `GET /api/museum/map?lang=vi` trả zones + hiện vật đã xuất bản kèm
-  tọa độ; hiện vật ẩn/không có vị trí không xuất hiện trong danh sách chính.
-- [ ] **P4-05** API analytics.
-  **Đạt khi:** `POST /api/analytics/pageview` trả 204 và tách được `artifact_slug`;
-  `GET /api/admin/analytics/summary?days=30` trả tổng, daily đủ 30 ngày và top
-  hiện vật.
-- [ ] **P4-06** Test backend + tài liệu API.
+  tọa độ; hiện vật ẩn/không có vị trí không xuất hiện trong danh sách chính; có
+  fallback `vi`.
+- [ ] **P4-05** API analytics ghi bảng `page_views` trên Supabase.
+  **Đạt khi:** `POST /api/analytics/pageview` trả 204, tách được `artifact_slug`,
+  không lưu IP/user-agent; `GET /api/admin/analytics/summary?days=30` trả tổng,
+  daily đủ 30 ngày theo `Asia/Ho_Chi_Minh` và top hiện vật.
+- [ ] **P4-06** Test backend + tài liệu API Supabase-first.
   **Đạt khi:** `npm test` và `npm run build` pass; `.env.example` có
-  `ADMIN_JWT_SECRET`; README/API samples có ví dụ.
+  `DATABASE_URL` để trống kèm ghi chú pooler/TLS và `ADMIN_JWT_SECRET`;
+  README/`src/db/README.md` có thứ tự schema → migration → seed và ví dụ API,
+  không chứa credential thật.
 
 ### P5 — Web quản trị, thống kê và bản đồ
 
-- [ ] **P5-01** Nối UI admin hiện có với API thật; xử lý 401 và trạng thái lỗi.
+- [x] **P5-01** Nối UI admin hiện có với API thật; xử lý 401 và trạng thái lỗi.
   **Đạt khi:** đăng nhập, danh sách, thêm, sửa, ẩn/hiện chạy trên DB thật.
-- [ ] **P5-02** Thêm nút xóa hiện vật + xác nhận.
+- [x] **P5-02** Thêm nút xóa hiện vật + xác nhận.
   **Đạt khi:** xóa xong quay về danh sách; hiện vật biến mất khỏi web/app/map;
   hủy xác nhận không xóa.
-- [ ] **P5-03** Chọn khu + tọa độ bản đồ trong form hiện vật.
+- [x] **P5-03** Chọn khu + tọa độ bản đồ trong form hiện vật.
   **Đạt khi:** chọn khu, bấm bản đồ đặt ghim, nhập tay tọa độ, lưu và mở lại thấy
   đúng vị trí.
-- [ ] **P5-04** Trang `/admin/analytics` + biểu đồ SVG.
+- [x] **P5-04** Trang `/admin/analytics` + biểu đồ SVG.
   **Đạt khi:** hiện tổng lượt xem, khách duy nhất, hôm nay, top hiện vật; đổi
   7/30 ngày; có bảng số liệu dự phòng cho screen reader.
-- [ ] **P5-05** Trang `/map` công khai + link trên nav.
+- [x] **P5-05** Trang `/map` công khai + link trên nav.
   **Đạt khi:** bản đồ hiện khu/ghim; bấm ghim mở đúng hiện vật; responsive
   320–1440px; có trạng thái tải/lỗi/thử lại.
-- [ ] **P5-06** Ghi nhận lượt xem web.
+- [x] **P5-06** Ghi nhận lượt xem web.
   **Đạt khi:** route công khai gửi 1 request/lần điều hướng; không gửi ở `/admin`;
   không gửi trùng do StrictMode; lỗi analytics không làm hỏng trang.
 - [x] **P5-07** Test web + build.
@@ -163,14 +174,17 @@ Tổng khoảng 19–20 ngày công; ba người làm song song khoảng 1,5–2
 
 ### P7 — Dữ liệu demo
 
-- [ ] **P7-01** Seed 30 ngày lượt truy cập.
-  **Đạt khi:** `npm run seed:analytics` tạo dữ liệu 30 ngày, chạy lại không nhân
-  đôi nếu không có `--force`; biểu đồ có số liệu ngay khi demo.
-- [ ] **P7-02** Seed khu vực + vị trí 8 hiện vật.
-  **Đạt khi:** `GET /api/museum/map` trả đủ 7 khu và 8 hiện vật có tọa độ.
-- [ ] **P7-03** Script setup/reset tiện dụng.
-  **Đạt khi:** `setup-local-db.sh` chạy schema/migration/seed/admin/analytics;
-  README ghi rõ lệnh.
+- [ ] **P7-01** Seed 30 ngày lượt truy cập vào `page_views` trên Supabase.
+  **Đạt khi:** `npm run seed:analytics` tạo dữ liệu 30 ngày trên project đã duyệt,
+  chạy lại không nhân đôi nếu không có `--force`; biểu đồ có số liệu ngay khi demo;
+  không lưu IP/user-agent.
+- [ ] **P7-02** Seed khu vực + vị trí 8 hiện vật trên Supabase.
+  **Đạt khi:** seed idempotent theo slug mới nhất; `GET /api/museum/map` trả đủ
+  7 khu và 8 hiện vật có tọa độ từ Supabase.
+- [ ] **P7-03** Runbook setup/reset Supabase.
+  **Đạt khi:** script kiểm tra project ref/host pooler, chạy schema/migration/seed/
+  admin/analytics theo thứ tự; reset chỉ trên non-production và có xác nhận;
+  `setup-local-db.sh` chỉ giữ làm fallback; README ghi rõ lệnh.
 
 ### P8 — Tài liệu và nghiệm thu
 
@@ -202,28 +216,40 @@ Tổng khoảng 19–20 ngày công; ba người làm song song khoảng 1,5–2
 
 ## 4. Lệnh vận hành
 
-```bash
-# Database local (Podman)
-podman start studyhub-postgres
-podman exec studyhub-postgres pg_isready -U postgres -d studyhub
+Chuẩn là Supabase non-production. Trước khi chạy lệnh ghi, đối chiếu project
+ref/host pooler trong `backend/.env` với project đã duyệt; không dán connection
+string thật vào terminal/log được chia sẻ.
 
-# Backend
+```bash
+# 1. Schema + migration trên Supabase (SQL Editor hoặc psql "$DATABASE_URL")
+cd backend
+psql "$DATABASE_URL" -f src/db/schema.sql
+# chạy các file migrate-*.sql theo thứ tự do issue #8/#16 quy định
+
+# 2. Seed dữ liệu demo trên project đã duyệt
+psql "$DATABASE_URL" -f src/db/seed.sql
+psql "$DATABASE_URL" -f src/db/seed-map.sql
+npm run seed:admin
+npm run seed:analytics   # khi script ở issue #14 sẵn sàng
+# npm run seed:demo      # khi runbook issue #16 sẵn sàng
+
+# 3. Backend / Web / Mobile
 cd backend && npm run dev
 curl http://localhost:3000/api/health
-
-# Web
-cd web && npm run dev
-
-# Mobile
-cd mobile && npm start
-
-# Seed phần bổ sung (sau khi làm P4/P7)
-cd backend && npm run seed:demo
+cd ../web && npm run dev
+cd ../mobile && npm start
 ```
 
-Khi cần chuyển sang Supabase: tạo project non-production, đổi `DATABASE_URL`
-trong `backend/.env`, chạy `schema.sql` + migration + `seed.sql`, rồi kiểm tra lại
-`/api/health` trước khi seed.
+Fallback local (không phải nguồn chuẩn):
+
+```bash
+podman start studyhub-postgres
+podman exec studyhub-postgres pg_isready -U postgres -d studyhub
+bash backend/scripts/setup-local-db.sh
+```
+
+Chi tiết xem [`backend/README.md`](../backend/README.md) và
+[`backend/src/db/README.md`](../backend/src/db/README.md).
 
 ## 5. Ghi chú dữ liệu
 
