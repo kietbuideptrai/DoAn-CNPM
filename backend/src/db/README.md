@@ -21,15 +21,18 @@ phương án dự phòng.
    ```
 
 4. Chạy seed hiện vật/bản dịch và seed khu/vị trí bằng `seed.sql`,
-   `seed-map.sql`. Các script chỉ thêm bản ghi còn thiếu; không ghi đè tên, ảnh,
-   trạng thái xuất bản hay bản dịch đã có.
+   `seed-map.sql`. `seed.sql` chỉ thêm bản ghi còn thiếu; không ghi đè tên, ảnh,
+   trạng thái xuất bản hay bản dịch đã có. `seed-map.sql` đồng bộ lại 7 khu seed
+   theo `shared/demoMap.ts` và chỉ gán vị trí cho hiện vật chưa có tọa độ.
 5. Chạy `npm run seed:admin` và `npm run seed:analytics` (khi sẵn sàng) từ
    `backend/`, với credentials lấy từ secret store.
 6. Kiểm tra bằng các file `verify-*.sql` (chỉ đọc) và gọi `/api/health`,
    `/api/languages`, `/api/artifacts?lang=vi`, `/api/museum/map`.
 
 Không chạy schema/migration/seed trên database production hoặc project chưa được
-xác nhận.
+xác nhận. Có thể dùng `npm run setup:supabase` (`--seed-only` nếu đã có schema)
+thay cho việc gọi từng lệnh `psql`; script tự đối chiếu project ref/host và chạy
+theo thứ tự schema → migration → seed → admin → analytics.
 
 ## Local dự phòng (Podman)
 

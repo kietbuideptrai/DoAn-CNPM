@@ -47,6 +47,26 @@ pooler có TLS. Podman local chỉ là phương án dự phòng.
 Backend dùng quyền PostgreSQL của connection string, **không** dùng
 `SUPABASE_ANON_KEY` hay service role key cho API admin.
 
+### Script setup/reset
+
+Khi đã khai báo `SUPABASE_PROJECT_REF` trong `.env`, chạy một lệnh duy nhất để
+apply schema, migration, seed, admin và analytics theo đúng thứ tự:
+
+```bash
+npm run setup:supabase
+npm run setup:supabase -- --seed-only   # chỉ chạy seed trên project đã có schema
+```
+
+Script từ chối nếu host/project ref không khớp, nếu `NODE_ENV=production`, hoặc
+nếu thiếu credentials admin. Reset là thao tác phá hủy, chỉ chạy khi thực sự cần:
+
+```bash
+CONFIRM_RESET=supabase-non-production npm run setup:supabase -- --reset
+```
+
+Script không in connection string hay mật khẩu ra log. Sau khi chạy, gọi lại
+`/api/health` để xác nhận `database: ok`.
+
 ## Chạy local dự phòng (Podman)
 
 Chỉ dùng khi cần dựng nhanh một database riêng để debug offline:
