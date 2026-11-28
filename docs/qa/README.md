@@ -33,6 +33,7 @@ cáo; không thay thế kiểm thử trên thiết bị thật hoặc nghiệm t
 | P2-03 — Mobile trên thiết bị thật | **Chặn**: môi trường không có thiết bị/emulator Android/iOS | [P2-03-mobile-device.md](./P2-03-mobile-device.md) |
 | P2-05 — Thời gian tải nội dung | **Một phần**: p95 468 ms trong mô phỏng 4G/CPU 4x; cần đo lại trên thiết bị/mạng thật | [P2-05-performance.md](./P2-05-performance.md) |
 | P3-01 — Kiểm thử nghiệm thu xuyên suốt | **Một phần**: web E2E đạt 16/16; mobile chưa kiểm thử | [P3-01-e2e.md](./P3-01-e2e.md) |
+| P8-04 — Test/build cuối và demo DB sạch | **Một phần**: test/build/typecheck/lint đạt, demo cơ bản ổn; demo phụ lục A chưa có mã để chạy | [P8-04-final-verification.md](./P8-04-final-verification.md) |
 
 ## Lỗi phát hiện và đã sửa
 
