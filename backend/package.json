@@ -5,9 +5,11 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "test": "tsx --test src/services/artifact-list-query.test.ts src/services/health.service.test.ts src/services/admin-auth.test.ts src/services/admin-artifacts.validation.test.ts src/db/seed.test.ts",
+    "test": "tsx --test src/services/artifact-list-query.test.ts src/services/health.service.test.ts src/services/admin-auth.test.ts src/services/admin-artifacts.validation.test.ts src/services/analytics.validation.test.ts src/services/analytics.service.test.ts src/services/museum-map.service.test.ts src/db/seed.test.ts src/db/seed-map.test.ts src/db/analytics-schema.test.ts src/db/setup-supabase.test.ts",
     "start": "node dist/server.js",
     "seed:admin": "tsx scripts/seed-admin.ts",
+    "seed:analytics": "tsx scripts/seed-analytics.ts",
+    "setup:supabase": "tsx scripts/setup-supabase.ts",
     "import:translations": "tsx scripts/import-translations.ts"
   },
   "dependencies": {

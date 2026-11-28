@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { analyticsQuery } from "../db/analytics-query";
 import { pool } from "../db/pool";
 import { asyncHandler, HttpError } from "../middleware/errors";
 import { requireAdmin } from "../middleware/require-admin";
@@ -19,6 +20,8 @@ import {
   parseAdminArtifactPatch,
   parseAdminTranslationInput,
 } from "../services/admin-artifacts.validation";
+import { getAnalyticsSummary } from "../services/analytics.service";
+import { parseAnalyticsDays } from "../services/analytics.validation";
 
 interface AdminAccountRow {
   id: string;
@@ -49,6 +52,16 @@ adminRouter.post(
 );
 
 adminRouter.use(requireAdmin);
+
+adminRouter.get(
+  "/analytics/summary",
+  asyncHandler(async (request, response) => {
+    const days = parseAnalyticsDays(request.query.days);
+    response.json(
+      await getAnalyticsSummary(days, analyticsQuery),
+    );
+  }),
+);
 
 adminRouter.get(
   "/artifacts",

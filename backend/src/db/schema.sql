@@ -1,4 +1,4 @@
-CREATE TABLE artifacts (
+CREATE TABLE IF NOT EXISTS artifacts (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   slug TEXT NOT NULL UNIQUE,
   name TEXT NOT NULL,
@@ -9,7 +9,7 @@ CREATE TABLE artifacts (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE artifact_translations (
+CREATE TABLE IF NOT EXISTS artifact_translations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   artifact_id UUID NOT NULL REFERENCES artifacts(id) ON DELETE CASCADE,
   language_code TEXT NOT NULL CHECK (language_code IN ('vi', 'en', 'zh', 'ja', 'ko')),
@@ -22,13 +22,24 @@ CREATE TABLE artifact_translations (
     UNIQUE (artifact_id, language_code)
 );
 
-CREATE TABLE admin_users (
+CREATE TABLE IF NOT EXISTS admin_users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email TEXT NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- Thống kê lượt xem: chỉ lưu định danh khách ẩn danh và đường dẫn, không lưu IP/user-agent/cookie.
+CREATE TABLE IF NOT EXISTS page_views (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  visitor_id UUID NOT NULL,
+  path TEXT NOT NULL,
+  artifact_slug TEXT,
+  viewed_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS page_views_viewed_at_idx ON page_views (viewed_at);
 
 -- Bản đồ bảo tàng: hệ tọa độ cố định 1000 x 600.
 CREATE TABLE IF NOT EXISTS museum_zones (
