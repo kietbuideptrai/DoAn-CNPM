@@ -1,7 +1,7 @@
 # Kết quả kiểm thử — 2026-11-17
 
 > Báo cáo dưới đây chạy ngày 2026-11-17 với dữ liệu `demo-*`. Từ 2026-11-25,
-> database local đã chuyển sang 8 hiện vật bảo tàng và web/mobile tắt demo mode;
+> database local dùng 8 hiện vật demo xuất từ Supabase và web/mobile tắt demo mode;
 > các số liệu E2E/responsive/accessibility bên dưới vẫn là bằng chứng lịch sử,
 > cần chạy lại trên bộ dữ liệu mới trước khi kết luận nghiệm thu.
 

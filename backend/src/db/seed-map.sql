@@ -17,14 +17,14 @@ SET zone_id = positions.zone_id,
     map_y = positions.map_y,
     updated_at = NOW()
 FROM (VALUES
-  ('dong-hai-dong-1946', 'phong-1', 120, 130),
-  ('bao-linh-kach-menh-so-2', 'phong-1', 260, 130),
-  ('bo-do-an-chu-tich-ho-chi-minh', 'phong-2', 430, 125),
-  ('tui-dung-com-nuoc-ho-chi-minh', 'phong-2', 570, 125),
-  ('doi-guoc-go-ho-chi-minh', 'phong-2', 500, 195),
-  ('me-con-ngay-gap-mat', 'phong-3', 730, 125),
-  ('tap-tho-trong-tuyen', 'phong-3', 870, 125),
-  ('tranh-co-dong-cach-mang-thang-tam', 'phong-4', 200, 345)
+  ('a-1-skyraider', 'phong-1', 120, 130),
+  ('blu-82', 'phong-1', 260, 130),
+  ('chuong-cop-con-dao', 'phong-2', 430, 125),
+  ('f-5a', 'phong-2', 570, 125),
+  ('m48-patton', 'phong-2', 500, 195),
+  ('may-chem', 'phong-3', 730, 125),
+  ('phao-155mm', 'phong-3', 870, 125),
+  ('uh-1-huey', 'phong-4', 200, 345)
 ) AS positions(slug, zone_id, map_x, map_y)
 WHERE artifacts.slug = positions.slug
   AND artifacts.map_x IS NULL

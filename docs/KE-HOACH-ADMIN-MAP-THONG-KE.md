@@ -199,14 +199,14 @@ Vị trí 8 hiện vật hiện có:
 
 | slug | Khu | x | y |
 | --- | --- | ---: | ---: |
-| `dong-hai-dong-1946` | `phong-1` | 120 | 130 |
-| `bao-linh-kach-menh-so-2` | `phong-1` | 260 | 130 |
-| `bo-do-an-chu-tich-ho-chi-minh` | `phong-2` | 430 | 125 |
-| `tui-dung-com-nuoc-ho-chi-minh` | `phong-2` | 570 | 125 |
-| `doi-guoc-go-ho-chi-minh` | `phong-2` | 500 | 195 |
-| `me-con-ngay-gap-mat` | `phong-3` | 730 | 125 |
-| `tap-tho-trong-tuyen` | `phong-3` | 870 | 125 |
-| `tranh-co-dong-cach-mang-thang-tam` | `phong-4` | 200 | 345 |
+| `a-1-skyraider` | `phong-1` | 120 | 130 |
+| `f-5a` | `phong-1` | 260 | 130 |
+| `m48-patton` | `phong-2` | 430 | 125 |
+| `may-chem` | `phong-2` | 570 | 125 |
+| `phao-155mm` | `phong-2` | 500 | 195 |
+| `blu-82` | `phong-3` | 730 | 125 |
+| `chuong-cop-con-dao` | `phong-3` | 870 | 125 |
+| `uh-1-huey` | `phong-4` | 200 | 345 |
 
 ### 3.4. Seed 30 ngày truy cập
 
@@ -302,8 +302,8 @@ Danh sách trả cả hiện vật đang ẩn:
   "artifacts": [
     {
       "id": "uuid",
-      "name": "Đồng Hai đồng năm 1946",
-      "slug": "dong-hai-dong-1946",
+      "name": "Máy bay cường kích A-1 Skyraider",
+      "slug": "a-1-skyraider",
       "category": "Tiền tệ",
       "image_url": "https://...",
       "is_published": true,
@@ -321,8 +321,8 @@ Chi tiết kèm bản dịch:
 ```json
 {
   "id": "uuid",
-  "name": "Đồng Hai đồng năm 1946",
-  "slug": "dong-hai-dong-1946",
+  "name": "Máy bay cường kích A-1 Skyraider",
+  "slug": "a-1-skyraider",
   "category": "Tiền tệ",
   "image_url": "https://...",
   "is_published": true,
@@ -332,7 +332,7 @@ Chi tiết kèm bản dịch:
   "translations": [
     {
       "language_code": "vi",
-      "title": "Đồng Hai đồng năm 1946",
+      "title": "Máy bay cường kích A-1 Skyraider",
       "summary": "...",
       "content": "..."
     }
@@ -383,7 +383,7 @@ Ghi lượt xem (công khai, gọi từ web):
 
 ```http
 POST /api/analytics/pageview
-{ "visitor_id": "uuid", "path": "/artifacts/dong-hai-dong-1946" }
+{ "visitor_id": "uuid", "path": "/artifacts/a-1-skyraider" }
 → 204
 ```
 
@@ -417,7 +417,7 @@ Authorization: Bearer ...
     { "date": "2026-10-29", "pageviews": 41, "unique_visitors": 22 }
   ],
   "top_artifacts": [
-    { "slug": "doi-guoc-go-ho-chi-minh", "title": "Đôi guốc gỗ mộc", "views": 120 }
+    { "slug": "phao-155mm", "title": "Pháo 155 mm", "views": 120 }
   ]
 }
 ```
@@ -450,8 +450,8 @@ GET /api/museum/zones
   ],
   "artifacts": [
     {
-      "slug": "dong-hai-dong-1946",
-      "title": "Đồng Hai đồng năm 1946",
+      "slug": "a-1-skyraider",
+      "title": "Máy bay cường kích A-1 Skyraider",
       "summary": "...",
       "image_url": "https://...",
       "zone_id": "phong-1",
