@@ -269,6 +269,27 @@ describe("public museum map page", () => {
     );
   });
 
+  it("exposes keyboard-reachable pins with names matching the grouped list", async () => {
+    renderMap();
+
+    const pins = await screen.findAllByRole("link", { name: /^Ghim \d+:/u });
+    const listLinks = screen.getAllByRole("link", {
+      name: /^Xem chi tiết:/u,
+    });
+
+    expect(pins).toHaveLength(listLinks.length);
+    pins.forEach((pin, index) => {
+      expect(pin.tagName).toBe("A");
+      expect(pin.getAttribute("href")).toBe(listLinks[index].getAttribute("href"));
+      expect(pin.getAttribute("aria-label")).toContain(
+        listLinks[index].querySelector("strong")?.textContent ?? "",
+      );
+
+      pin.focus();
+      expect(document.activeElement).toBe(pin);
+    });
+  });
+
   it("shows a load error and retries", async () => {
     fetchMock.mockRejectedValueOnce(
       new Error("Không thể kết nối máy chủ. Hãy kiểm tra mạng."),

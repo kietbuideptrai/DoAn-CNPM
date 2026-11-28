@@ -143,7 +143,7 @@ Tổng khoảng 19–20 ngày công; ba người làm song song khoảng 1,5–2
 - [ ] **P5-06** Ghi nhận lượt xem web.
   **Đạt khi:** route công khai gửi 1 request/lần điều hướng; không gửi ở `/admin`;
   không gửi trùng do StrictMode; lỗi analytics không làm hỏng trang.
-- [ ] **P5-07** Test web + build.
+- [x] **P5-07** Test web + build.
   **Đạt khi:** `npm test` và `npm run build` pass; có test cho admin client, xóa,
   chart, map và tracking.
 

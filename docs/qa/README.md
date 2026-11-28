@@ -34,6 +34,7 @@ cáo; không thay thế kiểm thử trên thiết bị thật hoặc nghiệm t
 | P2-05 — Thời gian tải nội dung | **Một phần**: p95 468 ms trong mô phỏng 4G/CPU 4x; cần đo lại trên thiết bị/mạng thật | [P2-05-performance.md](./P2-05-performance.md) |
 | P3-01 — Kiểm thử nghiệm thu xuyên suốt | **Một phần**: web E2E đạt 16/16; mobile chưa kiểm thử | [P3-01-e2e.md](./P3-01-e2e.md) |
 | P8-04 — Test/build cuối và demo DB sạch | **Một phần**: test/build/typecheck/lint đạt, demo cơ bản ổn; demo phụ lục A chưa có mã để chạy | [P8-04-final-verification.md](./P8-04-final-verification.md) |
+| P5-07 — Test/build web sau gộp P4–P6 | **Đạt**: web 92 test/16 file, backend 23 test, build đều đạt; chưa chụp lại bằng browser thật | [P5-07-web-final-verification.md](./P5-07-web-final-verification.md) |
 
 ## Lỗi phát hiện và đã sửa
 

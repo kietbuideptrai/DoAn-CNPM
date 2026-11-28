@@ -1710,6 +1710,7 @@ p {
 
 .visitor-chart-data {
   margin-top: 14px;
+  overflow-x: auto;
 }
 
 .visitor-chart-data summary {
