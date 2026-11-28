@@ -37,7 +37,7 @@ cáo; không thay thế kiểm thử trên thiết bị thật hoặc nghiệm t
 | P5-07 — Test/build web sau gộp P4–P6 | **Đạt**: web 92 test/16 file, backend 23 test, build đều đạt; chưa chụp lại bằng browser thật | [P5-07-web-final-verification.md](./P5-07-web-final-verification.md) |
 | P4-04 / P7-02 — Backend map và seed bản đồ | **Đạt (unit/SQL guard)**: 4/4 test; seed khớp `shared/demoMap.ts`; chưa chạy integration Supabase thật | [P4-04-P7-02-backend-map-verification.md](./P4-04-P7-02-backend-map-verification.md) |
 | P7-03 — Setup/reset Supabase | **Đạt (guard)**: 4/4 test; có đối chiếu project, thứ tự seed và xác nhận reset; chưa chạy ghi DB thật | [P7-03-supabase-setup-script.md](./P7-03-supabase-setup-script.md) |
-| P4/P7 — Chốt backend Supabase (#8–#16) | **Đạt (code/test)**: backend 45/45, web 92/92, build đều đạt; chưa chạy migration/seed trên Supabase thật | [P4-P7-backend-supabase-final-verification.md](./P4-P7-backend-supabase-final-verification.md) |
+| P4/P7 — Chốt backend Supabase (#8–#16) | **Đạt**: backend 45/45, web 92/92, build đạt; đã setup + đối chiếu API trên Supabase non-production | [P4-P7-backend-supabase-final-verification.md](./P4-P7-backend-supabase-final-verification.md) |
 | P4-06 — Tài liệu API Supabase-first | **Đạt (tài liệu)**: mẫu request/response và curl có placeholder; JSON hợp lệ; chưa chạy test/build hay gọi API thật | [P4-06-backend-api-documentation.md](./P4-06-backend-api-documentation.md) |
 
 ## Lỗi phát hiện và đã sửa

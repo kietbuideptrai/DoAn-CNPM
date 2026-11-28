@@ -10,7 +10,7 @@ bản đồ). Luồng chính vẫn là:
 | Khu vực | Trạng thái |
 | --- | --- |
 | Database | **Supabase PostgreSQL non-production** là nguồn chuẩn, kết nối qua pooler/TLS bằng `DATABASE_URL`. Podman local chỉ là dự phòng. Không dán connection string hay project ref thật vào repo. |
-| Backend | API MVP + admin/map/analytics đã có mã và test: `npm test` 45/45, `npm run build` đạt. Cần chạy runbook/schema/seed trên project Supabase đã duyệt trước nghiệm thu. |
+| Backend | API MVP + admin/map/analytics đã có mã và test: `npm test` 45/45, `npm run build` đạt. Đã chạy `setup:supabase` và đối chiếu health/map/analytics trên project Supabase non-production đã duyệt. |
 | Web | Sau khi gộp nhánh bổ sung: `npm test` 92/92, `npm run build` đạt; `.env.local` đặt `VITE_DEMO_MODE=false` và gọi API thật. |
 | Mobile | `npm run typecheck` và `npm run lint` đạt; `EXPO_PUBLIC_DEMO_MODE=false`, trỏ API qua IP LAN. Chưa kiểm thử trên thiết bị thật. |
 | Quản trị | Web đã có UI đăng nhập/danh sách/form/ẩn/xóa; backend auth + CRUD đã có mã trên nhánh bổ sung, chờ issue #9/#10 chốt trên Supabase. |

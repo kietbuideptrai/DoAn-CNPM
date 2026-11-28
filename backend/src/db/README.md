@@ -11,21 +11,18 @@ phương án dự phòng.
    với project đã duyệt. Nếu không khớp, dừng lại.
 2. Điền `DATABASE_URL` từ secret store vào `backend/.env`; giữ TLS
    (`sslmode=require`). Không dùng `SUPABASE_ANON_KEY` cho backend/admin.
-3. Trên database trống, chạy `schema.sql`. Với database đã có dữ liệu, chạy các
-   migration theo thứ tự do issue #8/#16 quy định, ví dụ:
-
-   ```bash
-   psql "$DATABASE_URL" -f backend/src/db/schema.sql
-   psql "$DATABASE_URL" -f backend/src/db/migrate-2026-11-28-admin-cascade.sql
-   psql "$DATABASE_URL" -f backend/src/db/migrate-2026-11-28-map.sql
-   ```
+3. Chạy `npm run setup:supabase` từ `backend/` để apply `schema.sql` và toàn bộ
+   `migrate-*.sql` theo thứ tự. Script dùng client `pg`, không cần cài `psql`.
+   Nếu chạy thủ công bằng SQL Editor/`psql`, lần lượt dùng `schema.sql`,
+   `migrate-2026-11-28-admin-cascade.sql`, `migrate-2026-11-28-analytics.sql` và
+   `migrate-2026-11-28-map.sql`.
 
 4. Chạy seed hiện vật/bản dịch và seed khu/vị trí bằng `seed.sql`,
    `seed-map.sql`. `seed.sql` chỉ thêm bản ghi còn thiếu; không ghi đè tên, ảnh,
    trạng thái xuất bản hay bản dịch đã có. `seed-map.sql` đồng bộ lại 7 khu seed
    theo `shared/demoMap.ts` và chỉ gán vị trí cho hiện vật chưa có tọa độ.
-5. Chạy `npm run seed:admin` và `npm run seed:analytics` (khi sẵn sàng) từ
-   `backend/`, với credentials lấy từ secret store.
+5. Chạy `npm run seed:admin` và `npm run seed:analytics` từ `backend/`, với
+   credentials lấy từ secret store; `setup:supabase` đã gồm cả hai bước này.
 6. Kiểm tra bằng các file `verify-*.sql` (chỉ đọc) và gọi `/api/health`,
    `/api/languages`, `/api/artifacts?lang=vi`, `/api/museum/map`.
 

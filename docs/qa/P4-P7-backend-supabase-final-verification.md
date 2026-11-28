@@ -44,10 +44,40 @@ Môi trường: Node v22.23.1, npm 10.9.8.
 - Output lỗi của script setup/seed được lọc để không lộ connection string/mật
   khẩu.
 
-## Giới hạn quan trọng
+## Integration trên Supabase (đã chạy)
 
-Không chạy schema/migration/seed hay gọi API ghi trên project Supabase thật trong
-môi trường này. Các test ở trên là unit/guard SQL và build/typecheck. Trước
-buổi nghiệm thu cần chạy `npm run setup:supabase` trên project non-production
-đã duyệt rồi kiểm tra `/api/health`, `/api/museum/map?lang=vi` và
-`/api/admin/analytics/summary?days=30`.
+Sau khi được cấp quyền ghi, đã chạy `npm run setup:supabase` trên project
+Supabase non-production đã cấu hình trong `backend/.env` (pooler + TLS). Script
+tự đối chiếu project ref/host; không in connection string, project ref hay mật
+khẩu ra log. Không chạy `--reset`.
+
+| Hạng mục | Kết quả |
+| --- | --- |
+| `npm run setup:supabase` | Đạt — schema + 3 migration + seed + admin + analytics |
+| Số lượng trong DB | 8 hiện vật, 40 bản dịch, 7 khu, 8 hiện vật có tọa độ, 1 admin, 1.484 lượt xem seed |
+| `GET /api/health` | 200, `database: ok` |
+| `GET /api/museum/zones` | 200, 7 khu |
+| `GET /api/museum/map?lang=vi` | 200, 8 hiện vật đã đặt, 0 chưa đặt |
+| `POST /api/admin/auth/login` | 200, có token; không in token/email/mật khẩu |
+| `GET /api/admin/analytics/summary?days=7` | 200, đủ 7 ngày, top 5, `peak_day` |
+| `GET /api/admin/analytics/summary?days=30` | 200, đủ 30 ngày, 1.485 lượt xem sau 1 request pageview thử nghiệm |
+| `GET /api/admin/analytics/summary` không token | 401 |
+| `POST /api/analytics/pageview` hợp lệ | 204 |
+| `days=14`, UUID sai, path `/admin/...` | 400 cho cả ba |
+| Ràng buộc DB | Đủ 3 constraint; index `page_views_viewed_at_idx`; không có cột IP/user-agent/cookie |
+
+### Lỗi phát hiện khi integration và đã sửa
+
+Truy vấn tổng hợp dùng `$1::date AT TIME ZONE 'Asia/Ho_Chi_Minh'`; PostgreSQL
+trả `timestamp without time zone`, nên khi so với `viewed_at` (timestamptz)
+bị lệch theo `TimeZone` của server và loại mất 36 hàng ở hai đầu khoảng. Đã đổi
+sang `$1::date::timestamp AT TIME ZONE 'Asia/Ho_Chi_Minh'` trong cả 3 truy vấn
+(`daily`, `totals`, `top-artifacts`) và thêm test guard. Sau khi sửa, tổng 30
+ngày khớp đúng số hàng trong DB (1.485).
+
+## Giới hạn còn lại
+
+- Chỉ thao tác trên project non-production đã cấu hình; không chạy reset dữ
+  liệu, không chạy trên production.
+- Một lượt xem thử nghiệm đã được ghi vào `page_views` để kiểm chứng route
+  `POST /api/analytics/pageview`.

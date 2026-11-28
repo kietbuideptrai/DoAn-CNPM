@@ -23,17 +23,19 @@ pooler có TLS. Podman local chỉ là phương án dự phòng.
    npm install
    ```
 
-3. Apply schema và migration theo thứ tự bằng SQL Editor hoặc
-   `psql "$DATABASE_URL" -f <file>`:
+3. Apply schema, migration và seed demo bằng một lệnh (không cần cài `psql`):
 
    ```bash
-   psql "$DATABASE_URL" -f src/db/schema.sql
-   # Sau đó chạy các file migrate-*.sql theo thứ tự do issue #8/#16 quy định
-   # (admin-cascade, map, migration analytics nếu có).
+   npm run setup:supabase
    ```
 
-4. Nạp dữ liệu demo (chỉ trên project đã duyệt): `seed.sql`, `seed-map.sql`,
-   `npm run seed:admin`, `npm run seed:analytics` khi script sẵn sàng.
+   Script dùng client `pg` có sẵn, đối chiếu project/host trước khi ghi và chạy
+   theo thứ tự schema → migration → seed → admin → analytics. Có thể dùng SQL
+   Editor hoặc `psql "$DATABASE_URL" -f <file>` nếu cần chạy từng file thủ công.
+
+4. Dữ liệu demo gồm `seed.sql`, `seed-map.sql`, `npm run seed:admin` và
+   `npm run seed:analytics`; đã được bao gồm ở lệnh trên (chỉ trên project đã
+   duyệt).
 5. Chạy API và kiểm tra:
 
    ```bash
