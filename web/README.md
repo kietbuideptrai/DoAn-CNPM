@@ -27,7 +27,7 @@ Không thêm dấu `/` ở cuối URL. Đổi biến trong `.env.local` thì kh�
 ## Kiểm thử và build
 
 ```bash
-npm test          # 55 test
+npm test          # chạy toàn bộ test
 npm run build     # build vào dist/
 ```
 

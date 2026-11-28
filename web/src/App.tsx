@@ -25,6 +25,7 @@ import {
   ProtectedRoute,
 } from "./components/AdminPages";
 import { AdminArtifactFormPage } from "./components/AdminArtifactForm";
+import { MuseumMapPage } from "./components/MuseumMapPage";
 import { LanguageProvider } from "./context/LanguageContext";
 import { useLanguage } from "./context/LanguageContext";
 import { getLanguageLabel } from "./utils/language";
@@ -56,6 +57,12 @@ function AppLayout() {
           >
             Hiện vật
           </Link>
+          <Link
+            aria-current={currentPath === "/map" ? "page" : undefined}
+            to={{ pathname: "/map", search: location.search }}
+          >
+            Bản đồ
+          </Link>
         </nav>
 
         <div className="header-preferences">
@@ -69,6 +76,7 @@ function AppLayout() {
           <Route path="/" element={<HomePage />} />
           <Route path="/artifacts" element={<ArtifactListPage />} />
           <Route path="/artifacts/:slug" element={<ArtifactDetailPage />} />
+          <Route path="/map" element={<MuseumMapPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>
