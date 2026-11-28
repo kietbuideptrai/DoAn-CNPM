@@ -287,7 +287,12 @@ describe("public museum map page", () => {
         8,
       ),
     );
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    const mapRequests = fetchMock.mock.calls.filter(
+      ([input]) =>
+        new URL(String(input), "http://localhost").pathname ===
+        "/api/museum/map",
+    );
+    expect(mapRequests).toHaveLength(2);
   });
 
   it("notes artifacts that have no position on the map", async () => {

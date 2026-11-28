@@ -10,6 +10,7 @@ import { useArtifacts } from "./hooks/useArtifacts";
 import { useArtifact } from "./hooks/useArtifact";
 import { useSpeech } from "./hooks/useSpeech";
 import { useViewHistory } from "./hooks/useViewHistory";
+import { usePageViewTracking } from "./hooks/usePageViewTracking";
 import { ArtifactQrCode } from "./components/ArtifactQrCode";
 import type {
   ArtifactDetail,
@@ -33,6 +34,7 @@ import { getLanguageLabel } from "./utils/language";
 function AppLayout() {
   const location = useLocation();
   const currentPath = location.pathname;
+  usePageViewTracking();
 
   return (
     <div className="app-shell">
