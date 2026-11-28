@@ -379,7 +379,7 @@ quan cũ không thay đổi. Thiết kế kỹ thuật, API contract và phân c
 | Quản trị | Đăng nhập email/mật khẩu + JWT; danh sách gồm cả hiện vật ẩn; thêm/sửa/xóa hiện vật và bản dịch 5 ngôn ngữ; ẩn/hiện; xem trước và tải QR |
 | Vị trí | Gán khu vực và tọa độ hiện vật trên sơ đồ bảo tàng; ghim hiện trên web và app |
 | Thống kê | Ghi nhận lượt xem web bằng mã khách ẩn danh; biểu đồ 7/30 ngày; tổng lượt xem, khách duy nhất, top hiện vật |
-| Bản đồ | Sơ đồ 1 tầng tự vẽ, 7 khu (5 phòng trưng bày + sảnh + hành lang); hiển thị trên web `/map` và tab Bản đồ của app |
+| Bản đồ | Sơ đồ 1 tầng tự vẽ, 7 khu (5 phòng trưng bày + sảnh + hành lang), không dùng thư viện bản đồ/GPS; hiển thị trên web `/map` và tab Bản đồ của app |
 
 ### A.2. Database bổ sung
 
@@ -422,3 +422,12 @@ quan cũ không thay đổi. Thiết kế kỹ thuật, API contract và phân c
 Upload ảnh qua giao diện, bản đồ nhiều tầng, GPS/beacon, nhiều vai trò admin,
 phân quyền chi tiết, real-time analytics, xuất Excel/CSV, chỉnh sửa khu vực bản
 đồ bằng kéo thả.
+
+### A.6. Trạng thái triển khai (2026-11-29)
+
+Phụ lục A đã từ thiết kế sang triển khai: API admin/analytics/map chạy trên
+Supabase non-production; web có `/admin`, `/admin/analytics`, `/map`; mobile có
+tab **Bản đồ** thứ 6. Kết quả đối chiếu AC-19…AC-28, kể cả phần chưa chạy được
+trên thiết bị thật/screen reader thật, xem
+[bằng chứng P8-02](./qa/P8-02-supplemental-evidence.md). Việc seed 30 ngày là dữ
+liệu demo; không phải lượt truy cập thật.

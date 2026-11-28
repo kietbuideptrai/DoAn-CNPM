@@ -1,0 +1,219 @@
+{
+  "title": "P8-02 — Bằng chứng bổ sung AC-19…AC-28",
+  "date": "2026-11-29",
+  "environment": {
+    "web": "production build via vite preview at http://127.0.0.1:5173",
+    "backend": "Express local at http://localhost:3000, configured Supabase non-production",
+    "browser": "Chromium headless (cached Playwright browser)",
+    "writing": "one temporary QA artifact created and deleted; no schema reset",
+    "secrets": "admin credentials read from backend/.env at runtime; not written to evidence"
+  },
+  "screenshots": [
+    "docs/qa/evidence/P8-02/admin-login-1440.png",
+    "docs/qa/evidence/P8-02/admin-dashboard-1440.png",
+    "docs/qa/evidence/P8-02/admin-form-1440.png",
+    "docs/qa/evidence/P8-02/admin-form-pin-1440.png",
+    "docs/qa/evidence/P8-02/admin-form-delete-section-1440.png",
+    "docs/qa/evidence/P8-02/admin-analytics-30-1440.png",
+    "docs/qa/evidence/P8-02/admin-analytics-7-1440.png",
+    "docs/qa/evidence/P8-02/map-web-320.png",
+    "docs/qa/evidence/P8-02/map-web-375.png",
+    "docs/qa/evidence/P8-02/map-web-390.png",
+    "docs/qa/evidence/P8-02/map-web-768.png",
+    "docs/qa/evidence/P8-02/map-web-1440.png",
+    "docs/qa/evidence/P8-02/map-web-created-pin-1440.png"
+  ],
+  "checks": {
+    "authNegative": {
+      "wrongPasswordStatus": 401,
+      "invalidTokenStatus": 401,
+      "pass": true
+    },
+    "login": {
+      "redirectedToAdmin": true,
+      "tokenStored": true,
+      "pass": true
+    },
+    "adminList": {
+      "rows": 8,
+      "hiddenRows": 0,
+      "pass": true
+    },
+    "adminForm": {
+      "translationTabs": 5,
+      "zoneSelectorPresent": true,
+      "pass": true
+    },
+    "adminPinInput": {
+      "x": "142.9",
+      "y": "106.1",
+      "pass": true
+    },
+    "deleteConfirmation": {
+      "dialogMessage": "Bạn có chắc muốn xóa vĩnh viễn hiện vật “Bom BLU-82 (bom 7 tấn)” không? Hành động này không thể hoàn tác.",
+      "action": "dismiss",
+      "pass": true
+    },
+    "analytics30": {
+      "status": 200,
+      "dailyLength": 30,
+      "hasTotals": true,
+      "hasTopArtifacts": true,
+      "pass": true
+    },
+    "analytics7": {
+      "status": 200,
+      "dailyLength": 7,
+      "pass": true
+    },
+    "responsiveMap": {
+      "320": {
+        "innerWidth": 320,
+        "scrollWidth": 320,
+        "zones": 7,
+        "pins": 8,
+        "noHorizontalOverflow": true
+      },
+      "375": {
+        "innerWidth": 375,
+        "scrollWidth": 375,
+        "zones": 7,
+        "pins": 8,
+        "noHorizontalOverflow": true
+      },
+      "390": {
+        "innerWidth": 390,
+        "scrollWidth": 390,
+        "zones": 7,
+        "pins": 8,
+        "noHorizontalOverflow": true
+      },
+      "768": {
+        "innerWidth": 768,
+        "scrollWidth": 768,
+        "zones": 7,
+        "pins": 8,
+        "noHorizontalOverflow": true
+      },
+      "1440": {
+        "innerWidth": 1440,
+        "scrollWidth": 1440,
+        "zones": 7,
+        "pins": 8,
+        "noHorizontalOverflow": true
+      }
+    },
+    "mapKeyboardLabels": [
+      {
+        "tag": "a",
+        "name": "DDi sản kể chuyện"
+      },
+      {
+        "tag": "a",
+        "name": "Trang chủ"
+      },
+      {
+        "tag": "a",
+        "name": "Hiện vật"
+      },
+      {
+        "tag": "a",
+        "name": "Bản đồ"
+      },
+      {
+        "tag": "select",
+        "name": "Tiếng ViệtEnglish中文日本語한국어"
+      },
+      {
+        "tag": "select",
+        "name": "Chọn cỡ chữ"
+      },
+      {
+        "tag": "a",
+        "name": "Ghim 1: Máy bay cường kích A-1 Skyraider tại Phòng Kháng chiến và Độc lập"
+      },
+      {
+        "tag": "a",
+        "name": "Ghim 2: Bom BLU-82 (bom 7 tấn) tại Phòng Kháng chiến và Độc lập"
+      },
+      {
+        "tag": "a",
+        "name": "Ghim 3: Mô hình chuồng cọp Côn Đảo tại Phòng Đời sống Chủ tịch Hồ Chí Minh"
+      },
+      {
+        "tag": "a",
+        "name": "Ghim 4: Máy bay chiến đấu F-5A tại Phòng Đời sống Chủ tịch Hồ Chí Minh"
+      },
+      {
+        "tag": "a",
+        "name": "Ghim 5: Xe tăng M48 Patton tại Phòng Đời sống Chủ tịch Hồ Chí Minh"
+      },
+      {
+        "tag": "a",
+        "name": "Ghim 6: Máy chém thời Pháp thuộc và chính quyền Ngô Đình Diệm tại Phòng Ký ức và Hội ngộ"
+      }
+    ],
+    "firstTabStop": {
+      "tag": "a",
+      "name": "DDi sản kể chuyện"
+    },
+    "createArtifact": {
+      "status": 201,
+      "hasId": true,
+      "pass": true
+    },
+    "fiveTranslations": {
+      "statuses": {
+        "vi": 204,
+        "en": 204,
+        "zh": 204,
+        "ja": 204,
+        "ko": 204
+      },
+      "pass": true
+    },
+    "pinOnLiveMap": {
+      "status": 200,
+      "zoneId": "sanh",
+      "x": 210,
+      "y": 120,
+      "pass": true
+    },
+    "pageview": {
+      "status": 204,
+      "pass": true
+    },
+    "deleteArtifact": {
+      "status": 204,
+      "detailStatusAfterDelete": 404,
+      "stillOnMap": false,
+      "pass": true
+    },
+    "logout": {
+      "redirected": true,
+      "tokenCleared": true,
+      "pass": true
+    },
+    "runtime": {
+      "pageErrors": 0,
+      "consoleErrors": 1,
+      "dialogs": [
+        {
+          "type": "beforeunload",
+          "message": "",
+          "action": "accept"
+        },
+        {
+          "type": "confirm",
+          "message": "Bạn có chắc muốn xóa vĩnh viễn hiện vật “Bom BLU-82 (bom 7 tấn)” không? Hành động này không thể hoàn tác.",
+          "action": "dismiss"
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Không có thiết bị Android/iOS nên không chụp được map mobile, không test chạm ghim thật.",
+    "Không có NVDA/Orca/VoiceOver/TalkBack thật; chỉ kiểm chứng nhãn DOM và thứ tự focus bằng bàn phím.",
+    "Native confirm dialog không nằm trong ảnh chụp; nội dung được lưu trong checks.runtime.dialogs."
+  ]
+}

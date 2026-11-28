@@ -1794,6 +1794,28 @@ p {
 }
 
 @media (min-width: 681px) and (max-width: 900px) {
+  .site-header {
+    flex-wrap: wrap;
+    gap: 0 16px;
+  }
+
+  .header-preferences {
+    order: 2;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    padding-block: 8px;
+  }
+
+  .font-size-picker label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
   .artifact-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

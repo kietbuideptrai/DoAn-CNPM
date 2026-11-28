@@ -1,6 +1,6 @@
-# Kết quả kiểm thử — 2026-11-17
+# Kết quả kiểm thử — cập nhật 2026-11-29
 
-> Báo cáo dưới đây chạy ngày 2026-11-17 với dữ liệu `demo-*`. Từ 2026-11-25,
+> Các báo cáo gốc chạy ngày 2026-11-17 với dữ liệu `demo-*`. Từ 2026-11-25,
 > database local dùng 8 hiện vật demo xuất từ Supabase và web/mobile tắt demo mode;
 > các số liệu E2E/responsive/accessibility bên dưới vẫn là bằng chứng lịch sử,
 > cần chạy lại trên bộ dữ liệu mới trước khi kết luận nghiệm thu.
@@ -33,13 +33,16 @@ cáo; không thay thế kiểm thử trên thiết bị thật hoặc nghiệm t
 | P2-03 — Mobile trên thiết bị thật | **Chặn**: môi trường không có thiết bị/emulator Android/iOS | [P2-03-mobile-device.md](./P2-03-mobile-device.md) |
 | P2-05 — Thời gian tải nội dung | **Một phần**: p95 468 ms trong mô phỏng 4G/CPU 4x; cần đo lại trên thiết bị/mạng thật | [P2-05-performance.md](./P2-05-performance.md) |
 | P3-01 — Kiểm thử nghiệm thu xuyên suốt | **Một phần**: web E2E đạt 16/16; mobile chưa kiểm thử | [P3-01-e2e.md](./P3-01-e2e.md) |
-| P8-04 — Test/build cuối và demo DB sạch | **Một phần**: test/build/typecheck/lint đạt, demo cơ bản ổn; demo phụ lục A chưa có mã để chạy | [P8-04-final-verification.md](./P8-04-final-verification.md) |
+| P8-04 — Test/build cuối và demo DB sạch (28/11) | **Lịch sử**: test/build/typecheck/lint đạt, demo cơ bản ổn; demo phụ lục A khi đó chưa có mã | [P8-04-final-verification.md](./P8-04-final-verification.md) |
 | P5-07 — Test/build web sau gộp P4–P6 | **Đạt**: web 92 test/16 file, backend 23 test, build đều đạt; chưa chụp lại bằng browser thật | [P5-07-web-final-verification.md](./P5-07-web-final-verification.md) |
 | P4-04 / P7-02 — Backend map và seed bản đồ | **Đạt (unit/SQL guard)**: 4/4 test; seed khớp `shared/demoMap.ts`; chưa chạy integration Supabase thật | [P4-04-P7-02-backend-map-verification.md](./P4-04-P7-02-backend-map-verification.md) |
 | P7-03 — Setup/reset Supabase | **Đạt (guard)**: 4/4 test; có đối chiếu project, thứ tự seed và xác nhận reset; chưa chạy ghi DB thật | [P7-03-supabase-setup-script.md](./P7-03-supabase-setup-script.md) |
 | P4/P7 — Chốt backend Supabase (#8–#16) | **Đạt**: backend 45/45, web 92/92, build đạt; đã setup + đối chiếu API trên Supabase non-production | [P4-P7-backend-supabase-final-verification.md](./P4-P7-backend-supabase-final-verification.md) |
 | P4-06 — Tài liệu API Supabase-first | **Đạt (tài liệu)**: mẫu request/response và curl có placeholder; JSON hợp lệ; chưa chạy test/build hay gọi API thật | [P4-06-backend-api-documentation.md](./P4-06-backend-api-documentation.md) |
 | P6 — Bản đồ mobile (#24–#27) | **Đạt (code/API)**: typecheck/lint pass, live 7 khu/8 hiện vật, demo khớp web; thiết bị thật/chạm/TalkBack còn Blocked | [P6-mobile-map-verification.md](./P6-mobile-map-verification.md) |
+| P8-01 — Đồng bộ tài liệu (#28) | **Đạt**: PRD A.6, TASKS P0/P3/P8, README Supabase-first và API samples đều khớp code | [P8-01-docs-sync.md](./P8-01-docs-sync.md) |
+| P8-02 — Ảnh/bằng chứng bổ sung (#29) | **Đạt phần web/API**: 13 ảnh, JSON AC-19…AC-28, responsive 5 viewport; mobile/screen reader thật Blocked | [P8-02-supplemental-evidence.md](./P8-02-supplemental-evidence.md) |
+| P8-04 — Chốt cuối 29/11 (#31) | **Đạt**: backend 45/45 + build, web 92/92 + build, mobile typecheck/lint; demo admin→map→analytics→xóa chạy được | [P8-04-final-verification-2026-11-29.md](./P8-04-final-verification-2026-11-29.md) |
 
 ## Lỗi phát hiện và đã sửa
 
@@ -58,6 +61,9 @@ cáo; không thay thế kiểm thử trên thiết bị thật hoặc nghiệm t
 - `evidence/P2-02-accessibility.json`: axe, bàn phím, dialog, zoom, typography.
 - `evidence/P2-05-performance.json`: 7 lần đo có throttle + 2 lần baseline.
 - `evidence/P3-01-e2e.json`: 16 case E2E web.
+- `evidence/P8-02/P8-02-evidence.json`: kết quả AC-19…AC-28, thông báo dialog,
+  số liệu responsive và giới hạn thiết bị.
+- `evidence/P8-02/*.png`: 13 ảnh admin/login/form/xóa/analytics/map ở 5 viewport.
 
 ## Giới hạn
 
@@ -65,7 +71,8 @@ cáo; không thay thế kiểm thử trên thiết bị thật hoặc nghiệm t
   hiện vật bảo tàng (xem [P1-03](./P1-03-database-verification.md)). Cần chạy
   lại responsive/accessibility/E2E trên bộ dữ liệu mới trước khi kết luận.
 - Chưa kiểm tra Firefox/Safari, thiết bị Android/iOS thật, mạng di động thật,
-  VoiceOver/TalkBack/NVDA/Orca.
+  VoiceOver/TalkBack/NVDA/Orca. Với P8-02 cụ thể: MOB-20…MOB-25 và mục AC-25/AC-26
+  trên mobile vẫn `Blocked`; ảnh web không thay thế được nghiệm thu thiết bị.
 - P2-05 dùng mô phỏng mạng/CPU của DevTools, không phải phép đo trên carrier
   thật; không dùng kết quả này để tuyên bố đạt NFR trên thiết bị nghiệm thu.
 - Các script harness nằm ngoài repo; báo cáo ghi lại lệnh và tham số để có thể

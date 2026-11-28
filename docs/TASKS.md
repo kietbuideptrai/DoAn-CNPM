@@ -1,6 +1,6 @@
 # Kế hoạch hoàn thiện đồ án
 
-Cập nhật 2026-11-28. Phạm vi MVP theo [PRD 1.1](./PRD.md), cộng với
+Cập nhật 2026-11-29. Phạm vi MVP theo [PRD 1.1](./PRD.md), cộng với
 [phạm vi bổ sung](./KE-HOACH-ADMIN-MAP-THONG-KE.md) (quản trị, thống kê truy cập,
 bản đồ). Luồng chính vẫn là:
 **QR → trang hiện vật → đổi ngôn ngữ → đọc/nghe thuyết minh**.
@@ -13,10 +13,10 @@ bản đồ). Luồng chính vẫn là:
 | Backend | API MVP + admin/map/analytics đã có mã và test: `npm test` 45/45, `npm run build` đạt. Đã chạy `setup:supabase` và đối chiếu health/map/analytics trên project Supabase non-production đã duyệt. |
 | Web | Sau khi gộp nhánh bổ sung: `npm test` 92/92, `npm run build` đạt; `.env.local` đặt `VITE_DEMO_MODE=false` và gọi API thật. |
 | Mobile | Đã có tab **Bản đồ** thứ 6 dùng `/api/museum/map`; `npm run typecheck` và `npm run lint` đạt; API thật trả 7 khu/8 hiện vật và demo mode trả cùng dữ liệu web. Chưa kiểm thử trên thiết bị thật. |
-| Quản trị | Web đã có UI đăng nhập/danh sách/form/ẩn/xóa; backend auth + CRUD đã có mã trên nhánh bổ sung, chờ issue #9/#10 chốt trên Supabase. |
-| Thống kê | Đã có client/chart/tracking trên web; cần bảng `page_views` và API analytics trên Supabase theo issue #12/#14. |
+| Quản trị | Web đã có UI đăng nhập/danh sách/form/ẩn/xóa; backend auth + CRUD chạy trên Supabase non-production. Bằng chứng UI/API tại [P8-02](./qa/P8-02-supplemental-evidence.md). |
+| Thống kê | Đã có client/chart/tracking trên web, bảng `page_views` và API analytics trên Supabase; seed 30 ngày và đổi 7/30 ngày đã kiểm chứng. |
 | Bản đồ | Web `/map` và tab mobile Bản đồ dùng chung dữ liệu demo `shared/demoMuseumMap.ts`; migration/seed và API công khai trên Supabase đã chốt. Chỉ còn kiểm thử trên thiết bị thật. |
-| Tài liệu | Issue backend #7–#16, `backend/README.md` và runbook DB đã cập nhật theo hướng Supabase; vẫn cần chốt API samples và demo theo issue #13/#16. |
+| Tài liệu | `backend/README.md`, runbook DB, API samples, README gốc, PRD Phụ lục A, báo cáo/vấn đáp và checklist QA đã cập nhật theo phần bổ sung; xem [P8-01](./qa/P8-01-docs-sync.md). |
 
 ## 2. Task còn lại
 
@@ -29,10 +29,11 @@ bản đồ). Luồng chính vẫn là:
 - [x] **P0-05** Kiểm tra CORS khi mở web bằng IP LAN (ví dụ `http://192.168.1.18:5173`).
   **Đạt khi:** thêm origin vào `CORS_ORIGINS`, gọi được `/api/artifacts` từ trình duyệt điện thoại.
   Đã kiểm tra: origin LAN trả 200, origin lạ trả 403.
-- [ ] **P0-06** Chuyển database chuẩn sang Supabase non-production.
+- [x] **P0-06** Chuyển database chuẩn sang Supabase non-production.
   **Đạt khi:** `backend/.env` dùng connection string pooler có TLS, đã đối chiếu
   project ref/host với project được duyệt; schema + migration + seed chạy được
   trên Supabase; `/api/health` trả `database: ok`; không có secret nào bị commit.
+  Xem [P4/P7 chốt Supabase](./qa/P4-P7-backend-supabase-final-verification.md).
 
 ### P1 — Dữ liệu và API
 
@@ -70,7 +71,7 @@ bản đồ). Luồng chính vẫn là:
   anon key ở server.
 - [ ] **P3-02** Tạo QR cho 8 hiện vật, trỏ domain web thật; thử mở và tải lại URL.
 - [ ] **P3-03** Chạy lại E2E trên bản deploy; ghi bug và bằng chứng.
-- [ ] **P3-04** Cập nhật [báo cáo/vấn đáp](./BAO-CAO-DO-AN.md): 92 test web, 23 test backend (sau gộp), database Supabase non-production, ảnh placeholder.
+- [x] **P3-04** Cập nhật [báo cáo/vấn đáp](./BAO-CAO-DO-AN.md): 92 test web, 45 test backend, database Supabase non-production, ảnh placeholder. Đã cập nhật cả phần bổ sung tại mục 6.
 - [ ] **P3-05** Commit phần dọn repo (đã bỏ theo dõi `node_modules`, `dist`, `.env.local`).
 
 ### P4 — Backend quản trị và dữ liệu mới
@@ -194,11 +195,18 @@ Tổng khoảng 19–20 ngày công; ba người làm song song khoảng 1,5–2
 
 ### P8 — Tài liệu và nghiệm thu
 
-- [ ] **P8-01** Cập nhật PRD Phụ lục A, TASKS, README, API samples.
-- [ ] **P8-02** QA: ảnh chụp admin/map/chart; responsive 320/375/390/768/1440;
+- [x] **P8-01** Cập nhật PRD Phụ lục A, TASKS, README, API samples.
+  Đối chiếu xong; xem [P8-01 docs sync](./qa/P8-01-docs-sync.md).
+- [x] **P8-02** QA: ảnh chụp admin/map/chart; responsive 320/375/390/768/1440;
   kiểm tra bàn phím và screen reader.
-- [ ] **P8-03** Cập nhật báo cáo/vấn đáp và kịch bản demo.
-- [ ] **P8-04** Chạy lại toàn bộ test/build/typecheck; commit phần bổ sung.
+  Đã chụp 13 ảnh và ghi JSON bằng chứng tại [P8-02](./qa/P8-02-supplemental-evidence.md).
+  Thiết bị thật và screen reader thật vẫn Blocked; không đánh pass giả.
+- [x] **P8-03** Cập nhật báo cáo/vấn đáp và kịch bản demo.
+  Xem mục 6 của [báo cáo](./BAO-CAO-DO-AN.md), kịch bản chạy 5–7 phút đã được
+  kiểm chứng bằng [kịch bản QA](./qa/P8-02-supplemental-evidence.md).
+- [x] **P8-04** Chạy lại toàn bộ test/build/typecheck; commit phần bổ sung.
+  Kết quả tại [P8-04 chốt 29/11](./qa/P8-04-final-verification-2026-11-29.md);
+  commit đã push trên nhánh `kietbuideptrai/backend-supabase`.
 
 ## 3. Thứ tự đề xuất
 
@@ -230,14 +238,13 @@ string thật vào terminal/log được chia sẻ.
 # 1. Schema + migration trên Supabase (SQL Editor hoặc psql "$DATABASE_URL")
 cd backend
 psql "$DATABASE_URL" -f src/db/schema.sql
-# chạy các file migrate-*.sql theo thứ tự do issue #8/#16 quy định
+# chạy các file migrate-*.sql theo thứ tự trong backend/README.md
 
 # 2. Seed dữ liệu demo trên project đã duyệt
 psql "$DATABASE_URL" -f src/db/seed.sql
 psql "$DATABASE_URL" -f src/db/seed-map.sql
 npm run seed:admin
-npm run seed:analytics   # khi script ở issue #14 sẵn sàng
-# npm run seed:demo      # khi runbook issue #16 sẵn sàng
+npm run seed:analytics   # bỏ qua nếu bảng page_views đã có dữ liệu
 
 # 3. Backend / Web / Mobile
 cd backend && npm run dev

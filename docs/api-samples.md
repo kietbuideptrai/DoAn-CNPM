@@ -81,7 +81,9 @@ curl -sS "$API_BASE_URL/api/museum/map?lang=vi"
 
 `GET /api/museum/map?lang=vi` trả `{ "zones": [...], "artifacts": [...] }`
 và có thể có `unplaced_artifacts`. Chỉ hiện vật đã xuất bản và có tọa độ mới
-nằm trong `artifacts`; thiếu bản dịch thì fallback `vi`.
+nằm trong `artifacts`; thiếu bản dịch thì fallback `vi`. Đã đối chiếu live ngày
+2026-11-29: 7 khu, 8 hiện vật, 0 hiện vật chưa có vị trí. `mobile/src/api/client.ts`
+và web dùng cùng shape này; `shared/demoMuseumMap.ts` chỉ thay fetch khi bật demo mode.
 
 ## Analytics
 

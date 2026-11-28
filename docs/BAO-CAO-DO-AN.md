@@ -39,7 +39,7 @@ Nếu giảng viên yêu cầu tự giới thiệu đồ án, dùng phần 2 tro
 - Tìm kiếm theo tên tiếng Việt gốc hoặc tiêu đề tiếng Anh, không phân biệt hoa thường và không phụ thuộc ngôn ngữ đang xem.
 - NFR: giao diện mobile-first, thao tác bàn phím/screen reader, phản hồi lỗi rõ ràng.
 - CMS, upload ảnh qua giao diện và chức năng quản trị nội dung không thuộc phạm vi nghiệm thu MVP theo PRD 1.1. Code quản trị còn trong repository nhưng không nên trình bày là chức năng MVP đã hoàn thiện.
-- Phần bổ sung 2026-11-27 (quản trị, thống kê, bản đồ) nằm ở Phụ lục A của PRD, mới dừng ở mức thiết kế và backlog. Tính đến 28/11/2026, backend chưa có API admin/analytics/map nên khi trình bày phải tách bạch **luồng MVP đã chạy được** với **kịch bản dự kiến**.
+- Phần bổ sung 2026-11-27 (quản trị, thống kê, bản đồ) nằm ở Phụ lục A của PRD. Tính đến 29/11/2026 đã có API, UI web và tab mobile; khi trình bày cần tách bạch **luồng đã kiểm chứng** với **phần chưa có thiết bị thật/screen reader thật**.
 
 ### Use case và luồng chính
 
@@ -116,9 +116,12 @@ Chọn một luồng ngắn, có chuẩn bị trước:
 
 **Chuẩn bị:** mở sẵn app/trang, kiểm tra mạng và backend, làm nóng API bằng `/api/health`, chuẩn bị QR và dữ liệu. Có phương án video/ảnh chụp hoặc demo local nếu dịch vụ triển khai không sẵn sàng. Không đọc hoặc chiếu secret trong `.env`.
 
-#### Kịch bản demo mở rộng (dự kiến — 5 đến 7 phút)
+#### Kịch bản demo mở rộng (đã kiểm chứng bằng API/UI — 5 đến 7 phút)
 
-Dùng cho phần bổ sung Phụ lục A. **Trạng thái: chưa chạy được.** Các task P4–P7 chưa triển khai, backend hiện chỉ có `/api/artifacts`, `/api/languages`, `/api/health`; `/api/admin/auth/login`, `/api/admin/analytics/summary` và `/api/museum/map` trả 404. Phân bổ thời gian dưới đây là dự kiến, chưa được đo bằng lần chạy thật (xem `qa/P8-04-final-verification.md`).
+Dùng cho phần bổ sung Phụ lục A. Kịch bản đã chạy trên project Supabase
+non-production đã cấu hình, với một hiện vật tạm được tạo rồi xóa ở cuối; không
+reset schema. Bằng chứng từng bước ở
+[qa/P8-02-supplemental-evidence.md](qa/P8-02-supplemental-evidence.md).
 
 | Thời điểm | Thao tác | Điểm cần nói |
 | --- | --- | --- |
@@ -127,23 +130,24 @@ Dùng cho phần bổ sung Phụ lục A. **Trạng thái: chưa chạy được
 | 2:00–2:45 | Mở trang công khai của hiện vật vừa tạo, đổi ngôn ngữ, bấm nghe, tải QR | Luồng khách tham quan không đổi |
 | 2:45–3:45 | Mở `/admin/analytics`, đổi 7/30 ngày, chỉ tổng lượt xem và top hiện vật | **30 ngày đầu là dữ liệu seed**, không phải truy cập thật |
 | 3:45–4:45 | Mở `/map`, bấm vào ghim vừa tạo | Cùng tọa độ với form admin |
-| 4:45–5:45 | Mở app, vào tab **Bản đồ**, bấm cùng ghim để vào chi tiết | Web và mobile dùng chung dữ liệu bản đồ |
+| 4:45–5:45 | Mở app, vào tab **Bản đồ**, bấm cùng ghim để vào chi tiết | Web và mobile dùng chung dữ liệu bản đồ; bước này cần thiết bị thật, hiện dùng ảnh/code làm bằng chứng |
 | 5:45–6:30 | Quay lại admin, xóa hiện vật vừa tạo và xác nhận | Xóa vĩnh viễn có hộp thoại xác nhận; kiểm tra biến mất khỏi web/app/map |
 
-Nếu chưa có mã bổ sung, chỉ trình bày kịch bản này như **plan demo** có slide/ảnh minh họa; đừng gọi đây là kết quả đã chạy. Luồng demo chạy được hiện tại là 5 bước ở trên (QR → chi tiết → ngôn ngữ → TTS → fallback).
+Luồng cơ bản 5 bước (QR → chi tiết → ngôn ngữ → TTS → fallback) vẫn giữ nguyên
+và không bị phần bổ sung làm thay đổi.
 
 ### Kiểm thử và kết quả
 
-Nêu kết quả đúng theo báo cáo QA hiện có (ngày 17/11/2026):
+Nêu kết quả đúng theo báo cáo QA (cập nhật 29/11/2026):
 
-- **Web unit/component:** 55/55 test đạt; production build thành công.
-- **Backend:** 14/14 test đạt; build thành công.
-- **Mobile:** typecheck và lint đạt; chưa có automated test suite riêng.
-- **Web responsive:** 20/20 case đạt ở viewport 320, 375, 390, 768, 1440 px.
-- **Web accessibility:** axe không phát hiện vi phạm trên 10 tổ hợp trang/viewport; bàn phím, dialog, mô phỏng zoom 200% và tap target chính đạt. Chưa kiểm tra screen reader thật, nên kết quả chỉ một phần.
-- **Web E2E:** 16/16 case đạt, gồm URL QR, đổi ngôn ngữ, TTS (mock), fallback, 404, mất mạng/thử lại và tìm kiếm.
+- **Web unit/component:** 92/92 test đạt; production build thành công.
+- **Backend:** 45/45 test đạt; build thành công.
+- **Mobile:** typecheck và lint đạt; API bản đồ live trả 7 khu/8 hiện vật; chưa có automated test suite riêng.
+- **Web responsive:** 20/20 case cũ ở 320/375/390/768/1440 px; riêng bản đồ bổ sung được chụp lại ở 5 viewport và không còn tràn ngang sau khi sửa header ở 681–900 px.
+- **Web accessibility:** axe không phát hiện vi phạm trên 10 tổ hợp trang/viewport; bàn phím, dialog, mô phỏng zoom 200% và tap target chính đạt. Bổ sung: nhãn DOM và thứ tự focus của map/chart được ghi trong bằng chứng P8-02; screen reader thật vẫn chưa kiểm tra.
+- **Web E2E:** 16/16 case cũ với dữ liệu demo; phần bổ sung có thêm kịch bản admin → ghim → analytics → map → xóa chạy bằng API/UI headless.
 - **Hiệu năng mô phỏng:** p95 468 ms tới khi nội dung hiện trong mô phỏng 4G + CPU 4×; web/API chạy local, chưa phải phép đo trên thiết bị/mạng thật.
-- **Mobile thiết bị thật:** chưa kiểm thử do môi trường không có thiết bị/emulator; camera, quyền, TTS native và VoiceOver/TalkBack còn cần xác minh.
+- **Mobile thiết bị thật:** chưa kiểm thử do môi trường không có thiết bị/emulator; camera, quyền, TTS native và VoiceOver/TalkBack còn cần xác minh. Các dòng MOB-20…MOB-25 ghi rõ `Blocked`.
 
 > Bộ test E2E chạy với `VITE_DEMO_MODE=false` và gọi API/database non-production, nhưng dữ liệu là 8 hiện vật `demo-*` hư cấu. Không dùng kết quả đó để nói rằng nội dung bảo tàng đã được nghiệm thu.
 
@@ -151,9 +155,9 @@ Nêu kết quả đúng theo báo cáo QA hiện có (ngày 17/11/2026):
 
 - Bộ seed gồm 8 hiện vật demo xuất từ database Supabase, có bản nháp 5 ngôn ngữ; bản dịch chưa được chuyên gia duyệt.
 - Ảnh hiện tại là ảnh giữ chỗ; quyền sử dụng ảnh hiện vật chưa được xác nhận.
-- Database thật hiện chạy PostgreSQL local bằng Podman: 8 hiện vật đã xuất bản, 40 bản dịch, `/api/health` trả 200; web/mobile đã tắt demo mode. Chưa triển khai Supabase cloud.
-- Ở phần bổ sung, **30 ngày đầu tiên trên biểu đồ là dữ liệu seed** do script `seed:analytics` dự kiến tạo ra, không phải lượt truy cập thật; kể từ lúc bật ghi nhận thì số liệu mới là thật. Khi demo phải nói rõ ranh giới này.
-- Phần bổ sung (admin, analytics, map web/mobile) mới có thiết kế trong `KE-HOACH-ADMIN-MAP-THONG-KE.md` và issue tương ứng; chưa có API/UI để nghiệm thu. Không dùng kịch bản mở rộng làm bằng chứng chạy thật.
+- Nguồn chuẩn là Supabase PostgreSQL non-production, nối qua pooler/TLS bằng `DATABASE_URL`; Podman chỉ là fallback. `/api/health` trả `database: ok`; web/mobile đã tắt demo mode. Chưa triển khai bản production riêng.
+- Ở phần bổ sung, **30 ngày đầu tiên trên biểu đồ là dữ liệu seed** do `npm run seed:analytics` tạo ra, không phải lượt truy cập thật; kể từ lúc bật ghi nhận thì số liệu mới là thật. Khi demo phải nói rõ ranh giới này.
+- Phần bổ sung (admin, analytics, map web/mobile) đã có API/UI và bằng chứng chạy thật trên môi trường non-production; chỉ phần thiết bị thật/screen reader thật còn Blocked. Xem [P8-02](qa/P8-02-supplemental-evidence.md).
 - Hướng phát triển: kiểm duyệt nội dung/bản dịch và bản quyền ảnh; hoàn tất kiểm thử app trên thiết bị Android/iOS; kiểm tra screen reader thật; đo hiệu năng trên mạng/thiết bị thật; triển khai bản demo ổn định; cân nhắc CMS sau MVP.
 - Kết luận: sản phẩm đã hiện thực hóa luồng cốt lõi ở web và có mã mobile, backend; nêu rõ phạm vi đã xác minh và công việc còn lại.
 
@@ -205,11 +209,11 @@ Nêu kết quả đúng theo báo cáo QA hiện có (ngày 17/11/2026):
 
 ### Nhóm đã kiểm thử những gì?
 
-“Web có 55 unit/component test; backend có 14 test. Responsive web đạt 20/20 case; web E2E đạt 16/16 với dữ liệu demo; axe không tìm thấy vi phạm trên 10 tổ hợp trang và viewport. Mobile mới typecheck/lint, chưa chạy trên thiết bị thật. Hiệu năng 468 ms p95 là số đo mô phỏng local, chưa phải kết quả production.”
+“Web có 92 unit/component test; backend có 45 test. Responsive web đạt 20/20 case; bản đồ bổ sung được chụp ở 5 viewport; web E2E đạt 16/16 với dữ liệu demo; axe không tìm thấy vi phạm trên 10 tổ hợp trang và viewport. Mobile typecheck/lint đạt, API bản đồ đã đối chiếu live, nhưng chưa chạy trên thiết bị thật. Hiệu năng 468 ms p95 là số đo mô phỏng local, chưa phải kết quả production.”
 
 ### Đồ án đã hoàn thành hoàn toàn chưa?
 
-“Luồng web và phần lớn mã nguồn mobile/backend đã được triển khai, database thật đã chạy local với 8 hiện vật và 40 bản dịch. Tuy nhiên chưa thể nói nghiệm thu hoàn toàn: mobile chưa được kiểm thử trên thiết bị thật; screen reader thật chưa kiểm tra; nội dung và bản dịch bảo tàng chưa được chuyên gia duyệt; ảnh giữ chỗ và quyền ảnh chưa chốt; hiệu năng chưa đo trên mạng/thiết bị thật; chưa triển khai Supabase cloud.”
+“Luồng web, backend và mobile đã có mã; Supabase non-production là nguồn chuẩn với 8 hiện vật/40 bản dịch, admin/analytics/map đã chạy được. Tuy nhiên chưa thể nói nghiệm thu hoàn toàn: mobile chưa được kiểm thử trên thiết bị thật; screen reader thật chưa kiểm tra; nội dung và bản dịch bảo tàng chưa được chuyên gia duyệt; ảnh giữ chỗ và quyền ảnh chưa chốt; hiệu năng chưa đo trên mạng/thiết bị thật; chưa triển khai bản production.”
 
 ### Hạn chế lớn nhất hiện tại là gì?
 
@@ -341,25 +345,25 @@ Nêu kết quả đúng theo báo cáo QA hiện có (ngày 17/11/2026):
 
 Hãy trả lời theo mẫu: “Em phụ trách **[phần thật]**. Đầu vào của phần này là **[…]**, đầu ra là **[…]**. Em triển khai chính ở **[file/module]**, xử lý các nhánh **[…]**, và kiểm chứng bằng **[test/demo]**. Khó khăn là **[…]**, em giải quyết bằng **[…]**. Phần còn giới hạn là **[…]**.” Chỉ thay nội dung bằng việc bạn thực sự làm.
 
-### Câu trả lời cho phần bổ sung (thiết kế đã chốt, chưa triển khai)
+### Câu trả lời cho phần bổ sung (đã triển khai, có bằng chứng)
 
-> Bốn câu dưới đây phản ánh **quyết định thiết kế** trong `KE-HOACH-ADMIN-MAP-THONG-KE.md`. Vì code chưa có, hãy nói rõ “đây là phương án nhóm đã chốt, hiện mới dừng ở thiết kế”, không nói như đã chạy.
+> Bốn câu dưới đây vẫn giữ quyết định thiết kế trong `KE-HOACH-ADMIN-MAP-THONG-KE.md`, nhưng đã được đối chiếu với mã chạy thật. Khi trình bày, nói rõ phần nào còn Blocked ở thiết bị thật.
 
-**Vì sao dùng JWT cho admin, luồng đăng nhập dự kiến ra sao?**
+**Vì sao dùng JWT cho admin, luồng đăng nhập ra sao?**
 
-“Đăng nhập dùng email/mật khẩu được seed trong database, mật khẩu lưu dạng băm bcrypt. Sau khi xác thực đúng, API trả JWT có hạn; mọi API ghi/quản trị đều yêu cầu `Authorization: Bearer`, trong khi API đọc công khai chỉ trả hiện vật đã xuất bản và không cần token. Secret nằm trong `.env`, không commit. JWT giúp backend stateless, web và mobile cùng dùng một hợp đồng. Điểm cần nói thêm là đăng xuất chỉ xóa token ở client; muốn thu hồi ngay phía server thì cần thêm deny-list, hiện ngoài phạm vi. Phần này mới là thiết kế, backend hiện chưa có endpoint đăng nhập.”
+“Đăng nhập dùng email/mật khẩu được seed trong database, mật khẩu lưu dạng băm bcrypt. Sau khi xác thực đúng, API `POST /api/admin/auth/login` trả JWT có hạn; mọi API ghi/quản trị đều yêu cầu `Authorization: Bearer`, trong khi API đọc công khai chỉ trả hiện vật đã xuất bản. Secret nằm trong `.env`, không commit. Bằng chứng: đăng nhập đúng lưu token, sai mật khẩu và token không hợp lệ đều trả 401, đăng xuất xóa token ở client. Muốn thu hồi ngay phía server cần deny-list, hiện ngoài phạm vi.”
 
 **Vì sao chọn xóa vĩnh viễn (hard delete) thay vì ẩn hiện vật?**
 
-“Nhóm chốt hard delete kèm hộp thoại xác nhận vì như vậy danh sách admin không lẫn dữ liệu đã bỏ, và khóa ngoại `ON DELETE CASCADE` dọn luôn bản dịch, tránh bản dịch mồ côi. Đổi lại là không khôi phục được, nên UI phải bắt xác nhận rõ ràng và chỉ admin đã đăng nhập mới gọi được API. Dữ liệu lịch sử `page_views.artifact_slug` vẫn giữ lại để biểu đồ không mất số liệu cũ. Hiện đây là quyết định thiết kế; API xóa chưa tồn tại.”
+“Nhóm chốt hard delete kèm hộp thoại xác nhận để danh sách admin không lẫn dữ liệu đã bỏ, và khóa ngoại `ON DELETE CASCADE` dọn luôn bản dịch, tránh bản dịch mồ côi. Đổi lại là không khôi phục được, nên UI bắt xác nhận và chỉ admin đã đăng nhập mới gọi được API. Dữ liệu lịch sử `page_views.artifact_slug` vẫn giữ lại để biểu đồ không mất số liệu cũ. Bằng chứng: đã chạy tạo → xóa một hiện vật tạm, chi tiết sau xóa trả 404 và ghim biến mất khỏi map; hộp thoại xác nhận ghi lại trong bằng chứng P8-02.”
 
 **Thống kê có lưu thông tin cá nhân không, dữ liệu 30 ngày có thật không?**
 
-“Không lưu IP, user-agent hay cookie. Client tạo một `visitor_id` UUID ngẫ nhiên lưu trong **localStorage** và gửi kèm mỗi lượt xem; server chỉ dùng mã đó để đếm khách duy nhất theo ngày và tự tách `artifact_slug` từ path. Nhánh `/admin` không được ghi nhận. Hạn chế là người dùng xóa storage thì thành khách mới, nên con số khách duy nhất là ước lượng ẩn danh, không phải danh tính thật. **30 ngày đầu biểu đồ là dữ liệu seed** tạo bằng script có seed cố định, chỉ để demo; sau khi bật ghi nhận thì mới là lượt truy cập thật. Phần ghi nhận và seed hiện chưa triển khai.”
+“Không lưu IP, user-agent hay cookie. Client tạo một `visitor_id` UUID ngẫ nhiên lưu trong **localStorage** và gửi kèm mỗi lượt xem; server chỉ dùng mã đó để đếm khách duy nhất theo ngày và tự tách `artifact_slug` từ path. Nhánh `/admin` không được ghi nhận. Hạn chế là người dùng xóa storage thì thành khách mới, nên con số khách duy nhất là ước lượng ẩn danh. **30 ngày đầu biểu đồ là dữ liệu seed** tạo bằng `npm run seed:analytics`, chỉ để demo; sau khi bật ghi nhận mới là truy cập thật. Bằng chứng: `pageview` trả 204, summary đủ 30 ngày và đổi được sang 7 ngày.”
 
 **Tọa độ bản đồ lưu thế nào, có dùng GPS không?**
 
-“Không dùng GPS hay beacon. Bản đồ là sơ đồ một tầng tự vẽ bằng SVG với `viewBox` cố định `1000 × 600`, gốc ở góc trên trái. Admin chọn một trong 7 khu rồi bấm đặt ghim; tọa độ `map_x`, `map_y` lưu thẳng trong database nên không đổi theo kích thước màn hình. Ghim là phần tử phủ lên SVG theo phần trăm để dễ chạm và hỗ trợ bàn phím. Hiện vật không có tọa độ thì không hiện trên bản đồ. Web `/map` và tab Bản đồ của app dùng chung nguồn dữ liệu. Đây là thiết kế; hai màn hình map hiện chưa có.”
+“Không dùng GPS hay beacon. Sơ đồ dùng hệ tọa độ cố định `1000 × 600`; web vẽ bằng SVG, mobile vẽ bằng `View` tuyệt đối để không thêm dependency và vẫn chạy Expo Go. Admin chọn một trong 7 khu rồi bấm đặt ghim; `map_x`, `map_y` lưu thẳng trong database. Web `/map` và tab Bản đồ mobile dùng chung dữ liệu qua API/demo dùng chung `shared/demoMuseumMap.ts`. Bằng chứng: hiện vật tạm lưu tại `(210, 120)` hiện đúng trên map; 7 khu/8 ghim không tràn ở 320–1440 px. Chưa bấm thử trên điện thoại thật, nên phần chạm/VoiceOver vẫn Blocked.”
 
 ## 7. Những điểm cần tránh nói quá
 
@@ -367,10 +371,10 @@ Hãy trả lời theo mẫu: “Em phụ trách **[phần thật]**. Đầu vào
 - Không nói “đạt accessibility hoàn toàn”; chưa kiểm tra screen reader thật và một số phép đo contrast/zoom còn giới hạn.
 - Không nói “đạt mục tiêu hiệu năng production”; 468 ms là kết quả mô phỏng, web/API local.
 - Không gọi 8 bản dịch/ảnh demo là nội dung bảo tàng chính thức; dữ liệu đang là bản nháp/placeholder.
-- Không nói Supabase cloud đã sẵn sàng cho nghiệm thu nội dung thật; hiện database thật chạy local, chưa triển khai cloud.
+- Không nói Supabase production đã sẵn sàng cho nghiệm thu nội dung thật; nguồn chuẩn hiện là project non-production đã duyệt.
 - Không trình bày CMS, lịch sử xem, dịch câu hoặc yêu thích là tiêu chí Must của MVP. Một số code phụ đang tồn tại, nhưng phạm vi PRD có loại trừ hoặc xếp Should.
 - Không khẳng định nhóm dùng Scrum/Agile, ai phụ trách phần nào, hay mốc thời gian nào nếu không đúng với thực tế nhóm.
-- Không nói admin/analytics/map đã chạy được: hiện mới có thiết kế, API và UI chưa triển khai. Kịch bản 5–7 phút ở phần Demo là dự kiến, chưa đo thời gian thật.
+- Không nói mobile/screen reader đã kiểm thử đầy đủ: kịch bản API/UI web đã chạy, nhưng chạm ghim và VoiceOver/TalkBack vẫn Blocked.
 - Không gọi 30 ngày đầu của biểu đồ là lượt truy cập thật; đó là dữ liệu seed.
 
 ## 8. Tài liệu nên mở khi cần dẫn chứng
@@ -384,6 +388,9 @@ Hãy trả lời theo mẫu: “Em phụ trách **[phần thật]**. Đầu vào
 - [Kiểm thử mobile trên thiết bị](qa/P2-03-mobile-device.md)
 - [Đo hiệu năng](qa/P2-05-performance.md)
 - [E2E web](qa/P3-01-e2e.md)
-- [Kiểm tra chốt P8-04](qa/P8-04-final-verification.md)
+- [Kiểm tra chốt P8-04 (28/11, lịch sử)](qa/P8-04-final-verification.md)
+- [Kiểm tra chốt P8-04 (29/11)](qa/P8-04-final-verification-2026-11-29.md)
+- [Đồng bộ tài liệu P8-01](qa/P8-01-docs-sync.md)
+- [Bằng chứng AC-19…AC-28](qa/P8-02-supplemental-evidence.md)
 - [Thiết kế phần bổ sung](KE-HOACH-ADMIN-MAP-THONG-KE.md)
 - [Rà soát nội dung mẫu](../backend/src/db/CONTENT-REVIEW.md)

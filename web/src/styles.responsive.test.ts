@@ -58,6 +58,8 @@ describe("responsive web styles", () => {
     const tablet = mediaBody("(min-width: 681px) and (max-width: 900px)");
     expect(tablet).toContain(".artifact-grid");
     expect(tablet).toContain("repeat(2, minmax(0, 1fr))");
+    expect(tablet).toContain(".header-preferences");
+    expect(tablet).toMatch(/\.header-preferences\s*\{[^}]*width: 100%/s);
   });
 
   it("keeps map and chart fluid without horizontal overflow", () => {

@@ -197,7 +197,7 @@
           }
         ]
       },
-      "_note": "Chỉ hiện vật đã xuất bản và có zone_id/tọa độ nằm trong artifacts; khi thiếu bản dịch thì fallback vi. unplaced_artifacts là khóa tùy chọn."
+      "_note": "Chỉ hiện vật đã xuất bản và có zone_id/tọa độ nằm trong artifacts; khi thiếu bản dịch thì fallback vi. unplaced_artifacts là khóa tùy chọn. Web và mobile/src/api/client.ts parse cùng shape này; EXPO_PUBLIC_DEMO_MODE=true chỉ đổi nguồn dữ liệu sang shared/demoMuseumMap.ts."
     }
   },
   "analyticsPageview": {
