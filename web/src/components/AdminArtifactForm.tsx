@@ -11,6 +11,7 @@ import type { ChangeEvent, FormEvent, ReactNode } from "react";
 import {
   ADMIN_LANGUAGES,
   createAdminArtifact,
+  deleteAdminArtifact,
   getAdminArtifact,
   saveAdminArtifactTranslation,
   updateAdminArtifact,
@@ -168,6 +169,8 @@ export function AdminArtifactFormPage({
     useState<TranslationLanguage>("vi");
   const [isLoading, setIsLoading] = useState(mode === "edit");
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
   const [hasLoadError, setHasLoadError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(() => {
@@ -531,6 +534,40 @@ export function AdminArtifactFormPage({
     }
   }
 
+  async function handleDelete(): Promise<void> {
+    if (mode !== "edit" || !id || !token || isDeleting) {
+      return;
+    }
+
+    const name = artifact.name.trim() || "này";
+    const confirmed = window.confirm(
+      `Bạn có chắc muốn xóa vĩnh viễn hiện vật “${name}” không? Hành động này không thể hoàn tác.`,
+    );
+    if (!confirmed) {
+      return;
+    }
+
+    setDeleteError(null);
+    setIsDeleting(true);
+    try {
+      await deleteAdminArtifact(id, token);
+      dirtyRef.current = false;
+      setIsDirty(false);
+      navigate("/admin", {
+        replace: true,
+        state: { successMessage: `Đã xóa hiện vật “${name}”.` },
+      });
+    } catch (error) {
+      setDeleteError(
+        error instanceof Error
+          ? error.message
+          : "Không thể xóa hiện vật. Vui lòng thử lại.",
+      );
+    } finally {
+      setIsDeleting(false);
+    }
+  }
+
   if (isLoading) {
     return (
       <AdminArtifactFormState
@@ -839,6 +876,31 @@ export function AdminArtifactFormPage({
           </button>
         </div>
       </form>
+
+      {mode === "edit" ? (
+        <section
+          className="admin-form-section admin-delete-section"
+          aria-labelledby="admin-delete-title"
+        >
+          <h2 id="admin-delete-title">Xóa hiện vật</h2>
+          <p className="admin-field-hint">
+            Xóa vĩnh viễn hiện vật này cùng toàn bộ bản dịch. Không thể hoàn tác.
+          </p>
+          <button
+            className="button admin-delete-button"
+            disabled={isDeleting}
+            onClick={() => void handleDelete()}
+            type="button"
+          >
+            {isDeleting ? "Đang xóa..." : "Xóa hiện vật"}
+          </button>
+          {deleteError ? (
+            <p className="admin-form-message admin-form-error" role="alert">
+              {deleteError}
+            </p>
+          ) : null}
+        </section>
+      ) : null}
     </section>
   );
 }

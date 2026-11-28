@@ -1275,6 +1275,28 @@ p {
   cursor: wait;
 }
 
+.admin-delete-section {
+  border-color: #d5a39f;
+}
+
+.admin-delete-button {
+  min-width: 132px;
+  justify-content: center;
+  border: 1px solid #b44a3f;
+  background: #fff5f4;
+  color: #762820;
+  cursor: pointer;
+}
+
+.admin-delete-button:hover {
+  background: #ffe9e6;
+}
+
+.admin-delete-button:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
 @media (min-width: 681px) and (max-width: 900px) {
   .artifact-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

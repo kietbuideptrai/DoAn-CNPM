@@ -228,6 +228,17 @@ export function updateAdminArtifact(
   );
 }
 
+export function deleteAdminArtifact(
+  id: string,
+  token: string,
+): Promise<void> {
+  return requestAdmin<void>(
+    `${ADMIN_ARTIFACTS_PATH}/${encodeURIComponent(id)}`,
+    token,
+    { method: "DELETE" },
+  );
+}
+
 export function saveAdminArtifactTranslation(
   id: string,
   translation: AdminArtifactTranslation,

@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   ADMIN_UNAUTHORIZED_EVENT,
   createAdminArtifact,
+  deleteAdminArtifact,
   getAdminArtifacts,
   loginAdmin,
   requestAdmin,
@@ -183,6 +184,23 @@ describe("admin API client", () => {
         body: JSON.stringify({ is_published: false }),
       }),
     );
+  });
+
+  it("deletes the artifact with a bearer token", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(
+      deleteAdminArtifact("artifact/id", "admin-token"),
+    ).resolves.toBeUndefined();
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/admin/artifacts/artifact%2Fid",
+      expect.objectContaining({ method: "DELETE" }),
+    );
+    expect(
+      new Headers(fetchMock.mock.calls[0][1]?.headers).get("Authorization"),
+    ).toBe("Bearer admin-token");
   });
 
   it("rejects malformed artifact list data", async () => {
