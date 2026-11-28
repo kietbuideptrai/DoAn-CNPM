@@ -10,7 +10,7 @@ bản đồ). Luồng chính vẫn là:
 | Khu vực | Trạng thái |
 | --- | --- |
 | Database | **Supabase PostgreSQL non-production** là nguồn chuẩn, kết nối qua pooler/TLS bằng `DATABASE_URL`. Podman local chỉ là dự phòng. Không dán connection string hay project ref thật vào repo. |
-| Backend | API MVP chạy ổn; phần admin/map/analytics đang chốt theo issue #8–#16. Sau khi gộp nhánh bổ sung: `npm test` 23/23, `npm run build` đạt, `/api/health` trả `database: ok`. |
+| Backend | API MVP + admin/map/analytics đã có mã và test: `npm test` 45/45, `npm run build` đạt. Cần chạy runbook/schema/seed trên project Supabase đã duyệt trước nghiệm thu. |
 | Web | Sau khi gộp nhánh bổ sung: `npm test` 92/92, `npm run build` đạt; `.env.local` đặt `VITE_DEMO_MODE=false` và gọi API thật. |
 | Mobile | `npm run typecheck` và `npm run lint` đạt; `EXPO_PUBLIC_DEMO_MODE=false`, trỏ API qua IP LAN. Chưa kiểm thử trên thiết bị thật. |
 | Quản trị | Web đã có UI đăng nhập/danh sách/form/ẩn/xóa; backend auth + CRUD đã có mã trên nhánh bổ sung, chờ issue #9/#10 chốt trên Supabase. |
@@ -109,27 +109,27 @@ này có thể làm song song với P1–P3; không thay thế các task cũ.
 
 Tổng khoảng 19–20 ngày công; ba người làm song song khoảng 1,5–2 tuần.
 
-- [ ] **P4-01** Cập nhật schema + migration + seed admin trên Supabase non-production.
+- [x] **P4-01** Cập nhật schema + migration + seed admin trên Supabase non-production.
   **Đạt khi:** đã đối chiếu project ref/host pooler; `schema.sql` và các
   `migrate-*.sql` chạy được bằng SQL Editor/`psql "$DATABASE_URL"`; có bảng
   `museum_zones`, `page_views`; `artifacts` có `zone_id`, `map_x`, `map_y`; xóa
   hiện vật xóa bản dịch theo; `npm run seed:admin` tạo tài khoản từ secret store.
-- [ ] **P4-02** API đăng nhập admin + middleware JWT với `admin_users` trên Supabase.
+- [x] **P4-02** API đăng nhập admin + middleware JWT với `admin_users` trên Supabase.
   **Đạt khi:** đúng email/mật khẩu đã seed trả token; sai trả 401; thiếu/hết hạn
   token trả 401; `ADMIN_JWT_SECRET` nằm ở secret store; `npm test` có test hash/token.
-- [ ] **P4-03** API CRUD hiện vật và bản dịch trên Supabase.
+- [x] **P4-03** API CRUD hiện vật và bản dịch trên Supabase.
   **Đạt khi:** danh sách gồm cả hiện vật ẩn; tạo/sửa/xóa được; slug trùng trả 409;
   upsert bản dịch 5 ngôn ngữ; xóa trả 204 nhờ FK `ON DELETE CASCADE`; không lộ
   lỗi SQL/connection string trong response.
-- [ ] **P4-04** API bản đồ công khai đọc từ `museum_zones` và vị trí trên Supabase.
+- [x] **P4-04** API bản đồ công khai đọc từ `museum_zones` và vị trí trên Supabase.
   **Đạt khi:** `GET /api/museum/map?lang=vi` trả zones + hiện vật đã xuất bản kèm
   tọa độ; hiện vật ẩn/không có vị trí không xuất hiện trong danh sách chính; có
   fallback `vi`.
-- [ ] **P4-05** API analytics ghi bảng `page_views` trên Supabase.
+- [x] **P4-05** API analytics ghi bảng `page_views` trên Supabase.
   **Đạt khi:** `POST /api/analytics/pageview` trả 204, tách được `artifact_slug`,
   không lưu IP/user-agent; `GET /api/admin/analytics/summary?days=30` trả tổng,
   daily đủ 30 ngày theo `Asia/Ho_Chi_Minh` và top hiện vật.
-- [ ] **P4-06** Test backend + tài liệu API Supabase-first.
+- [x] **P4-06** Test backend + tài liệu API Supabase-first.
   **Đạt khi:** `npm test` và `npm run build` pass; `.env.example` có
   `DATABASE_URL` để trống kèm ghi chú pooler/TLS và `ADMIN_JWT_SECRET`;
   README/`src/db/README.md` có thứ tự schema → migration → seed và ví dụ API,
@@ -174,14 +174,14 @@ Tổng khoảng 19–20 ngày công; ba người làm song song khoảng 1,5–2
 
 ### P7 — Dữ liệu demo
 
-- [ ] **P7-01** Seed 30 ngày lượt truy cập vào `page_views` trên Supabase.
+- [x] **P7-01** Seed 30 ngày lượt truy cập vào `page_views` trên Supabase.
   **Đạt khi:** `npm run seed:analytics` tạo dữ liệu 30 ngày trên project đã duyệt,
   chạy lại không nhân đôi nếu không có `--force`; biểu đồ có số liệu ngay khi demo;
   không lưu IP/user-agent.
-- [ ] **P7-02** Seed khu vực + vị trí 8 hiện vật trên Supabase.
+- [x] **P7-02** Seed khu vực + vị trí 8 hiện vật trên Supabase.
   **Đạt khi:** seed idempotent theo slug mới nhất; `GET /api/museum/map` trả đủ
   7 khu và 8 hiện vật có tọa độ từ Supabase.
-- [ ] **P7-03** Runbook setup/reset Supabase.
+- [x] **P7-03** Runbook setup/reset Supabase.
   **Đạt khi:** script kiểm tra project ref/host pooler, chạy schema/migration/seed/
   admin/analytics theo thứ tự; reset chỉ trên non-production và có xác nhận;
   `setup-local-db.sh` chỉ giữ làm fallback; README ghi rõ lệnh.

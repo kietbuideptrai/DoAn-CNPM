@@ -1,4 +1,5 @@
 {
+  "_note": "Bộ mẫu request/response cho tài liệu API backend Supabase-first (issue #13). Mọi host, token, email, UUID và slug đều là placeholder/minh họa, không phải dữ liệu nghiệm thu và không chứa credential thật. Khi chạy thử, chỉ trỏ tới project Supabase non-production đã được đối chiếu.",
   "artifactDetail": {
     "slug": "tank-001",
     "image_url": "https://example.test/tank-001.jpg",
@@ -18,5 +19,262 @@
   },
   "notFound": {
     "message": "Không tìm thấy hiện vật"
+  },
+  "adminLogin": {
+    "request": {
+      "method": "POST",
+      "url": "https://api.example.test/api/admin/auth/login",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "email": "admin@example.test",
+        "password": "<ADMIN_PASSWORD_FROM_SECRET_STORE>"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "token": "<ADMIN_TOKEN>"
+      }
+    }
+  },
+  "adminArtifactsList": {
+    "request": {
+      "method": "GET",
+      "url": "https://api.example.test/api/admin/artifacts",
+      "headers": {
+        "Authorization": "Bearer <ADMIN_TOKEN>"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "artifacts": [
+          {
+            "id": "11111111-1111-4111-8111-111111111111",
+            "name": "Máy bay cường kích A-1 Skyraider",
+            "slug": "a-1-skyraider",
+            "category": "Phương tiện",
+            "is_published": true,
+            "zone_id": "phong-1",
+            "map_x": 120,
+            "map_y": 130
+          },
+          {
+            "id": "22222222-2222-4222-8222-222222222222",
+            "name": "Hiện vật chưa công bố",
+            "slug": "hien-vat-an",
+            "category": "Hiện vật",
+            "is_published": false,
+            "zone_id": null,
+            "map_x": null,
+            "map_y": null
+          }
+        ]
+      },
+      "_note": "Danh sách quản trị trả cả hiện vật ẩn; client web cũng chấp nhận response là mảng trực tiếp."
+    }
+  },
+  "adminArtifactUpdate": {
+    "request": {
+      "method": "PATCH",
+      "url": "https://api.example.test/api/admin/artifacts/11111111-1111-4111-8111-111111111111",
+      "headers": {
+        "Authorization": "Bearer <ADMIN_TOKEN>",
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "name": "Máy bay cường kích A-1 Skyraider",
+        "slug": "a-1-skyraider",
+        "category": "Phương tiện",
+        "image_url": "https://example.test/a-1-skyraider.jpg",
+        "zone_id": "phong-1",
+        "map_x": 120,
+        "map_y": 130
+      }
+    },
+    "response": {
+      "status": 204,
+      "body": null,
+      "_note": "Có thể gửi một phần trường, ví dụ {\"is_published\": true}. Server trả 204 không có body."
+    }
+  },
+  "adminArtifactDelete": {
+    "request": {
+      "method": "DELETE",
+      "url": "https://api.example.test/api/admin/artifacts/11111111-1111-4111-8111-111111111111",
+      "headers": {
+        "Authorization": "Bearer <ADMIN_TOKEN>"
+      }
+    },
+    "response": {
+      "status": 204,
+      "body": null,
+      "_note": "Xóa hiện vật cũng xóa bản dịch nhờ ON DELETE CASCADE; lịch sử page_views theo artifact_slug được giữ lại."
+    }
+  },
+  "museumZones": {
+    "request": {
+      "method": "GET",
+      "url": "https://api.example.test/api/museum/zones"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "zones": [
+          {
+            "id": "phong-1",
+            "name": "Phòng Kháng chiến và Độc lập",
+            "short_name": "Kháng chiến",
+            "description": "Khu trưng bày chính của bảo tàng.",
+            "kind": "gallery",
+            "x": 60,
+            "y": 60,
+            "width": 280,
+            "height": 180,
+            "color": "#EAF2EC",
+            "sort_order": 1
+          },
+          {
+            "id": "duong-di-chinh",
+            "name": "Đường đi chính",
+            "short_name": "Lối đi",
+            "description": "",
+            "kind": "walkway",
+            "x": 40,
+            "y": 250,
+            "width": 320,
+            "height": 40,
+            "color": "#F2F2F2",
+            "sort_order": 9
+          }
+        ]
+      },
+      "_note": "Client web chấp nhận mảng trực tiếp hoặc object có khóa zones; response trả cả khu vực walkway/lobby để vẽ nền."
+    }
+  },
+  "museumMapVi": {
+    "request": {
+      "method": "GET",
+      "url": "https://api.example.test/api/museum/map?lang=vi"
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "zones": [
+          {
+            "id": "phong-1",
+            "name": "Phòng Kháng chiến và Độc lập",
+            "short_name": "Kháng chiến",
+            "description": "Khu trưng bày chính của bảo tàng.",
+            "kind": "gallery",
+            "x": 60,
+            "y": 60,
+            "width": 280,
+            "height": 180,
+            "color": "#EAF2EC",
+            "sort_order": 1
+          }
+        ],
+        "artifacts": [
+          {
+            "slug": "a-1-skyraider",
+            "title": "Máy bay cường kích A-1 Skyraider",
+            "summary": "Máy bay cường kích từng phục vụ trong chiến tranh.",
+            "image_url": "https://example.test/a-1-skyraider.jpg",
+            "zone_id": "phong-1",
+            "x": 120,
+            "y": 130
+          }
+        ],
+        "unplaced_artifacts": [
+          {
+            "slug": "hien-vat-chua-co-toa-do",
+            "title": "Hiện vật chưa có tọa độ",
+            "summary": "",
+            "image_url": "https://example.test/hien-vat-chua-co-toa-do.jpg"
+          }
+        ]
+      },
+      "_note": "Chỉ hiện vật đã xuất bản và có zone_id/tọa độ nằm trong artifacts; khi thiếu bản dịch thì fallback vi. unplaced_artifacts là khóa tùy chọn."
+    }
+  },
+  "analyticsPageview": {
+    "request": {
+      "method": "POST",
+      "url": "https://api.example.test/api/analytics/pageview",
+      "headers": {
+        "Content-Type": "application/json"
+      },
+      "body": {
+        "visitor_id": "<VISITOR_UUID_VALID>",
+        "path": "/artifacts/a-1-skyraider"
+      }
+    },
+    "response": {
+      "status": 204,
+      "body": null,
+      "_note": "Thay <VISITOR_UUID_VALID> bằng UUID v4 do client tạo. path phải bắt đầu bằng /, dài 1–300 ký tự và không được bắt đầu bằng /admin. Server tự tách artifact_slug từ /artifacts/:slug; không lưu IP/user-agent."
+    }
+  },
+  "adminAnalyticsSummary30Days": {
+    "request": {
+      "method": "GET",
+      "url": "https://api.example.test/api/admin/analytics/summary?days=30",
+      "headers": {
+        "Authorization": "Bearer <ADMIN_TOKEN>"
+      }
+    },
+    "response": {
+      "status": 200,
+      "body": {
+        "range": {
+          "days": 30,
+          "from": "2026-10-29",
+          "to": "2026-11-27"
+        },
+        "totals": {
+          "pageviews": 1820,
+          "unique_visitors": 640,
+          "today_pageviews": 54,
+          "today_unique_visitors": 31,
+          "peak_day": {
+            "date": "2026-11-15",
+            "pageviews": 92
+          }
+        },
+        "daily": [
+          {
+            "date": "2026-10-29",
+            "pageviews": 41,
+            "unique_visitors": 22
+          },
+          {
+            "date": "2026-10-30",
+            "pageviews": 0,
+            "unique_visitors": 0
+          },
+          {
+            "date": "2026-11-27",
+            "pageviews": 54,
+            "unique_visitors": 31
+          }
+        ],
+        "top_artifacts": [
+          {
+            "slug": "a-1-skyraider",
+            "title": "Máy bay cường kích A-1 Skyraider",
+            "views": 120
+          },
+          {
+            "slug": "tank-001",
+            "title": "Xe tăng lịch sử",
+            "views": 86
+          }
+        ]
+      },
+      "_note": "Shape khớp AdminAnalyticsSummary trong web/src/api/adminClient.ts. daily ở đây chỉ rút gọn để minh họa; response thật có đủ 30 ngày theo Asia/Ho_Chi_Minh, ngày không có dữ liệu vẫn trả 0. days chỉ nhận 7 hoặc 30 (mặc định 30); peak_day có thể là null."
+    }
   }
 }
