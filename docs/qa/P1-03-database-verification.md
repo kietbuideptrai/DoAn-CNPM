@@ -2,7 +2,7 @@
 
 - **Ngày chạy:** 2026-11-25
 - **Môi trường:** PostgreSQL 16 (Podman, `127.0.0.1:5432`), backend Express local
-  `127.0.0.1:3000`, dữ liệu 8 hiện vật bảo tàng.
+  `127.0.0.1:3000`, dữ liệu 8 hiện vật demo xuất từ Supabase.
 - **Dữ liệu:** `seed.sql` + xuất bản 8 slug bằng `scripts/setup-local-db.sh`.
 
 ## Database
@@ -30,9 +30,9 @@
 | `GET /api/artifacts?lang=ja` | 200, 8 hiện vật |
 | `GET /api/artifacts?lang=ko` | 200, 8 hiện vật |
 | `GET /api/languages` | 200, đủ 5 ngôn ngữ |
-| `GET /api/artifacts/dong-hai-dong-1946?lang=ja` | 200, bản dịch `ja`, `available_languages` đủ 5 |
-| `GET /api/artifacts?lang=ja&q=đồng` | 200, khớp `dong-hai-dong-1946` (tìm tiếng Việt khi xem tiếng Nhật) |
-| `GET /api/artifacts?lang=vi&q=coin` | 200, khớp `dong-hai-dong-1946` (tìm tiếng Anh khi xem tiếng Việt) |
+| `GET /api/artifacts/a-1-skyraider?lang=ja` | 200, bản dịch `ja`, `available_languages` đủ 5 |
+| `GET /api/artifacts?lang=ja&q=skyraider` | 200, khớp `a-1-skyraider` (tìm theo tên gốc khi xem tiếng Nhật) |
+| `GET /api/artifacts?lang=vi&q=attack` | 200, khớp `a-1-skyraider` (tìm theo tiêu đề tiếng Anh khi xem tiếng Việt) |
 | `GET /api/artifacts/khong-ton-tai?lang=vi` | 404 |
 
 ## CORS

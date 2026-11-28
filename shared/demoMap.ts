@@ -102,18 +102,14 @@ export const demoZones: MuseumZone[] = [
 
 const demoPositions: Record<string, { zone_id: string; x: number; y: number }> =
   {
-    "dong-hai-dong-1946": { zone_id: "phong-1", x: 120, y: 130 },
-    "bao-linh-kach-menh-so-2": { zone_id: "phong-1", x: 260, y: 130 },
-    "bo-do-an-chu-tich-ho-chi-minh": { zone_id: "phong-2", x: 430, y: 125 },
-    "tui-dung-com-nuoc-ho-chi-minh": { zone_id: "phong-2", x: 570, y: 125 },
-    "doi-guoc-go-ho-chi-minh": { zone_id: "phong-2", x: 500, y: 195 },
-    "me-con-ngay-gap-mat": { zone_id: "phong-3", x: 730, y: 125 },
-    "tap-tho-trong-tuyen": { zone_id: "phong-3", x: 870, y: 125 },
-    "tranh-co-dong-cach-mang-thang-tam": {
-      zone_id: "phong-4",
-      x: 200,
-      y: 345,
-    },
+    "a-1-skyraider": { zone_id: "phong-1", x: 120, y: 130 },
+    "blu-82": { zone_id: "phong-1", x: 260, y: 130 },
+    "chuong-cop-con-dao": { zone_id: "phong-2", x: 430, y: 125 },
+    "f-5a": { zone_id: "phong-2", x: 570, y: 125 },
+    "m48-patton": { zone_id: "phong-2", x: 500, y: 195 },
+    "may-chem": { zone_id: "phong-3", x: 730, y: 125 },
+    "phao-155mm": { zone_id: "phong-3", x: 870, y: 125 },
+    "uh-1-huey": { zone_id: "phong-4", x: 200, y: 345 },
   };
 
 export function getDemoMuseumMap(language: Language): MuseumMapData {

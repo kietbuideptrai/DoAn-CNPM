@@ -5,6 +5,7 @@ import {
   deleteAdminArtifact,
   getAdminAnalyticsSummary,
   getAdminArtifacts,
+  getMuseumZones,
   loginAdmin,
   requestAdmin,
   saveAdminArtifactTranslation,
@@ -100,6 +101,9 @@ describe("admin API client", () => {
       slug: "hien-vat",
       category: "Lịch sử",
       image_url: "https://example.test/image.jpg",
+      zone_id: "phong-1",
+      map_x: 120,
+      map_y: 130,
     };
     const translation = {
       language_code: "vi" as const,
@@ -166,6 +170,9 @@ describe("admin API client", () => {
         slug: "hien-vat",
         category: "Lịch sử",
         is_published: true,
+        zone_id: null,
+        map_x: null,
+        map_y: null,
       },
     ]);
   });
@@ -185,6 +192,37 @@ describe("admin API client", () => {
         body: JSON.stringify({ is_published: false }),
       }),
     );
+  });
+
+  it("loads museum zones from the public endpoint", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          zones: [
+            {
+              id: "phong-1",
+              name: "Phòng Kháng chiến và Độc lập",
+              short_name: "Kháng chiến",
+              description: "",
+              kind: "gallery",
+              x: 60,
+              y: 60,
+              width: 280,
+              height: 180,
+              color: "#EAF2EC",
+              sort_order: 1,
+            },
+          ],
+        }),
+        { status: 200, headers: { "Content-Type": "application/json" } },
+      ),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(getMuseumZones()).resolves.toMatchObject([
+      { id: "phong-1", x: 60, y: 60, width: 280, height: 180 },
+    ]);
+    expect(fetchMock).toHaveBeenCalledWith("/api/museum/zones");
   });
 
   it("deletes the artifact with a bearer token", async () => {

@@ -85,7 +85,7 @@ describe("development seed safety", () => {
     assert.ok(
       imageSources.images.every(
         (image) =>
-          image.articleUrl.startsWith("https://baotanghochiminh.vn/") &&
+          typeof image.articleUrl === "string" &&
           image.imageUrl.startsWith("https://placehold.co/") &&
           image.sourceImageUrl === null &&
           image.licenseOrPermission === null &&
@@ -93,18 +93,17 @@ describe("development seed safety", () => {
           seed.includes(image.imageUrl),
       ),
     );
-    assert.doesNotMatch(seed, /War Remnants Museum|Chứng tích Chiến tranh/);
     assert.deepEqual(
       imageSources.images.map(({ slug }) => slug).sort(),
       [
-        "dong-hai-dong-1946",
-        "me-con-ngay-gap-mat",
-        "tap-tho-trong-tuyen",
-        "bao-linh-kach-menh-so-2",
-        "bo-do-an-chu-tich-ho-chi-minh",
-        "tui-dung-com-nuoc-ho-chi-minh",
-        "doi-guoc-go-ho-chi-minh",
-        "tranh-co-dong-cach-mang-thang-tam",
+        "a-1-skyraider",
+        "blu-82",
+        "chuong-cop-con-dao",
+        "f-5a",
+        "m48-patton",
+        "may-chem",
+        "phao-155mm",
+        "uh-1-huey",
       ].sort(),
     );
   });

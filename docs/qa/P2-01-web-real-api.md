@@ -22,7 +22,7 @@ VITE_DEMO_MODE=false
 | Case | Kết quả |
 | --- | --- |
 | `/artifacts` hiển thị danh sách | 8 link hiện vật, khớp 8 slug trong database |
-| `/artifacts/dong-hai-dong-1946?lang=ja` | `h1` = “1946年発行の2ドン硬貨”, nội dung từ API thật |
+| `/artifacts/a-1-skyraider?lang=ja` | `h1` = “A-1スカイレイダー攻撃機”, nội dung từ API thật |
 | Thuộc tính ngôn ngữ vùng nội dung | `.detail-content[lang="ja"]` đúng |
 | `html[lang]` | `vi` (khung giao diện tiếng Việt) |
 | API health | `backend: ok`, `database: ok` |

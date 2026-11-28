@@ -13,6 +13,16 @@ export interface AdminArtifactListItem {
   slug: string;
   category: string;
   is_published: boolean;
+  zone_id: string | null;
+  map_x: number | null;
+  map_y: number | null;
+}
+
+function toCoordinate(value: unknown): number | null {
+  if (value === null || value === undefined) {
+    return null;
+  }
+  return Number(value);
 }
 
 export interface AdminArtifactDetail extends AdminArtifactListItem {
@@ -25,8 +35,15 @@ export interface AdminArtifactDetail extends AdminArtifactListItem {
   }>;
 }
 
-interface AdminArtifactRow extends Omit<AdminArtifactDetail, "translations"> {
+interface AdminArtifactRow extends Omit<AdminArtifactDetail, "translations" | "map_x" | "map_y"> {
   translations: AdminArtifactDetail["translations"] | null;
+  map_x: unknown;
+  map_y: unknown;
+}
+
+interface AdminArtifactListRow extends Omit<AdminArtifactListItem, "map_x" | "map_y"> {
+  map_x: unknown;
+  map_y: unknown;
 }
 
 const UUID_PATTERN =
@@ -38,23 +55,35 @@ function requireArtifactId(id: string): void {
   }
 }
 
-function isDuplicateSlugError(error: unknown): boolean {
+function hasErrorCode(error: unknown, code: string): boolean {
   return (
     typeof error === "object" &&
     error !== null &&
     "code" in error &&
-    error.code === "23505"
+    error.code === code
   );
 }
 
+function isDuplicateSlugError(error: unknown): boolean {
+  return hasErrorCode(error, "23505");
+}
+
+function isInvalidZoneError(error: unknown): boolean {
+  return hasErrorCode(error, "23503");
+}
+
 export async function listAdminArtifacts(): Promise<AdminArtifactListItem[]> {
-  const result = await pool.query<AdminArtifactListItem>(
-    `SELECT id, name, slug, category, is_published
+  const result = await pool.query<AdminArtifactListRow>(
+    `SELECT id, name, slug, category, is_published, zone_id, map_x, map_y
      FROM artifacts
      ORDER BY name, slug`,
   );
 
-  return result.rows;
+  return result.rows.map((artifact) => ({
+    ...artifact,
+    map_x: toCoordinate(artifact.map_x),
+    map_y: toCoordinate(artifact.map_y),
+  }));
 }
 
 export async function getAdminArtifact(
@@ -69,6 +98,9 @@ export async function getAdminArtifact(
        artifact.category,
        artifact.image_url,
        artifact.is_published,
+       artifact.zone_id,
+       artifact.map_x,
+       artifact.map_y,
        COALESCE(
          json_agg(
            json_build_object(
@@ -94,7 +126,12 @@ export async function getAdminArtifact(
     return undefined;
   }
 
-  return { ...artifact, translations: artifact.translations ?? [] };
+  return {
+    ...artifact,
+    translations: artifact.translations ?? [],
+    map_x: toCoordinate(artifact.map_x),
+    map_y: toCoordinate(artifact.map_y),
+  };
 }
 
 export async function createAdminArtifact(
@@ -102,15 +139,26 @@ export async function createAdminArtifact(
 ): Promise<{ id: string }> {
   try {
     const result = await pool.query<{ id: string }>(
-      `INSERT INTO artifacts (name, slug, category, image_url)
-       VALUES ($1, $2, $3, $4)
+      `INSERT INTO artifacts (name, slug, category, image_url, zone_id, map_x, map_y)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING id`,
-      [fields.name, fields.slug, fields.category, fields.image_url],
+      [
+        fields.name,
+        fields.slug,
+        fields.category,
+        fields.image_url,
+        fields.zone_id,
+        fields.map_x,
+        fields.map_y,
+      ],
     );
     return { id: result.rows[0].id };
   } catch (error) {
     if (isDuplicateSlugError(error)) {
       throw new HttpError(409, "Slug đã tồn tại. Hãy chọn slug khác.");
+    }
+    if (isInvalidZoneError(error)) {
+      throw new HttpError(400, "Khu vực bản đồ không hợp lệ");
     }
     throw error;
   }
@@ -127,6 +175,9 @@ export async function updateAdminArtifact(
     "category",
     "image_url",
     "is_published",
+    "zone_id",
+    "map_x",
+    "map_y",
   ] as const;
   const updatedColumns = columns.filter(
     (column) => patch[column] !== undefined,
@@ -154,6 +205,9 @@ export async function updateAdminArtifact(
   } catch (error) {
     if (isDuplicateSlugError(error)) {
       throw new HttpError(409, "Slug đã tồn tại. Hãy chọn slug khác.");
+    }
+    if (isInvalidZoneError(error)) {
+      throw new HttpError(400, "Khu vực bản đồ không hợp lệ");
     }
     throw error;
   }

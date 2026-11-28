@@ -149,7 +149,7 @@ Nêu kết quả đúng theo báo cáo QA hiện có (ngày 17/11/2026):
 
 ### Dữ liệu, giới hạn và hướng phát triển
 
-- Bộ seed tham khảo 8 hiện vật trong chuyên mục “Hiện vật kể chuyện” của Bảo tàng Hồ Chí Minh, có bản nháp 5 ngôn ngữ; bản dịch chưa được chuyên gia/bảo tàng duyệt.
+- Bộ seed gồm 8 hiện vật demo xuất từ database Supabase, có bản nháp 5 ngôn ngữ; bản dịch chưa được chuyên gia duyệt.
 - Ảnh hiện tại là ảnh giữ chỗ; quyền sử dụng ảnh hiện vật chưa được xác nhận.
 - Database thật hiện chạy PostgreSQL local bằng Podman: 8 hiện vật đã xuất bản, 40 bản dịch, `/api/health` trả 200; web/mobile đã tắt demo mode. Chưa triển khai Supabase cloud.
 - Ở phần bổ sung, **30 ngày đầu tiên trên biểu đồ là dữ liệu seed** do script `seed:analytics` dự kiến tạo ra, không phải lượt truy cập thật; kể từ lúc bật ghi nhận thì số liệu mới là thật. Khi demo phải nói rõ ranh giới này.

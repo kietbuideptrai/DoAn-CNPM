@@ -23,7 +23,7 @@ bản đồ). Luồng chính vẫn là:
 ### P0 — Chốt database thật
 
 - [x] **P0-01** Dựng PostgreSQL local bằng Podman, tạo database `studyhub`.
-- [x] **P0-02** Chạy `schema.sql` + `seed.sql`, xuất bản 8 hiện vật bảo tàng.
+- [x] **P0-02** Chạy `schema.sql` + `seed.sql`, xuất bản 8 hiện vật demo từ Supabase.
 - [x] **P0-03** Trỏ `backend/.env` vào database local; `/api/health` trả HTTP 200.
 - [x] **P0-04** Tắt demo mode ở web và mobile; cấu hình `.env.example` mặc định dùng API thật.
 - [x] **P0-05** Kiểm tra CORS khi mở web bằng IP LAN (ví dụ `http://192.168.1.18:5173`).
@@ -227,7 +227,7 @@ trong `backend/.env`, chạy `schema.sql` + migration + `seed.sql`, rồi kiểm
 
 ## 5. Ghi chú dữ liệu
 
-8 hiện vật tham khảo chuyên mục “Hiện vật kể chuyện” của Bảo tàng Hồ Chí Minh.
+8 hiện vật demo được xuất từ database Supabase ngày 2026-11-28.
 Bản dịch là bản nháp cần hiệu đính; ảnh đang dùng placeholder. Trước khi công bố
 chính thức cần duyệt nội dung và xác nhận quyền sử dụng ảnh.
 

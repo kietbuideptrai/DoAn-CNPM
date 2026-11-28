@@ -91,7 +91,7 @@ describe("museum map client", () => {
 
     expect(map.zones).toHaveLength(7);
     expect(map.artifacts).toHaveLength(8);
-    expect(map.artifacts[0].title).toBe("1946年発行の2ドン硬貨");
+    expect(map.artifacts[0].title).toBe("A-1スカイレイダー攻撃機");
     expect(fetchMock).not.toHaveBeenCalled();
   });
 });

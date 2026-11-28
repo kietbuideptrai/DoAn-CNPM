@@ -1755,6 +1755,43 @@ p {
   color: var(--color-muted);
 }
 
+.admin-map-editor {
+  border: 1px solid #809188;
+  border-radius: 8px;
+  margin-top: 12px;
+  overflow: hidden;
+}
+
+.admin-map-svg {
+  cursor: crosshair;
+  display: block;
+  height: auto;
+  width: 100%;
+}
+
+.admin-map-pin {
+  pointer-events: none;
+}
+
+.admin-map-coordinates {
+  align-items: end;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 12px;
+}
+
+.admin-map-center-button {
+  align-self: end;
+  min-width: 132px;
+}
+
+@media (max-width: 680px) {
+  .admin-map-coordinates {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (min-width: 681px) and (max-width: 900px) {
   .artifact-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

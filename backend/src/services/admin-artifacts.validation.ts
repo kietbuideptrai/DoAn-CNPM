@@ -8,6 +8,9 @@ export interface AdminArtifactFields {
   slug: string;
   category: string;
   image_url: string;
+  zone_id: string | null;
+  map_x: number | null;
+  map_y: number | null;
 }
 
 export interface AdminArtifactPatch {
@@ -16,6 +19,9 @@ export interface AdminArtifactPatch {
   category?: string;
   image_url?: string;
   is_published?: boolean;
+  zone_id?: string | null;
+  map_x?: number | null;
+  map_y?: number | null;
 }
 
 export interface AdminTranslationFields {
@@ -71,6 +77,60 @@ function readString(
   return value.trim();
 }
 
+function readNullableZoneId(value: unknown): string | null | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  if (value === null || value === "") {
+    return null;
+  }
+  if (
+    typeof value !== "string" ||
+    !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(value) ||
+    value.length > 100
+  ) {
+    throw new HttpError(400, "Khu vực bản đồ không hợp lệ");
+  }
+
+  return value;
+}
+
+function readNullableCoordinate(
+  value: unknown,
+  label: string,
+  maximum: number,
+): number | null | undefined {
+  if (value === undefined) {
+    return undefined;
+  }
+  if (value === null || value === "") {
+    return null;
+  }
+
+  const coordinate =
+    typeof value === "number"
+      ? value
+      : typeof value === "string" && value.trim().length > 0
+        ? Number(value)
+        : Number.NaN;
+  if (!Number.isFinite(coordinate) || coordinate < 0 || coordinate > maximum) {
+    throw new HttpError(400, `Tọa độ ${label} phải nằm trong khoảng 0–${maximum}`);
+  }
+
+  return Math.round(coordinate * 100) / 100;
+}
+
+function ensureCoordinatePair(
+  mapX: number | null | undefined,
+  mapY: number | null | undefined,
+): void {
+  const missingX = mapX === null || mapX === undefined;
+  const missingY = mapY === null || mapY === undefined;
+  if (missingX !== missingY) {
+    throw new HttpError(400, "Cần nhập cả tọa độ x và y");
+  }
+}
+
 export function parseAdminArtifactInput(body: unknown): AdminArtifactFields {
   const record = readRecord(body);
   const slug = readString(record.slug, "slug", 200, true) ?? "";
@@ -81,11 +141,18 @@ export function parseAdminArtifactInput(body: unknown): AdminArtifactFields {
     );
   }
 
+  const mapX = readNullableCoordinate(record.map_x, "x", 1000);
+  const mapY = readNullableCoordinate(record.map_y, "y", 600);
+  ensureCoordinatePair(mapX, mapY);
+
   return {
     name: readString(record.name, "tên hiện vật", 200, true) ?? "",
     slug,
     category: readString(record.category, "danh mục", 200, false) ?? "",
     image_url: readString(record.image_url, "đường dẫn ảnh", 2048, false) ?? "",
+    zone_id: readNullableZoneId(record.zone_id) ?? null,
+    map_x: mapX ?? null,
+    map_y: mapY ?? null,
   };
 }
 
@@ -117,6 +184,18 @@ export function parseAdminArtifactPatch(body: unknown): AdminArtifactPatch {
       throw new HttpError(400, "Trạng thái xuất bản không hợp lệ");
     }
     patch.is_published = record.is_published;
+  }
+  if ("zone_id" in record) {
+    patch.zone_id = readNullableZoneId(record.zone_id);
+  }
+  if ("map_x" in record) {
+    patch.map_x = readNullableCoordinate(record.map_x, "x", 1000);
+  }
+  if ("map_y" in record) {
+    patch.map_y = readNullableCoordinate(record.map_y, "y", 600);
+  }
+  if ("map_x" in record || "map_y" in record) {
+    ensureCoordinatePair(patch.map_x, patch.map_y);
   }
 
   if (Object.keys(patch).length === 0) {
