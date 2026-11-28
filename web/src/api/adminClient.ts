@@ -40,6 +40,143 @@ export interface AdminArtifactInput {
   image_url: string;
 }
 
+export const ANALYTICS_DAYS = [7, 30] as const;
+export type AnalyticsDays = (typeof ANALYTICS_DAYS)[number];
+export const ADMIN_ANALYTICS_SUMMARY_PATH = "/api/admin/analytics/summary";
+
+export interface AnalyticsDailyPoint {
+  date: string;
+  pageviews: number;
+  unique_visitors: number;
+}
+
+export interface AnalyticsTopArtifact {
+  slug: string;
+  title: string;
+  views: number;
+}
+
+export interface AdminAnalyticsSummary {
+  range: { days: number; from: string; to: string };
+  totals: {
+    pageviews: number;
+    unique_visitors: number;
+    today_pageviews: number;
+    today_unique_visitors: number;
+    peak_day: { date: string; pageviews: number } | null;
+  };
+  daily: AnalyticsDailyPoint[];
+  top_artifacts: AnalyticsTopArtifact[];
+}
+
+export function getAdminAnalyticsSummary(
+  days: AnalyticsDays,
+  token: string,
+): Promise<AdminAnalyticsSummary> {
+  const params = new URLSearchParams({ days: String(days) });
+  return requestAdmin<unknown>(
+    `${ADMIN_ANALYTICS_SUMMARY_PATH}?${params.toString()}`,
+    token,
+  ).then(parseAnalyticsSummary);
+}
+
+function parseAnalyticsSummary(response: unknown): AdminAnalyticsSummary {
+  if (typeof response !== "object" || response === null) {
+    throw new ApiRequestError("Dữ liệu thống kê từ máy chủ không hợp lệ.", null);
+  }
+
+  const body = response as Record<string, unknown>;
+  if (
+    typeof body.range !== "object" ||
+    body.range === null ||
+    typeof body.totals !== "object" ||
+    body.totals === null ||
+    !Array.isArray(body.daily) ||
+    !Array.isArray(body.top_artifacts)
+  ) {
+    throw new ApiRequestError("Dữ liệu thống kê từ máy chủ không đầy đủ.", null);
+  }
+
+  const range = body.range as Record<string, unknown>;
+  const totals = body.totals as Record<string, unknown>;
+  if (
+    typeof range.days !== "number" ||
+    typeof range.from !== "string" ||
+    typeof range.to !== "string" ||
+    typeof totals.pageviews !== "number" ||
+    typeof totals.unique_visitors !== "number" ||
+    typeof totals.today_pageviews !== "number"
+  ) {
+    throw new ApiRequestError("Dữ liệu thống kê từ máy chủ không đầy đủ.", null);
+  }
+
+  let peakDay: AdminAnalyticsSummary["totals"]["peak_day"] = null;
+  if (totals.peak_day !== null && totals.peak_day !== undefined) {
+    if (typeof totals.peak_day !== "object") {
+      throw new ApiRequestError("Dữ liệu thống kê từ máy chủ không hợp lệ.", null);
+    }
+    const peak = totals.peak_day as Record<string, unknown>;
+    if (typeof peak.date !== "string" || typeof peak.pageviews !== "number") {
+      throw new ApiRequestError("Dữ liệu thống kê từ máy chủ không đầy đủ.", null);
+    }
+    peakDay = { date: peak.date, pageviews: peak.pageviews };
+  }
+
+  const daily = body.daily.map((item: unknown) => {
+    if (typeof item !== "object" || item === null) {
+      throw new ApiRequestError("Dữ liệu thống kê từ máy chủ không hợp lệ.", null);
+    }
+    const point = item as Record<string, unknown>;
+    if (
+      typeof point.date !== "string" ||
+      typeof point.pageviews !== "number" ||
+      typeof point.unique_visitors !== "number"
+    ) {
+      throw new ApiRequestError("Dữ liệu thống kê từ máy chủ không đầy đủ.", null);
+    }
+    return {
+      date: point.date,
+      pageviews: point.pageviews,
+      unique_visitors: point.unique_visitors,
+    };
+  });
+
+  const topArtifacts = body.top_artifacts.map((item: unknown) => {
+    if (typeof item !== "object" || item === null) {
+      throw new ApiRequestError("Dữ liệu thống kê từ máy chủ không hợp lệ.", null);
+    }
+    const artifact = item as Record<string, unknown>;
+    if (
+      typeof artifact.slug !== "string" ||
+      typeof artifact.title !== "string" ||
+      typeof artifact.views !== "number"
+    ) {
+      throw new ApiRequestError("Dữ liệu thống kê từ máy chủ không đầy đủ.", null);
+    }
+    return {
+      slug: artifact.slug,
+      title: artifact.title,
+      views: artifact.views,
+    };
+  });
+
+  return {
+    range: { days: range.days, from: range.from, to: range.to },
+    totals: {
+      pageviews: totals.pageviews,
+      unique_visitors: totals.unique_visitors,
+      today_pageviews: totals.today_pageviews,
+      today_unique_visitors:
+        typeof totals.today_unique_visitors === "number"
+          ? totals.today_unique_visitors
+          : 0,
+      peak_day: peakDay,
+    },
+    daily,
+    top_artifacts: topArtifacts,
+  };
+}
+
 export async function loginAdmin(
   email: string,
   password: string,

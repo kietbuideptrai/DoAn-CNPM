@@ -1275,6 +1275,283 @@ p {
   cursor: wait;
 }
 
+.admin-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: auto;
+}
+
+.admin-nav a {
+  padding: 8px 0;
+  border-bottom: 3px solid transparent;
+  color: var(--color-muted);
+  font-size: calc(var(--font-scale) * 14px);
+}
+
+.admin-nav a[aria-current="page"] {
+  border-color: var(--color-green);
+  color: var(--color-green);
+  font-weight: 650;
+}
+
+.admin-dashboard-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.admin-analytics-link {
+  justify-content: center;
+  border: 1px solid #809188;
+  background: var(--color-paper);
+  color: var(--color-ink);
+  cursor: pointer;
+}
+
+.admin-analytics-link:hover {
+  background: #edf1ed;
+}
+
+.analytics-range {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 20px;
+  margin: 28px 0 22px;
+  padding: 0;
+  border: 0;
+}
+
+.analytics-range legend {
+  padding: 0;
+  color: var(--color-ink);
+  font-size: calc(var(--font-scale) * 15px);
+  font-weight: 650;
+}
+
+.analytics-range-option {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: calc(var(--font-scale) * 15px);
+}
+
+.analytics-range-option input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--color-green);
+  cursor: pointer;
+}
+
+.analytics-state {
+  margin-top: 20px;
+}
+
+.analytics-range-note {
+  margin-bottom: 16px;
+  color: var(--color-muted);
+  font-size: calc(var(--font-scale) * 14px);
+}
+
+.analytics-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin: 0;
+}
+
+.analytics-card {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-paper);
+}
+
+.analytics-card dt {
+  color: var(--color-muted);
+  font-size: calc(var(--font-scale) * 14px);
+  font-weight: 650;
+}
+
+.analytics-card dd {
+  margin: 10px 0 0;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: calc(var(--font-scale) * clamp(24px, 3vw, 34px));
+  line-height: 1.15;
+  overflow-wrap: anywhere;
+}
+
+.analytics-card-detail {
+  display: block;
+  margin-top: 6px;
+  color: var(--color-muted);
+  font-family: Inter, "Segoe UI", sans-serif;
+  font-size: calc(var(--font-scale) * 13px);
+}
+
+.analytics-chart-section,
+.analytics-top-section {
+  margin-top: 32px;
+}
+
+.analytics-chart-section h2,
+.analytics-top-section h2 {
+  margin-bottom: 14px;
+  font-size: calc(var(--font-scale) * 22px);
+}
+
+.chart-panel {
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-paper);
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 0 0 12px;
+  padding: 0;
+  color: var(--color-muted);
+  font-size: calc(var(--font-scale) * 13px);
+  list-style: none;
+}
+
+.chart-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chart-legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: var(--color-green);
+}
+
+.chart-legend-swatch.chart-legend-line {
+  height: 0;
+  border-top: 3px solid #b06a2c;
+  border-radius: 0;
+}
+
+.visitor-chart-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.visitor-chart-grid line {
+  stroke: #e6ece7;
+  stroke-width: 1;
+}
+
+.visitor-chart-grid text,
+.visitor-chart-axis text {
+  fill: var(--color-muted);
+  font-size: 12px;
+}
+
+.visitor-chart-bar {
+  fill: var(--color-green);
+  opacity: 0.85;
+}
+
+.visitor-chart-line {
+  fill: none;
+  stroke: #b06a2c;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.5;
+}
+
+.visitor-chart-point {
+  fill: var(--color-paper);
+  stroke: #b06a2c;
+  stroke-width: 2;
+}
+
+.visitor-chart-hit {
+  fill: transparent;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.visitor-chart-hit:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: -2px;
+}
+
+.visitor-chart-tooltip rect {
+  fill: var(--color-ink);
+}
+
+.visitor-chart-tooltip text {
+  fill: #fff;
+  font-size: 13px;
+}
+
+.chart-empty {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: calc(var(--font-scale) * 15px);
+}
+
+.visitor-chart-data {
+  margin-top: 14px;
+}
+
+.visitor-chart-data summary {
+  width: fit-content;
+  padding: 6px 0;
+  color: var(--color-green);
+  cursor: pointer;
+  font-size: calc(var(--font-scale) * 14px);
+  font-weight: 650;
+}
+
+.visitor-chart-table {
+  min-width: 480px;
+}
+
+.visitor-chart-table caption {
+  padding: 12px 16px;
+  color: var(--color-muted);
+  font-size: calc(var(--font-scale) * 13px);
+  text-align: left;
+}
+
+.analytics-seed-note {
+  margin: 18px 0 0;
+  padding: 12px 14px;
+  border-left: 3px solid var(--color-green);
+  border-radius: 0 8px 8px 0;
+  background: #edf5ef;
+  color: #34453e;
+  font-size: calc(var(--font-scale) * 14px);
+  line-height: 1.55;
+}
+
+.analytics-top-table {
+  min-width: 420px;
+}
+
+.analytics-empty {
+  padding: 18px;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-paper);
+  color: var(--color-muted);
+}
+
 @media (min-width: 681px) and (max-width: 900px) {
   .artifact-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1464,17 +1741,32 @@ p {
     flex: 1 0 100%;
   }
 
-  .admin-header-preferences {
+  .admin-nav {
     order: 2;
     width: auto;
+    gap: 18px;
     margin-left: 0;
+  }
+
+  .admin-header-preferences {
+    order: 3;
+    width: auto;
+    margin-left: auto;
     padding-block: 0 12px;
   }
 
   .admin-logout-button {
-    order: 3;
-    margin-left: auto;
+    order: 4;
+    margin-left: 0;
     margin-bottom: 12px;
+  }
+
+  .analytics-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .chart-panel {
+    padding: 12px;
   }
 
   .admin-form-section,
@@ -1513,5 +1805,15 @@ p {
 
   .admin-form-actions > .button {
     flex: 1;
+  }
+}
+
+@media (max-width: 400px) {
+  .analytics-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-dashboard-actions > .button {
+    width: 100%;
   }
 }

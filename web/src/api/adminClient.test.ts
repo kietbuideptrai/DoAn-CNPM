@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   ADMIN_UNAUTHORIZED_EVENT,
   createAdminArtifact,
+  getAdminAnalyticsSummary,
   getAdminArtifacts,
   loginAdmin,
   requestAdmin,
@@ -198,6 +199,88 @@ describe("admin API client", () => {
 
     await expect(getAdminArtifacts("admin-token")).rejects.toThrow(
       "Dữ liệu hiện vật từ máy chủ không đầy đủ.",
+    );
+  });
+
+  it("requests the analytics summary for the selected range with a bearer token", async () => {
+    const payload = {
+      range: { days: 7, from: "2026-11-21", to: "2026-11-27" },
+      totals: {
+        pageviews: 500,
+        unique_visitors: 200,
+        today_pageviews: 54,
+        today_unique_visitors: 31,
+        peak_day: { date: "2026-11-25", pageviews: 92 },
+      },
+      daily: [{ date: "2026-11-21", pageviews: 41, unique_visitors: 22 }],
+      top_artifacts: [
+        { slug: "doi-guoc-go-ho-chi-minh", title: "Đôi guốc gỗ mộc", views: 120 },
+      ],
+    };
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify(payload), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(getAdminAnalyticsSummary(7, "admin-token")).resolves.toEqual(
+      payload,
+    );
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/admin/analytics/summary?days=7",
+      expect.objectContaining({ headers: expect.any(Headers) }),
+    );
+    expect(
+      new Headers(fetchMock.mock.calls[0][1]?.headers).get("Authorization"),
+    ).toBe("Bearer admin-token");
+  });
+
+  it("accepts an empty peak day and rejects incomplete analytics data", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            range: { days: 30, from: "2026-10-29", to: "2026-11-27" },
+            totals: {
+              pageviews: 0,
+              unique_visitors: 0,
+              today_pageviews: 0,
+              peak_day: null,
+            },
+            daily: [],
+            top_artifacts: [],
+          }),
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          },
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            range: { days: 30 },
+            totals: { pageviews: 1 },
+            daily: [{}],
+            top_artifacts: [],
+          }),
+          {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          },
+        ),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    await expect(getAdminAnalyticsSummary(30, "admin-token")).resolves.toMatchObject({
+      totals: { peak_day: null, today_unique_visitors: 0 },
+      daily: [],
+    });
+    await expect(getAdminAnalyticsSummary(30, "admin-token")).rejects.toThrow(
+      "Dữ liệu thống kê từ máy chủ không đầy đủ.",
     );
   });
 });
