@@ -10,7 +10,24 @@ bash backend/scripts/setup-local-db.sh
 ```
 
 Script dựng container `studyhub-postgres`, tạo schema nếu chưa có, nạp
-`seed.sql` (chỉ thêm bản ghi còn thiếu) và xuất bản 8 hiện vật bảo tàng.
+`seed.sql` (chỉ thêm bản ghi còn thiếu), áp dụng migration khóa ngoại xóa hiện
+vật và xuất bản 8 hiện vật bảo tàng.
+
+## Tài khoản quản trị
+
+Admin web dùng `POST /api/admin/auth/login` và gửi token ở header
+`Authorization: Bearer <token>` cho các API `/api/admin/*`. Thiết lập các biến
+sau trong `backend/.env` (không commit giá trị thật):
+
+```bash
+ADMIN_JWT_SECRET=<chuỗi ngẫu nhiên dài>
+ADMIN_EMAIL=admin@disan.local
+ADMIN_PASSWORD=<mật khẩu demo>
+cd backend && npm run seed:admin
+```
+
+`seed:admin` chỉ tạo tài khoản nếu email chưa tồn tại, không ghi đè mật khẩu cũ.
+Token có hạn 8 giờ; web tự điều hướng về `/admin/login` khi nhận 401.
 
 ## Supabase hoặc PostgreSQL khác
 

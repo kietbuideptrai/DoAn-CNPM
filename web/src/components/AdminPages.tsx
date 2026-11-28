@@ -170,6 +170,7 @@ export function AdminLayout() {
 
 export function AdminDashboard() {
   const { token } = useAuth();
+  const location = useLocation();
   const [artifacts, setArtifacts] = useState<AdminArtifactListItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isRetrying, setIsRetrying] = useState(false);
@@ -178,7 +179,19 @@ export function AdminDashboard() {
   const [updatingArtifactIds, setUpdatingArtifactIds] = useState<Set<string>>(
     () => new Set(),
   );
-  const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [statusMessage, setStatusMessage] = useState<string | null>(() => {
+    const navigationState: unknown = location.state;
+    if (
+      typeof navigationState === "object" &&
+      navigationState !== null &&
+      "successMessage" in navigationState &&
+      typeof navigationState.successMessage === "string"
+    ) {
+      return navigationState.successMessage;
+    }
+
+    return null;
+  });
   const [requestVersion, setRequestVersion] = useState(0);
 
   const loadArtifacts = useCallback(async () => {
